@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SplashScreen from "./Screens/SplashScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
-
+import CreateAccountScreen from "./Screens/CreateAccountScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -20,13 +20,17 @@ export default function App() {
         <StatusBar hidden></StatusBar>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="ProfileScreen"
+            initialRouteName="CreateAccountScreen"
             screenOptions={{ gestureEnabled: false }}
             headerMode="none"
           >
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen
+              name="CreateAccountScreen"
+              component={CreateAccountScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
