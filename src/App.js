@@ -11,6 +11,7 @@ import SplashScreen from "./Screens/SplashScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import CreateAccountScreen from "./Screens/CreateAccountScreen";
+import HomeScreen from "./Screens/HomeScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -20,12 +21,14 @@ export default function App() {
         <StatusBar hidden></StatusBar>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="CreateAccountScreen"
+            initialRouteName="SplashScreen"
             screenOptions={{ gestureEnabled: false }}
             headerMode="none"
           >
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen
               name="CreateAccountScreen"
