@@ -5,6 +5,7 @@ import UserActions from "~/Store/User/Actions";
 import Styles from "./styles";
 import LoginLogo from "~/Assets/Svg/loginLogo";
 import AuthForm from "~/Components/AuthForm";
+import Colors from "~/Assets/Colors";
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.User);
@@ -32,6 +33,8 @@ const LoginScreen = (props) => {
         onChangePassword={setPassword}
         errorMessage={errorMessages}
         buttonAction={handleLoginPressed}
+        buttonBackgroundColor={Colors.blue}
+        buttonText="Kyçu"
       />
     </View>
   );

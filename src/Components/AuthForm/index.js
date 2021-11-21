@@ -4,7 +4,6 @@ import Input from "../InputField";
 import Styles from "./styles";
 import Lock from "~/Assets/Svg/lock";
 import Unlock from "~/Assets/Svg/unlock";
-import { useNavigation } from "@react-navigation/core";
 import User from "~/Assets/Svg/user";
 import Password from "~/Assets/Svg/password";
 
@@ -13,8 +12,9 @@ const AuthForm = ({
   onChangePassword,
   errorMessage,
   buttonAction,
+  buttonBackgroundColor,
+  buttonText,
 }) => {
-  const navigation = useNavigation();
   const [lockIcon, setLockIcon] = useState(true);
 
   return (
@@ -41,10 +41,15 @@ const AuthForm = ({
         enabled={true}
       />
       <TouchableOpacity
-        style={Styles.loginButton}
+        style={[
+          Styles.loginButton,
+          {
+            backgroundColor: buttonBackgroundColor,
+          },
+        ]}
         onPress={() => buttonAction()}
       >
-        <Text style={Styles.loginButtonText}>Kyçu</Text>
+        <Text style={Styles.loginButtonText}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
   );
