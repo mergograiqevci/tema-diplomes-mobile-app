@@ -24,7 +24,9 @@ const Input = ({
             Styles.input,
             {
               opacity: !enabled ? 0.8 : 1,
-              borderColor: focused ? Colors.activeBorderInput : Colors.white,
+              borderColor: focused
+                ? Colors.activeBorderInput
+                : Colors.inActiveBorderInput,
             },
           ]}
           placeholder={placeholder}

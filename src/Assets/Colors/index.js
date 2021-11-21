@@ -6,6 +6,7 @@ const Colors = {
   blue: "#273D7E",
   authHeaderText: "#373F48",
   activeBorderInput: "#074D80",
+  inActiveBorderInput: "#DFE6EC",
   gray: "#AFAFAF",
   negative: "#F45D48",
 };

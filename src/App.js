@@ -12,6 +12,7 @@ import LoginScreen from "./Screens/LoginScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import CreateAccountScreen from "./Screens/CreateAccountScreen";
 import HomeScreen from "./Screens/HomeScreen";
+import GroupDetailsScreen from "./Screens/GroupDetailsScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -33,6 +34,10 @@ export default function App() {
             <Stack.Screen
               name="CreateAccountScreen"
               component={CreateAccountScreen}
+            />
+            <Stack.Screen
+              name="GroupDetailsScreen"
+              component={GroupDetailsScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

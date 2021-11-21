@@ -1,0 +1,101 @@
+import React, { useState } from "react";
+import { View, Text, SectionList } from "react-native";
+import Header from "~/Components/Header";
+import Logout from "~/Assets/Svg/logout";
+import AddPerson from "~/Assets/Svg/addPerson";
+import Colors from "~/Assets/Colors";
+import InviteOtherModal from "~/Components/InviteOtherModal";
+import PopUpModal from "~/Components/PopUpModal";
+import SectionHeader from "~/Components/SectionHeader";
+import tasksData from "~/Functions/fakeData/tasksData";
+import TasksBox from "~/Components/TasksBox";
+const GroupDetailsScreen = ({ navigation }) => {
+  const [inviteModalVisible, setInviteModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const [id, setId] = useState("");
+  const [errorMessages, setErrorMessages] = useState({});
+  const DATA = [
+    {
+      title: "Detyrat",
+      data: tasksData,
+    },
+  ];
+  const inviteModalProps = {
+    title: "Shto nje student ne grup",
+    leftButtonText: "Ruaj",
+    leftButtonColor: Colors.appBaseColor,
+    rightButtonText: "Kthehu",
+    rightButtonColor: Colors.negative,
+  };
+
+  const deleteModalProps = {
+    title: "A jeni te sigurt qe deshironi te dilni nga kuizi ?",
+    subTitle:
+      " The Mathematics Placement Exam (MPE) is a 90-minute, 60-item multiple choice exam that tests skills and understandings from precalculus",
+    leftButtonText: "Konfirmo",
+    leftButtonColor: Colors.negative,
+    rightButtonText: "Kthehu",
+    rightButtonColor: Colors.appBaseColor,
+  };
+
+  const leftButtonAction = () => {
+    console.log("Left Button onclick");
+  };
+
+  const rightButtonAction = () => {
+    setInviteModalVisible(false);
+    setDeleteModalVisible(false);
+  };
+
+  const renderItem = ({ item }) => {
+    return <TasksBox item={item} />;
+  };
+
+  const headerSectionList = () => {
+    return (
+      <Header
+        title="Algorithm"
+        leftIcon={<AddPerson />}
+        handleLeftIcon={() => setInviteModalVisible(true)}
+        rightIcon={<Logout />}
+        handleRightIcon={() => setDeleteModalVisible(true)}
+        safeAreaBackgroundColor={Colors.appBaseColor}
+        backgroundColor={Colors.appBaseColor}
+        height={50}
+      />
+    );
+  };
+  return (
+    <View style={{ flex: 1 }}>
+      <SectionList
+        sections={DATA}
+        bounces={false}
+        keyExtractor={(item, index) => item + index}
+        ListHeaderComponent={headerSectionList()}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title } }) => (
+          <SectionHeader title={title} />
+        )}
+      />
+      <InviteOtherModal
+        modalVisible={inviteModalVisible}
+        setModalVisible={setInviteModalVisible}
+        leftButtonAction={leftButtonAction}
+        rightButtonAction={rightButtonAction}
+        onChangeId={setId}
+        errorMessage={errorMessages}
+        otherProps={inviteModalProps}
+      />
+      <PopUpModal
+        modalVisible={deleteModalVisible}
+        setModalVisible={setDeleteModalVisible}
+        leftButtonAction={leftButtonAction}
+        rightButtonAction={rightButtonAction}
+        otherProps={deleteModalProps}
+      />
+    </View>
+  );
+};
+
+export default GroupDetailsScreen;

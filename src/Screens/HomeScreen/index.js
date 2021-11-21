@@ -1,47 +1,41 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { View, SectionList, Text } from "react-native";
 import Header from "~/Components/Header";
 import Colors from "~/Assets/Colors";
 import ProfileBox from "~/Components/ProfileBox";
 import TasksBox from "~/Components/TasksBox";
+import OtherTasks from "~/Components/OtherTasks";
+import groupsData from "~/Functions/fakeData/groupsData";
+import tasksData from "~/Functions/fakeData/tasksData";
+import completedData from "~/Functions/fakeData/completedData";
+import failedData from "~/Functions/fakeData/failedData";
+import SectionHeader from "~/Components/SectionHeader";
 const HomeScreen = () => {
-  const data = [
+  const DATA = [
     {
-      id: 1,
-      image: "https://iconape.com/wp-content/files/xa/367772/png/367772.png",
-      backgroundColor: "#078080",
-      title: "NodeJS - The Complete Guide",
-      description:
-        "Node is useful for developing applications that require a persistent",
+      title: "Detyrat",
+      data: tasksData,
     },
     {
-      id: 2,
-      image: "https://iconape.com/wp-content/files/xa/367772/png/367772.png",
-      backgroundColor: "#074D80",
-      title: "NodeJS - The Complete Guide",
-      description:
-        "Node is useful for developing applications that require a persistent",
+      title: "Grupet",
+      data: groupsData,
     },
     {
-      id: 3,
-      image: "https://iconape.com/wp-content/files/xa/367772/png/367772.png",
-      backgroundColor: "#078080",
-      title: "NodeJS - The Complete Guide",
-      description:
-        "Node is useful for developing applications that require a persistent",
+      title: "Perfunduara",
+      data: completedData,
     },
     {
-      id: 4,
-      image: "https://iconape.com/wp-content/files/xa/367772/png/367772.png",
-      backgroundColor: "#078080",
-      title: "NodeJS - The Complete Guide",
-      description:
-        "Node is useful for developing applications that require a persistent",
+      title: "Deshtuara",
+      data: failedData,
     },
   ];
 
   const renderItem = ({ item }) => {
-    return <TasksBox item={item} />;
+    if (item.type === "task") {
+      return <TasksBox item={item} />;
+    } else {
+      return <OtherTasks item={item} />;
+    }
   };
 
   const headerFlatList = () => {
@@ -59,11 +53,15 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
+      <SectionList
+        sections={DATA}
+        bounces={false}
+        keyExtractor={(item, index) => item + index}
         ListHeaderComponent={headerFlatList()}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title } }) => (
+          <SectionHeader title={title} />
+        )}
       />
     </View>
   );
