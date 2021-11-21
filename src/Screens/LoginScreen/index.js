@@ -1,66 +1,40 @@
-import React, { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import UserActions from '~/Store/User/Actions';
-import State from '~/Store/State';
-
-import Button from '~/Components/Button';
-import Styles from './styles';
-
+import React, { useState } from "react";
+import { Text, View, SafeAreaView } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import UserActions from "~/Store/User/Actions";
+import Styles from "./styles";
+import LoginLogo from "~/Assets/Svg/loginLogo";
+import AuthForm from "~/Components/AuthForm";
 const LoginScreen = (props) => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.User);
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessages, setErrorMessages] = useState({});
 
-    const dispatch = useDispatch();
-    const userData = useSelector(state => state.User);
+  const handleLoginPressed = () => {
+    dispatch(UserActions.login(id, password));
+  };
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+  const handleBackPressed = () => {
+    props.navigation.pop();
+  };
 
-    const handleLoginPressed = () => {
-        dispatch(UserActions.login(username, password))
-    }
-
-    const handleBackPressed = () => {
-        props.navigation.pop();
-    }
-
-    return (
-        <View style={Styles.container}>
-            
-            {
-                userData.dataState === State.DONE ?
-                <Text>
-                    {JSON.stringify(userData.data)}
-                </Text> :
-
-                userData.dataState === State.FAILED ?
-                <Text>
-                    {userData.loginError.toString()}
-                </Text> :
-
-                null
-            }
-
-            <TextInput
-                value={username}
-                placeholder="Username"
-                onChangeText={setUsername}/>
-            
-            <TextInput
-                value={password}
-                secureTextEntry
-                placeholder="Password"
-                onChangeText={setPassword}/>
-
-            <Button
-                text="Login"
-                onPress={handleLoginPressed}/>
-
-            <Button
-                text="Back to Splash Screen"
-                onPress={handleBackPressed}/>
-
-        </View>
-    );
-}
+  return (
+    <View style={Styles.container}>
+      <SafeAreaView style={{ flex: 0 }} />
+      <View style={Styles.loginLogo}>
+        <LoginLogo />
+      </View>
+      <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>
+      <AuthForm
+        onChangeId={setId}
+        onChangePassword={setPassword}
+        errorMessage={errorMessages}
+        buttonAction={handleLoginPressed}
+      />
+    </View>
+  );
+};
 
 export default LoginScreen;
