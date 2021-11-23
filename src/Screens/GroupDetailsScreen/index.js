@@ -41,6 +41,7 @@ const GroupDetailsScreen = ({ navigation }) => {
 
   const leftButtonAction = () => {
     console.log("Left Button onclick");
+    navigation.pop();
   };
 
   const rightButtonAction = () => {

@@ -13,6 +13,9 @@ import ProfileScreen from "./Screens/ProfileScreen";
 import CreateAccountScreen from "./Screens/CreateAccountScreen";
 import HomeScreen from "./Screens/HomeScreen";
 import GroupDetailsScreen from "./Screens/GroupDetailsScreen";
+import TakingQuizScreen from "./Screens/TakingQuizScreen";
+import QuizResultScreen from "./Screens/QuizResultScreen";
+import QuizStudentResultScreen from "./Screens/QuizStudentResultScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -38,6 +41,18 @@ export default function App() {
             <Stack.Screen
               name="GroupDetailsScreen"
               component={GroupDetailsScreen}
+            />
+            <Stack.Screen
+              name="TakingQuizScreen"
+              component={TakingQuizScreen}
+            />
+            <Stack.Screen
+              name="QuizResultScreen"
+              component={QuizResultScreen}
+            />
+            <Stack.Screen
+              name="QuizStudentResultScreen"
+              component={QuizStudentResultScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

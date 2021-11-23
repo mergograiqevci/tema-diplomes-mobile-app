@@ -9,5 +9,6 @@ const Colors = {
   inActiveBorderInput: "#DFE6EC",
   gray: "#AFAFAF",
   negative: "#F45D48",
+  green: "#76FFBB",
 };
 export default Colors;

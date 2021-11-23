@@ -15,7 +15,9 @@ const OtherTasks = ({ item }) => {
         },
       ]}
       onPress={() =>
-        item.type === "group" && navigation.push("GroupDetailsScreen")
+        item.type === "group"
+          ? navigation.push("GroupDetailsScreen")
+          : item.type === "quiz" && navigation.push("TakingQuizScreen")
       }
       activeOpacity={item.type === "group" ? 0 : 0.7}
     >
