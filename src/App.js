@@ -17,6 +17,8 @@ import TakingQuizScreen from "./Screens/TakingQuizScreen";
 import QuizResultScreen from "./Screens/QuizResultScreen";
 import QuizStudentResultScreen from "./Screens/QuizStudentResultScreen";
 import NewTaskScreen from "./Screens/NewTaskScreen";
+import QuizDetailsScreen from "./Screens/QuizDetailsScreen";
+import StudentRatingScreen from "./Screens/StudentRatingScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -26,7 +28,7 @@ export default function App() {
         <StatusBar hidden></StatusBar>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="SplashScreen"
+            initialRouteName="StudentRatingScreen"
             screenOptions={{ gestureEnabled: false }}
             headerMode="none"
           >
@@ -56,6 +58,14 @@ export default function App() {
               component={QuizStudentResultScreen}
             />
             <Stack.Screen name="NewTaskScreen" component={NewTaskScreen} />
+            <Stack.Screen
+              name="QuizDetailsScreen"
+              component={QuizDetailsScreen}
+            />
+            <Stack.Screen
+              name="StudentRatingScreen"
+              component={StudentRatingScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

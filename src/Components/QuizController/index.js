@@ -11,7 +11,7 @@ const QuizController = ({ item, textColor, backgroundColor, onPress }) => {
         },
       ]}
       activeOpacity={onPress ? 0 : 1}
-      onPress={() => onPress(item)}
+      onPress={() => onPress && onPress(item)}
     >
       <Text style={[Styles.text, { textAlign: "left", color: textColor }]}>
         {item.left}
