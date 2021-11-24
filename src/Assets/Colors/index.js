@@ -10,5 +10,6 @@ const Colors = {
   gray: "#AFAFAF",
   negative: "#F45D48",
   green: "#76FFBB",
+  inActiveNewTaskButton: "#7EA7A7",
 };
 export default Colors;

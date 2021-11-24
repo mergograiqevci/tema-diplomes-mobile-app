@@ -52,8 +52,8 @@ const Input = ({
             {icon}
           </TouchableOpacity>
         )}
-        <View style={[Styles.iconView, { left: 15 }]}>{leftIcon}</View>
       </View>
+      <View style={[Styles.iconView, { left: 15 }]}>{leftIcon}</View>
       {errorMessage ? (
         <Text style={Styles.errorMessage}>{errorMessage}</Text>
       ) : null}

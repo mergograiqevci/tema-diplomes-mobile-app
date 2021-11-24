@@ -9,12 +9,16 @@ import PopUpModal from "~/Components/PopUpModal";
 import SectionHeader from "~/Components/SectionHeader";
 import tasksData from "~/Functions/fakeData/tasksData";
 import TasksBox from "~/Components/TasksBox";
+import Plus from "~/Assets/Svg/plus";
 const GroupDetailsScreen = ({ navigation }) => {
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const [id, setId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+
+  const user = "professor";
+
   const DATA = [
     {
       title: "Detyrat",
@@ -49,6 +53,14 @@ const GroupDetailsScreen = ({ navigation }) => {
     setDeleteModalVisible(false);
   };
 
+  const handleRightIcon = () => {
+    if (user === "professor") {
+      navigation.push("NewTaskScreen");
+    } else {
+      setDeleteModalVisible(true);
+    }
+  };
+
   const renderItem = ({ item }) => {
     return <TasksBox item={item} />;
   };
@@ -59,8 +71,8 @@ const GroupDetailsScreen = ({ navigation }) => {
         title="Algorithm"
         leftIcon={<AddPerson />}
         handleLeftIcon={() => setInviteModalVisible(true)}
-        rightIcon={<Logout />}
-        handleRightIcon={() => setDeleteModalVisible(true)}
+        rightIcon={user === "professor" ? <Plus /> : <Logout />}
+        handleRightIcon={handleRightIcon}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}

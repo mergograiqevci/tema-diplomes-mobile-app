@@ -16,6 +16,7 @@ import GroupDetailsScreen from "./Screens/GroupDetailsScreen";
 import TakingQuizScreen from "./Screens/TakingQuizScreen";
 import QuizResultScreen from "./Screens/QuizResultScreen";
 import QuizStudentResultScreen from "./Screens/QuizStudentResultScreen";
+import NewTaskScreen from "./Screens/NewTaskScreen";
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -54,6 +55,7 @@ export default function App() {
               name="QuizStudentResultScreen"
               component={QuizStudentResultScreen}
             />
+            <Stack.Screen name="NewTaskScreen" component={NewTaskScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

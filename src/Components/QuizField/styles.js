@@ -18,9 +18,7 @@ export default StyleSheet.create({
   },
   iconView: {
     position: "absolute",
-    // paddingTop: 14,
-    alignSelf: "center",
-    justifyContent: "center",
+    paddingTop: 23,
     alignItems: "center",
   },
   errorMessage: {
