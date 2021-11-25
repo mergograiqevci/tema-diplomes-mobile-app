@@ -11,7 +11,7 @@ import completedData from "~/Functions/fakeData/completedData";
 import failedData from "~/Functions/fakeData/failedData";
 import SectionHeader from "~/Components/SectionHeader";
 const HomeScreen = () => {
-  const threshold = 270;
+  const threshold = 200;
   const [flatListPosition, setFlatListPosition] = useState(0);
   const [topHeaderHeight, setTopHeaderHeight] = useState(threshold);
   const DATA = [
@@ -35,8 +35,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     let position = threshold - flatListPosition;
-    console.log(position);
-    position > 0 && setTopHeaderHeight(position);
+    position > 84 && setTopHeaderHeight(position);
   }, [flatListPosition]);
 
   const handleOptionsInFlat = (e) => {
@@ -53,13 +52,12 @@ const HomeScreen = () => {
 
   const headerFlatList = () => {
     return (
-      <View style={{ flex: 1, marginBottom: 70 }}>
+      <View style={{ flex: 1, marginBottom: 70, position: "absolute" }}>
         <Header
           safeAreaBackgroundColor={Colors.appBaseColor}
           backgroundColor={Colors.appBaseColor}
-          height={170}
+          height={topHeaderHeight - topHeaderHeight / 3}
         />
-        <ProfileBox height={topHeaderHeight} />
       </View>
     );
   };
@@ -70,13 +68,16 @@ const HomeScreen = () => {
         sections={DATA}
         bounces={false}
         keyExtractor={(item, index) => item + index}
-        ListHeaderComponent={headerFlatList()}
+        // ListHeaderComponent={headerFlatList()}
         renderItem={renderItem}
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />
         )}
+        style={{ marginTop: topHeaderHeight + 80 }}
         onScroll={handleOptionsInFlat}
       />
+      {headerFlatList()}
+      <ProfileBox height={topHeaderHeight} />
     </View>
   );
 };

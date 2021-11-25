@@ -4,7 +4,6 @@ import Colors from "~/Assets/Colors";
 export default StyleSheet.create({
   container: {
     width: width,
-    height: height,
     position: "absolute",
   },
   mapView: {
@@ -17,6 +16,7 @@ export default StyleSheet.create({
     borderWidth: 0.5,
     borderColor: Colors.gray,
     alignSelf: "center",
+    justifyContent: "center",
     position: "absolute",
     borderRadius: 9,
     alignItems: "center",
@@ -24,7 +24,7 @@ export default StyleSheet.create({
   },
   nameText: {
     marginTop: 10,
-    fontSize: 20,
     marginBottom: 15,
+    fontSize: 20,
   },
 });

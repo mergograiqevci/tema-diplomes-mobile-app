@@ -25,8 +25,13 @@ const ProfileBox = ({ height }) => {
           },
         ]}
       >
-        <Profile />
-        <Text style={Styles.nameText}>Mergim Graiqevci</Text>
+        <View style={{ alignItems: "center" }}>
+          {height > 151 && <Profile height={height / 3.5} width={92} />}
+          {height > 122 && (
+            <Text style={Styles.nameText}>Mergim Graiqevci</Text>
+          )}
+        </View>
+
         <View style={Styles.mapView}>
           {data.map((item) => (
             <ProfileDetails key={item.count} item={item} />

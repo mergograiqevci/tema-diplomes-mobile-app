@@ -4,8 +4,8 @@ import Svg, { Circle, Path, Defs, Pattern, Use, Image } from "react-native-svg";
 function Profile(props) {
   return (
     <Svg
-      width={136}
-      height={92}
+      width={props.width}
+      height={props.height}
       viewBox="0 0 136 92"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
