@@ -3,11 +3,9 @@ import { Image, View, Text } from "react-native";
 import Images from "~/Assets/Images";
 import Styles from "./styles";
 import UserActions from "~/Store/User/Actions";
-import { useSelector, useDispatch } from "react-redux";
-const SplashScreen = ({ navigation }) => {
+import { useDispatch } from "react-redux";
+const SplashScreen = () => {
   const dispatch = useDispatch();
-  const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
-
   useEffect(() => {
     //zevendsohet me request per autologin
     setTimeout(() => {
@@ -15,11 +13,6 @@ const SplashScreen = ({ navigation }) => {
       dispatch(UserActions.setSafeAreaSize());
     }, 2000);
   }, []);
-  useEffect(() => {
-    if (Object.keys(safeAreaSize).length !== 0) {
-      navigation.push("HomeScreen");
-    }
-  }, [safeAreaSize]);
   return (
     <View style={Styles.container}>
       <Image style={Styles.logo} source={Images.Logo} />
