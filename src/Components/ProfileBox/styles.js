@@ -16,7 +16,6 @@ export default StyleSheet.create({
     backgroundColor: Colors.white,
     borderWidth: 0.5,
     borderColor: Colors.gray,
-    height: 210,
     alignSelf: "center",
     position: "absolute",
     borderRadius: 9,

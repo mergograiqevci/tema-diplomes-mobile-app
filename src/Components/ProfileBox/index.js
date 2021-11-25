@@ -5,7 +5,7 @@ import Profile from "~/Assets/Svg/profile";
 import Styles from "./styles";
 import { useSelector } from "react-redux";
 import ProfileDetails from "./ProfileDetails";
-const ProfileBox = () => {
+const ProfileBox = ({ height }) => {
   const data = [
     { title: "Grupe", count: 4 },
     { title: "Video", count: 10 },
@@ -21,6 +21,7 @@ const ProfileBox = () => {
           Styles.profileView,
           {
             marginTop: safeAreaSize.top + 20,
+            height: height,
           },
         ]}
       >

@@ -28,7 +28,7 @@ export default function App() {
         <StatusBar hidden></StatusBar>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="StudentRatingScreen"
+            initialRouteName="SplashScreen"
             screenOptions={{ gestureEnabled: false }}
             headerMode="none"
           >
