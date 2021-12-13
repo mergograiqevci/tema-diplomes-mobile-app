@@ -6,6 +6,7 @@ import Styles from "./styles";
 import LoginLogo from "~/Assets/Svg/loginLogo";
 import AuthForm from "~/Components/AuthForm";
 import Colors from "~/Assets/Colors";
+import Student from "~/Assets/Svg/student";
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.User);
@@ -25,8 +26,10 @@ const LoginScreen = (props) => {
     <View style={Styles.container}>
       <SafeAreaView style={{ flex: 0 }} />
       <View style={Styles.loginLogo}>
-        <LoginLogo />
+        <Student width={130} height={90} />
+        {/* <LoginLogo /> */}
       </View>
+
       <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>
       <AuthForm
         onChangeId={setId}

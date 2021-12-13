@@ -4,8 +4,8 @@ import Svg, { Path, Defs, Pattern, Use, Image } from "react-native-svg";
 function Student(props) {
   return (
     <Svg
-      width={50}
-      height={48}
+      width={props.width ? props.width : 50}
+      height={props.height ? props.height : 48}
       viewBox="0 0 50 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

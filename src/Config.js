@@ -1,7 +1,7 @@
 const Config = {
-    Server: {
-        API_BASE_URL: 'https://reqres.in/api'
-    }
-}
+  Server: {
+    API_BASE_URL: "http://localhost:8080",
+  },
+};
 
 export default Config;

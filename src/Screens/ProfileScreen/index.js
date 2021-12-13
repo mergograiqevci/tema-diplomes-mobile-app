@@ -7,8 +7,11 @@ import AuthForm from "~/Components/AuthForm";
 import Styles from "./styles";
 import Logout from "~/Assets/Svg/logout";
 import PopUpModal from "~/Components/PopUpModal";
+import UserActions from "~/Store/User/Actions";
+import { useDispatch } from "react-redux";
 const ProfileScreen = ({ navigation }) => {
-  const [id, setId] = useState("");
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,7 +35,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleUpdateUser = () => {
-    //request per update
+    dispatch(UserActions.resetPassword(username, password));
   };
 
   return (
@@ -50,7 +53,7 @@ const ProfileScreen = ({ navigation }) => {
       <Text style={Styles.title}>Të Dhënat</Text>
 
       <AuthForm
-        onChangeId={setId}
+        onChangeId={setUsername}
         onChangePassword={setPassword}
         errorMessage={errorMessages}
         buttonAction={handleUpdateUser}

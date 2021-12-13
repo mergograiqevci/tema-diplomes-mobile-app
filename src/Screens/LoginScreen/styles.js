@@ -6,14 +6,16 @@ export default StyleSheet.create({
     backgroundColor: Colors.appBaseColor,
   },
   loginLogo: {
-    marginTop: 97,
-    marginLeft: 25,
+    marginTop: 120,
+    // marginLeft: 25,
+    alignItems: "center",
   },
   title: {
     color: Colors.white,
     marginTop: 20,
     fontSize: 25,
-    marginLeft: 25,
+    // marginLeft: 25,
+    textAlign: "center",
     // fontFamily: "Montserrat-Bold",
   },
 });

@@ -11,12 +11,12 @@ import ArrowLeft from "~/Assets/Svg/arrowLeft";
 const CreateAccountScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.User);
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
 
   const handleRegisterPressed = () => {
-    dispatch(UserActions.register(id, password));
+    dispatch(UserActions.registerStudent(username, password));
   };
 
   return (
@@ -33,7 +33,7 @@ const CreateAccountScreen = ({ navigation }) => {
       </View>
       <Text style={Styles.title}>Menaxhimi i Studentëve</Text>
       <AuthForm
-        onChangeId={setId}
+        onChangeId={setUsername}
         onChangePassword={setPassword}
         errorMessage={errorMessages}
         buttonAction={handleRegisterPressed}
