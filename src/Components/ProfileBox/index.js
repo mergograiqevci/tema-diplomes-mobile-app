@@ -20,7 +20,7 @@ const ProfileBox = ({ height }) => {
         style={[
           Styles.profileView,
           {
-            marginTop: safeAreaSize.top + 20,
+            marginTop: 70, //safeAreaSize?.top + 20,
             height: height,
           },
         ]}

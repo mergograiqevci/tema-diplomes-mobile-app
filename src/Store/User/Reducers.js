@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import State from "~/Store/State";
 
 const initialState = {
-  data: null,
+  loginData: null,
   loginError: null,
-  dataState: State.NOT_PROCESSED,
+  loginState: State.NOT_PROCESSED,
   safeAreaSize: {},
   register: {},
   registerError: null,
@@ -15,6 +15,7 @@ const initialState = {
   myProfile: {},
   myProfileError: null,
   myProfileState: State.NOT_PROCESSED,
+  token: undefined,
 };
 
 const slice = createSlice({
@@ -22,15 +23,15 @@ const slice = createSlice({
   initialState,
   reducers: {
     loginStart(state) {
-      state.dataState = State.PROCESSING;
+      state.loginState = State.PROCESSING;
     },
     loginDone(state, action) {
-      state.data = action.payload;
-      state.dataState = State.DONE;
+      state.loginData = action.payload;
+      state.loginState = State.DONE;
     },
     loginFailed(state, action) {
       state.loginError = action.payload;
-      state.dataState = State.FAILED;
+      state.loginState = State.FAILED;
     },
     registerStart(state) {
       state.registerState = State.PROCESSING;
@@ -43,6 +44,11 @@ const slice = createSlice({
       state.registerError = action.payload;
       state.registerState = State.FAILED;
     },
+    clearPrevRegisterStudentData(state) {
+      state.register = {};
+      state.registerError = null;
+      state.registerState = State.NOT_PROCESSED;
+    },
     resetPasswordStart(state) {
       state.resetPasswordState = State.PROCESSING;
     },
@@ -53,6 +59,11 @@ const slice = createSlice({
     resetPasswordFailed(state, action) {
       state.resetPasswordError = action.payload;
       state.resetPasswordState = State.FAILED;
+    },
+    clearPrevResetPasswordData(state) {
+      state.resetPassword = {};
+      state.resetPasswordError = null;
+      state.resetPasswordState = State.NOT_PROCESSED;
     },
     getProfileStart(state) {
       state.myProfileState = State.PROCESSING;
@@ -67,6 +78,25 @@ const slice = createSlice({
     },
     setSafeAreaSize(state, action) {
       state.safeAreaSize = action.payload;
+    },
+    setToken(state, action) {
+      state.token = action.payload;
+    },
+    logoutDone(state) {
+      state.loginData = null;
+      state.loginError = null;
+      state.loginState = State.NOT_PROCESSED;
+      state.safeAreaSize = {};
+      state.register = {};
+      state.registerError = null;
+      state.registerState = State.NOT_PROCESSED;
+      state.resetPassword = {};
+      state.resetPasswordError = null;
+      state.resetPasswordState = State.NOT_PROCESSED;
+      state.myProfile = {};
+      state.myProfileError = null;
+      state.myProfileState = State.NOT_PROCESSED;
+      state.token = undefined;
     },
   },
 });
@@ -86,4 +116,8 @@ export const {
   getProfileStart,
   getProfileDone,
   getProfileFailed,
+  setToken,
+  clearPrevRegisterStudentData,
+  clearPrevResetPasswordData,
+  logoutDone,
 } = slice.actions;

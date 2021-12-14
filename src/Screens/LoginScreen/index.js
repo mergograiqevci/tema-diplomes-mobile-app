@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, SafeAreaView } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import UserActions from "~/Store/User/Actions";
@@ -7,19 +7,43 @@ import LoginLogo from "~/Assets/Svg/loginLogo";
 import AuthForm from "~/Components/AuthForm";
 import Colors from "~/Assets/Colors";
 import Student from "~/Assets/Svg/student";
-const LoginScreen = (props) => {
+import State from "~/Store/State";
+import Config from "~/Config";
+const LoginScreen = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.User);
+  const userReducer = useSelector((state) => state?.User);
+  const loginState = userReducer?.loginState;
+  const loginError = userReducer?.loginError;
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
 
-  const handleLoginPressed = () => {
-    dispatch(UserActions.login(id, password));
+  const otherAuthProps = {
+    userPlaceHolder: "Id",
+    userError: "id",
+    passPlaceHolder: "Password",
+    passError: "password",
   };
 
-  const handleBackPressed = () => {
-    props.navigation.pop();
+  useEffect(() => {
+    if (loginState === State.FAILED) {
+      setErrorMessages({
+        [loginError.message && loginError.message === "id_not_valid"
+          ? "id"
+          : "password"]:
+          Config.ErrorMessages[
+            loginError.message ? loginError.message : "default_error"
+          ],
+      });
+    }
+  }, [loginState]);
+
+  const handleLoginPressed = () => {
+    if (id.trim() && password.trim()) {
+      dispatch(UserActions.login(id, password));
+    } else {
+      setErrorMessages({ password: Config.ErrorMessages["fill_data"] });
+    }
   };
 
   return (
@@ -38,6 +62,7 @@ const LoginScreen = (props) => {
         buttonAction={handleLoginPressed}
         buttonBackgroundColor={Colors.blue}
         buttonText="Kyçu"
+        otherProps={otherAuthProps}
       />
     </View>
   );

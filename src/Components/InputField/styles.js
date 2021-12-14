@@ -26,7 +26,7 @@ export default StyleSheet.create({
   errorMessage: {
     fontSize: 14,
     marginBottom: 20,
-    color: "red",
+    color: "white",
     marginLeft: 15,
     // fontFamily: "Montserrat-Regular",
   },

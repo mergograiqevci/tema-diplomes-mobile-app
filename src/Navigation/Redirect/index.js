@@ -8,13 +8,16 @@ import ProfileScreen from "~/Screens/ProfileScreen";
 import CreateAccountScreen from "~/Screens/CreateAccountScreen";
 
 const Redirect = () => {
-  // const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
-  // if (Object.keys(safeAreaSize).length === 0) {
-  //   return <SplashScreen />;
-  // } else {
-  //   return <BottomTabNavigator />;
-  // }
-  return <LoginScreen />;
+  const token = useSelector((state) => state.User?.token);
+  console.log(token);
+  if (token === null) {
+    return <LoginScreen />;
+  }
+  if (token !== undefined && token !== "error") {
+    return <BottomTabNavigator />;
+  } else {
+    return <SplashScreen />;
+  }
 };
 
 export default Redirect;

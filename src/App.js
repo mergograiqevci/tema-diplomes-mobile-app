@@ -5,6 +5,8 @@ import { StatusBar } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Redirect from "./Navigation/Redirect";
+import ToasterUI from "./Components/ToasterUI";
+import Toast from "react-native-toast-message";
 export default function App() {
   return (
     <Provider store={Store}>
@@ -13,10 +15,17 @@ export default function App() {
         <NavigationContainer>
           <Redirect />
         </NavigationContainer>
+        <Toast config={toastConfig} />
       </View>
     </Provider>
   );
 }
+
+const toastConfig = {
+  my_custom_type: ({ text1, props, ...rest }) => {
+    return <ToasterUI props={props} />;
+  },
+};
 
 const Styles = StyleSheet.create({
   appContainer: {

@@ -1,49 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import Header from "~/Components/Header";
-import ArrowLeft from "~/Assets/Svg/arrowLeft";
 import Colors from "~/Assets/Colors";
 import AuthForm from "~/Components/AuthForm";
 import Styles from "./styles";
 import Logout from "~/Assets/Svg/logout";
 import PopUpModal from "~/Components/PopUpModal";
 import UserActions from "~/Store/User/Actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import State from "~/Store/State";
+import Config from "~/Config";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState("");
+  const userReducer = useSelector((state) => state?.User);
+  const myProfile = userReducer?.myProfile;
+  const resetPassword = userReducer?.resetPassword;
+  const resetPasswordError = userReducer?.resetPasswordError;
+  const resetPasswordState = userReducer?.resetPasswordState;
+  const [username, setUsername] = useState(myProfile?.data?.username);
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
   const modalProps = {
-    title: "A jeni te sigurt qe deshironi te dilni nga kuizi ?",
-    subTitle:
-      " The Mathematics Placement Exam (MPE) is a 90-minute, 60-item multiple choice exam that tests skills and understandings from precalculus",
+    title: "A jeni te sigurt qe deshironi te dilni?",
+    subTitle: "",
     leftButtonText: "Konfirmo",
     leftButtonColor: Colors.negative,
     rightButtonText: "Kthehu",
     rightButtonColor: Colors.appBaseColor,
   };
 
+  const otherAuthProps = {
+    userValue: username,
+    userValueEnabled: false,
+    userPlaceHolder: "Username",
+    userError: "username",
+    passPlaceHolder: "Password",
+    passError: "password",
+  };
   const leftButtonAction = () => {
-    console.log("Left Button onclick");
+    dispatch(UserActions.logout());
   };
 
   const rightButtonAction = () => {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    if (resetPasswordState === State.DONE) {
+      toasterMessage(`Keni ndryshuar me sukses fjalëkalimin`, "success");
+      dispatch(UserActions.clearPrevResetPasswordData());
+    } else if (resetPasswordState === State.FAILED) {
+      setErrorMessages({
+        ["password"]:
+          Config.ErrorMessages[
+            resetPasswordError.message
+              ? resetPasswordError.message
+              : "default_error"
+          ],
+      });
+    }
+  }, [resetPasswordState]);
+
   const handleUpdateUser = () => {
-    dispatch(UserActions.resetPassword(username, password));
+    if (password.trim()) {
+      dispatch(UserActions.resetPassword(username, password));
+    } else {
+      setErrorMessages({ password: Config.ErrorMessages["fill_data"] });
+    }
   };
 
   return (
     <View>
       <Header
         title="Profili"
-        leftIcon={<ArrowLeft />}
-        handleLeftIcon={() => navigation.goBack()}
         rightIcon={<Logout />}
         handleRightIcon={() => setModalVisible(true)}
         safeAreaBackgroundColor={Colors.appBaseColor}
@@ -59,6 +91,7 @@ const ProfileScreen = ({ navigation }) => {
         buttonAction={handleUpdateUser}
         buttonBackgroundColor={Colors.appBaseColor}
         buttonText="Ruaj"
+        otherProps={otherAuthProps}
       />
       <PopUpModal
         modalVisible={modalVisible}

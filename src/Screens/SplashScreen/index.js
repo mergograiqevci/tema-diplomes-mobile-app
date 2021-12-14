@@ -7,14 +7,13 @@ import { useDispatch } from "react-redux";
 import Student from "~/Assets/Svg/student";
 const SplashScreen = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
-    //zevendsohet me request per autologin
-    dispatch(UserActions.myProfile());
     setTimeout(() => {
-      // navigation.push("LoginScreen");
-      // dispatch(UserActions.setSafeAreaSize());
-    }, 2000);
+      dispatch(UserActions.myProfile());
+    }, 1500);
   }, []);
+
   return (
     <View style={Styles.container}>
       {/* <Image style={Styles.logo} source={Images.Logo} /> */}
