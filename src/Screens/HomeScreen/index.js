@@ -10,10 +10,19 @@ import tasksData from "~/Functions/fakeData/tasksData";
 import completedData from "~/Functions/fakeData/completedData";
 import failedData from "~/Functions/fakeData/failedData";
 import SectionHeader from "~/Components/SectionHeader";
+import ToDoActions from "~/Store/ToDo/Actions";
+import { useSelector, useDispatch } from "react-redux";
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const threshold = 200;
   const [flatListPosition, setFlatListPosition] = useState(0);
   const [topHeaderHeight, setTopHeaderHeight] = useState(threshold);
+
+  const toDoReducer = useSelector((state) => state?.ToDo);
+  const toDoData = toDoReducer?.toDoData;
+  const toDoError = toDoReducer?.toDoError;
+  const toDoState = toDoReducer?.toDoState;
+
   const DATA = [
     {
       title: "Detyrat",
@@ -34,6 +43,10 @@ const HomeScreen = () => {
   ];
 
   useEffect(() => {
+    dispatch(ToDoActions.getToDo());
+  }, []);
+
+  useEffect(() => {
     let position = threshold - flatListPosition;
     position > 84 && setTopHeaderHeight(position);
   }, [flatListPosition]);
@@ -43,7 +56,9 @@ const HomeScreen = () => {
   };
 
   const renderItem = ({ item }) => {
-    if (item.type === "task") {
+    // console.log(item?.isTask);
+    // return null;
+    if (item?.isTask === true && item?.type !== "quiz") {
       return <TasksBox item={item} />;
     } else {
       return <OtherTasks item={item} />;
@@ -65,7 +80,7 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <SectionList
-        sections={DATA}
+        sections={toDoData}
         bounces={false}
         keyExtractor={(item, index) => item + index}
         // ListHeaderComponent={headerFlatList()}

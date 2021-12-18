@@ -12,5 +12,8 @@ const Colors = {
   green: "#76FFBB",
   darkGreen: "#7DD1A7",
   inActiveNewTaskButton: "#7EA7A7",
+  groupBackground: "#788E8B",
+  upComingTasks: "#3EAAB3",
+  pendingQuiz: "#F29339",
 };
 export default Colors;
