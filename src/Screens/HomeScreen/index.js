@@ -56,8 +56,6 @@ const HomeScreen = () => {
   };
 
   const renderItem = ({ item }) => {
-    // console.log(item?.isTask);
-    // return null;
     if (item?.isTask === true && item?.type !== "quiz") {
       return <TasksBox item={item} />;
     } else {

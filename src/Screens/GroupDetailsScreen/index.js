@@ -7,24 +7,17 @@ import Colors from "~/Assets/Colors";
 import InviteOtherModal from "~/Components/InviteOtherModal";
 import PopUpModal from "~/Components/PopUpModal";
 import SectionHeader from "~/Components/SectionHeader";
-import tasksData from "~/Functions/fakeData/tasksData";
 import TasksBox from "~/Components/TasksBox";
 import Plus from "~/Assets/Svg/plus";
-const GroupDetailsScreen = ({ navigation }) => {
+const GroupDetailsScreen = ({ navigation, route }) => {
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const [id, setId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
-
+  const { item, tasks } = route.params;
   const user = "professor";
 
-  const DATA = [
-    {
-      title: "Detyrat",
-      data: tasksData,
-    },
-  ];
   const inviteModalProps = {
     title: "Shto nje student ne grup",
     leftButtonText: "Ruaj",
@@ -68,7 +61,7 @@ const GroupDetailsScreen = ({ navigation }) => {
   const headerSectionList = () => {
     return (
       <Header
-        title="Algorithm"
+        title={item?.group?.title}
         leftIcon={<AddPerson />}
         handleLeftIcon={() => setInviteModalVisible(true)}
         rightIcon={user === "professor" ? <Plus /> : <Logout />}
@@ -82,7 +75,7 @@ const GroupDetailsScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <SectionList
-        sections={DATA}
+        sections={tasks}
         bounces={false}
         keyExtractor={(item, index) => item + index}
         ListHeaderComponent={headerSectionList()}

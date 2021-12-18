@@ -9,10 +9,9 @@ class ToDoActions {
       dispatch(ToDoReducers.getToDoStart());
       API.ToDo.getToDo(token)
         .then((res) => {
+          dispatch(ToDoReducers.unFormatedToDo(res?.data));
           const formatedToDo = formatToDo(res?.data);
-          // console.log("formatedToDo", formatedToDo);
           const formatedSections = formatSections(formatedToDo);
-          // console.log("formatedSections", formatedSections);
           dispatch(ToDoReducers.getToDoDone(formatedSections));
         })
         .catch((err) => {

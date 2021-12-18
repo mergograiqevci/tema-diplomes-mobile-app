@@ -14,7 +14,6 @@ const formatToDo = (toDo) => {
     groupTasks.length > 0 &&
     groupTasks.map((task) => tasks.push(task));
 
-  console.log("quizTaken", toDo?.quizTaken);
   return {
     tasks,
     groups: toDo?.groups.map((i) => ({ ...i, isGroup: true })),

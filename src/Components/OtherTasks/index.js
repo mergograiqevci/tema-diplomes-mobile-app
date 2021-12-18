@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity } from "react-native";
 import Styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "~/Assets/Colors";
+import moment from "moment";
+import { useSelector } from "react-redux";
 const OtherTasks = ({ item }) => {
+  const toDoReducer = useSelector((state) => state?.ToDo);
+  const unFormatedToDoData = toDoReducer?.unFormatedToDoData?.groupTasks;
   const navigation = useNavigation();
   const title =
     item.isGroup === true
@@ -16,7 +20,7 @@ const OtherTasks = ({ item }) => {
     item.isGroup === true
       ? "3"
       : item.isTask === true
-      ? item?.quiz?.date
+      ? moment(item?.quiz?.date).utc().format("DD/MM-HH:mm")
       : item.grade === null
       ? item?.points
       : "Nota: " + item?.grade;
@@ -51,7 +55,19 @@ const OtherTasks = ({ item }) => {
       ]}
       onPress={() =>
         item.isGroup === true
-          ? navigation.push("GroupDetailsScreen")
+          ? // const d=groupTasks.filter((i)=>i.group._id.toString()===id);
+
+            navigation.push("GroupDetailsScreen", {
+              item: item,
+              tasks: [
+                {
+                  title: "Detyrat",
+                  data: unFormatedToDoData.filter(
+                    (i) => i.group._id.toString() === item.group._id
+                  ),
+                },
+              ],
+            })
           : navigation.push("TakingQuizScreen")
       }
       activeOpacity={item.isGroup === true ? 0 : 0.7}

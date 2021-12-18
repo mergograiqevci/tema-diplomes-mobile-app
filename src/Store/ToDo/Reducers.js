@@ -3,6 +3,7 @@ import State from "~/Store/State";
 
 const initialState = {
   toDoData: [],
+  unFormatedToDoData: [],
   toDoError: null,
   toDoState: State.NOT_PROCESSED,
 };
@@ -13,6 +14,9 @@ const slice = createSlice({
   reducers: {
     getToDoStart(state) {
       state.toDoState = State.PROCESSING;
+    },
+    unFormatedToDo(state, action) {
+      state.unFormatedToDoData = action.payload;
     },
     getToDoDone(state, action) {
       state.toDoData = action.payload;
@@ -26,4 +30,5 @@ const slice = createSlice({
 });
 
 export const ToDoSlice = slice;
-export const { getToDoStart, getToDoDone, getToDoFailed } = slice.actions;
+export const { getToDoStart, getToDoDone, getToDoFailed, unFormatedToDo } =
+  slice.actions;
