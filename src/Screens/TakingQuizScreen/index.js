@@ -5,14 +5,22 @@ import Colors from "~/Assets/Colors";
 import QuizAnswers from "~/Assets/Svg/quizAnswers";
 import QuizCurrentAnswer from "~/Assets/Svg/quizCurrentAnswer";
 import Styles from "./styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Logout from "~/Assets/Svg/logout";
 import PopUpModal from "~/Components/PopUpModal";
-const TakingQuizScreen = ({ navigation }) => {
+import ToDoActions from "~/Store/ToDo/Actions";
+const TakingQuizScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const { item } = route.params;
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
-  const [allAnswers, setAllAnswers] = useState([]);
+  const [questionIndex, setQuestinIndex] = useState(0);
+  const [currentQuestion] = useState(item?.quiz?.quiz?.details[questionIndex]);
   const [currentAnswers, setCurrentAnswers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  // console.log("quiz", quiz.quiz.details);
+  const lastQuestion = questionIndex + 1 === item?.quiz?.quiz?.details?.length;
+  console.log("ID:", item._id);
   const modalProps = {
     title: "A jeni te sigurt qe deshironi te dilni nga kuizi ?",
     subTitle:
@@ -30,33 +38,57 @@ const TakingQuizScreen = ({ navigation }) => {
     { id: 4, left: "d)", center: "11" },
   ];
 
+  console.log("ANSWEER:", currentAnswers);
+
   const setSingleAnswer = (item) => {
-    const findItem = currentAnswers.find((i) => i.id === item.id);
+    const findItem = currentAnswers.find(
+      (i) => i.answer.toString() === item.answer.toString()
+    );
     if (findItem) {
-      setCurrentAnswers(currentAnswers.filter((i) => i.id !== item.id));
+      setCurrentAnswers(
+        currentAnswers.filter(
+          (i) => i.answer.toString() !== item.answer.toString()
+        )
+      );
     } else {
-      setCurrentAnswers([...currentAnswers, item]);
+      setCurrentAnswers([
+        ...currentAnswers,
+        { ...item, question: currentQuestion?.question },
+      ]);
     }
   };
 
-  const switchToMap = (item) => {
-    if (item.id === 2) {
+  const switchToMap = (cItem) => {
+    // console.log("ITEM:", item);
+    return <QuizAnswers color={Colors.white} />;
+    //duhet me kqyr prap
+    const itemIndex = item?.quiz?.quiz?.details.findIndex(
+      (i) => i._id === cItem._id
+    );
+    console.log("INDEXI:", itemIndex);
+    if (cItem.id === questionIndex) {
       return <QuizCurrentAnswer />;
     }
-    if (item.id < 2) {
+    if (cItem.id < questionIndex) {
       return <QuizAnswers color={Colors.blue} />;
     } else {
-      return <QuizAnswers color={Colors.white} />;
     }
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
+    const convertedItem = {
+      answer: item,
+      left: index + 1 + " )",
+      center: item,
+    };
     return (
       <QuizController
-        item={item}
+        item={convertedItem}
         textColor={Colors.black}
         backgroundColor={
-          currentAnswers.find((i) => i.id === item.id)
+          currentAnswers.find(
+            (i) => i?.answer?.toString() === convertedItem?.answer?.toString()
+          )
             ? Colors.green
             : Colors.white
         }
@@ -69,20 +101,22 @@ const TakingQuizScreen = ({ navigation }) => {
     return (
       <View style={{ flex: 1 }}>
         <View style={Styles.headerView}>
-          <Text style={Styles.text}>Test nga Matematika</Text>
+          <Text style={Styles.text}>{item?.quiz?.title}</Text>
           <Text style={Styles.text}>
-            02
-            <Text style={[Styles.text, { opacity: 0.6 }]}>/5</Text>
+            {questionIndex + 1}
+            <Text style={[Styles.text, { opacity: 0.6 }]}>
+              /{item?.quiz?.quiz?.details?.length}
+            </Text>
           </Text>
         </View>
 
         <View style={Styles.questionView}>
-          {question.map((item) => (
+          {item?.quiz?.quiz?.details.map((item) => (
             <View style={{ marginHorizontal: 2 }}>{switchToMap(item)}</View>
           ))}
         </View>
         <Text style={Styles.questionText}>
-          Cili numer eshte me i madh se 4?
+          {item?.quiz?.quiz?.details[questionIndex]?.question}
         </Text>
       </View>
     );
@@ -103,7 +137,9 @@ const TakingQuizScreen = ({ navigation }) => {
             style={Styles.continueQuizButton}
             onPress={handleContinueToNextQuestion}
           >
-            <Text style={Styles.continueQuizText}>Vazhdo</Text>
+            <Text style={Styles.continueQuizText}>
+              {lastQuestion ? "Perfundo" : "Vazhdo"}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -111,8 +147,11 @@ const TakingQuizScreen = ({ navigation }) => {
   };
 
   const handleContinueToNextQuestion = () => {
-    // console.log("NEXT QUESTION");
-    navigation.push("QuizResultScreen");
+    if (lastQuestion) {
+      dispatch(ToDoActions.completeQuiz(item._id));
+    } else {
+      setQuestinIndex(questionIndex + 1);
+    }
   };
   const handleLeaveQuiz = () => {
     setModalVisible(true);
@@ -130,7 +169,7 @@ const TakingQuizScreen = ({ navigation }) => {
   return (
     <View style={[Styles.container, { paddingTop: safeAreaSize.top + 20 }]}>
       <FlatList
-        data={question}
+        data={item?.quiz?.quiz?.details[questionIndex]?.options}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}

@@ -6,6 +6,9 @@ const initialState = {
   unFormatedToDoData: [],
   toDoError: null,
   toDoState: State.NOT_PROCESSED,
+  completeQuizData: {},
+  completeQuizError: null,
+  completeQuizState: State.NOT_PROCESSED,
 };
 
 const slice = createSlice({
@@ -15,9 +18,6 @@ const slice = createSlice({
     getToDoStart(state) {
       state.toDoState = State.PROCESSING;
     },
-    unFormatedToDo(state, action) {
-      state.unFormatedToDoData = action.payload;
-    },
     getToDoDone(state, action) {
       state.toDoData = action.payload;
       state.toDoState = State.DONE;
@@ -26,9 +26,30 @@ const slice = createSlice({
       state.toDoError = action.payload;
       state.toDoState = State.FAILED;
     },
+    completeQuizStart(state) {
+      state.completeQuizState = State.PROCESSING;
+    },
+    completeQuizDone(state, action) {
+      state.completeQuizData = action.payload;
+      state.completeQuizState = State.DONE;
+    },
+    completeQuizFailed(state, action) {
+      state.completeQuizError = action.payload;
+      state.completeQuizState = State.FAILED;
+    },
+    unFormatedToDo(state, action) {
+      state.unFormatedToDoData = action.payload;
+    },
   },
 });
 
 export const ToDoSlice = slice;
-export const { getToDoStart, getToDoDone, getToDoFailed, unFormatedToDo } =
-  slice.actions;
+export const {
+  getToDoStart,
+  getToDoDone,
+  getToDoFailed,
+  unFormatedToDo,
+  completeQuizStart,
+  completeQuizDone,
+  completeQuizFailed,
+} = slice.actions;

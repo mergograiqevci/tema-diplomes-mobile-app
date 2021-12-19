@@ -9,6 +9,7 @@ import groupsData from "~/Functions/fakeData/groupsData";
 import OtherTasks from "~/Components/OtherTasks";
 import Plus from "~/Assets/Svg/plus";
 import AddGroup from "~/Assets/Svg/addGroup";
+import isProfessor from "~/Functions/isProfessor";
 const GroupsScreen = ({ navigation }) => {
   const [createGroupModalVisible, setCreateGroupModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -17,6 +18,8 @@ const GroupsScreen = ({ navigation }) => {
   const [errorMessages, setErrorMessages] = useState({});
   const [selectedLanguage, setSelectedLanguage] = useState();
   const user = "professor";
+
+  const professor = isProfessor();
 
   const createGroupModalProps = {
     title: "Krijio nje grup te ri",

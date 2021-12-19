@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, SectionList } from "react-native";
 import Header from "~/Components/Header";
 import Logout from "~/Assets/Svg/logout";
@@ -10,14 +10,31 @@ import SectionHeader from "~/Components/SectionHeader";
 import TasksBox from "~/Components/TasksBox";
 import Plus from "~/Assets/Svg/plus";
 import OtherTasks from "~/Components/OtherTasks";
+import isProfessor from "~/Functions/isProfessor";
+import GroupActions from "~/Store/Group/Actions";
+import { useSelector, useDispatch } from "react-redux";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
+import State from "~/Store/State";
+import { useIsFocused } from "@react-navigation/native";
+import * as GroupReducers from "~/Store/Group/Reducers";
+
 const GroupDetailsScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const focused = useIsFocused();
+
+  const groupReducer = useSelector((state) => state?.Group);
+  const leaveGroupData = groupReducer?.leaveGroupData;
+  const leaveGroupError = groupReducer?.leaveGroupError;
+  const leaveGroupState = groupReducer?.leaveGroupState;
+
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const [id, setId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const { item, tasks } = route.params;
-  const user = "professor";
+
+  const professor = isProfessor();
 
   const inviteModalProps = {
     title: "Shto nje student ne grup",
@@ -28,18 +45,35 @@ const GroupDetailsScreen = ({ navigation, route }) => {
   };
 
   const deleteModalProps = {
-    title: "A jeni te sigurt qe deshironi te dilni nga kuizi ?",
-    subTitle:
-      " The Mathematics Placement Exam (MPE) is a 90-minute, 60-item multiple choice exam that tests skills and understandings from precalculus",
+    title: "A jeni te sigurt qe deshironi te dilni nga grupi ?",
+    subTitle: "",
     leftButtonText: "Konfirmo",
     leftButtonColor: Colors.negative,
     rightButtonText: "Kthehu",
     rightButtonColor: Colors.appBaseColor,
   };
 
+  useEffect(() => {
+    if (leaveGroupState === State.FAILED) {
+      setDeleteModalVisible(false);
+      toasterMessage(
+        `Ka ndodhur nje gabim gjate largimit nga grupi, ju lutem provoni me vone`,
+        "error"
+      );
+    } else if (leaveGroupState === State.DONE) {
+      setDeleteModalVisible(false);
+      navigation.pop();
+    }
+  }, [leaveGroupState]);
+
+  useEffect(() => {
+    if (!focused) {
+      dispatch(GroupReducers.clearPrevLeaveGroupData());
+    }
+  }, [focused]);
+
   const leftButtonAction = () => {
-    console.log("Left Button onclick");
-    navigation.pop();
+    dispatch(GroupActions.leaveGroup(item?._id));
   };
 
   const rightButtonAction = () => {
@@ -48,7 +82,7 @@ const GroupDetailsScreen = ({ navigation, route }) => {
   };
 
   const handleRightIcon = () => {
-    if (user === "professor") {
+    if (professor) {
       navigation.push("NewTaskScreen");
     } else {
       setDeleteModalVisible(true);
@@ -69,7 +103,7 @@ const GroupDetailsScreen = ({ navigation, route }) => {
         title={item?.group?.title}
         leftIcon={<AddPerson />}
         handleLeftIcon={() => setInviteModalVisible(true)}
-        rightIcon={user === "professor" ? <Plus /> : <Logout />}
+        rightIcon={professor ? <Plus /> : <Logout />}
         handleRightIcon={handleRightIcon}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}

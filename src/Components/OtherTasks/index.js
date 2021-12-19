@@ -66,7 +66,7 @@ const OtherTasks = ({ item }) => {
                 },
               ],
             })
-          : navigation.push("TakingQuizScreen")
+          : navigation.push("TakingQuizScreen", { item: item })
       }
       activeOpacity={item.isGroup === true ? 0 : 0.7}
     >

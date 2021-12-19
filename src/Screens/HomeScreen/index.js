@@ -5,10 +5,6 @@ import Colors from "~/Assets/Colors";
 import ProfileBox from "~/Components/ProfileBox";
 import TasksBox from "~/Components/TasksBox";
 import OtherTasks from "~/Components/OtherTasks";
-import groupsData from "~/Functions/fakeData/groupsData";
-import tasksData from "~/Functions/fakeData/tasksData";
-import completedData from "~/Functions/fakeData/completedData";
-import failedData from "~/Functions/fakeData/failedData";
 import SectionHeader from "~/Components/SectionHeader";
 import ToDoActions from "~/Store/ToDo/Actions";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,7 +19,6 @@ const HomeScreen = () => {
   const toDoError = toDoReducer?.toDoError;
   const toDoState = toDoReducer?.toDoState;
 
-  // console.log("toDoData", toDoData[0].data);
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
   }, []);

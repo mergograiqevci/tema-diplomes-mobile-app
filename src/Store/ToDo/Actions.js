@@ -20,6 +20,21 @@ class ToDoActions {
         });
     };
   }
+  static completeQuiz(quiz_id) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      dispatch(ToDoReducers.completeQuizStart());
+      API.ToDo.completeQuiz(token, quiz_id)
+        .then((res) => {
+          console.log("SUCC:", res);
+          dispatch(ToDoReducers.completeQuizDone(res));
+        })
+        .catch((err) => {
+          console.log("err", err);
+          dispatch(ToDoReducers.completeQuizFailed(err));
+        });
+    };
+  }
 }
 
 export default ToDoActions;

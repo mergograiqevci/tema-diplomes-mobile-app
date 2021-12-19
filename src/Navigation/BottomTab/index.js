@@ -13,7 +13,10 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   getTabBarVisibility = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === "HomeWithoutBottomTab") {
+    if (
+      routeName === "HomeWithoutBottomTab" ||
+      routeName === "TakingQuizScreen"
+    ) {
       return "none";
     }
     return "flex";
