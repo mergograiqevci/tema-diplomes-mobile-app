@@ -9,6 +9,7 @@ import PopUpModal from "~/Components/PopUpModal";
 import SectionHeader from "~/Components/SectionHeader";
 import TasksBox from "~/Components/TasksBox";
 import Plus from "~/Assets/Svg/plus";
+import OtherTasks from "~/Components/OtherTasks";
 const GroupDetailsScreen = ({ navigation, route }) => {
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -55,7 +56,11 @@ const GroupDetailsScreen = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => {
-    return <TasksBox item={item} />;
+    if (item?.isTask === true && item?.type !== "quiz") {
+      return <TasksBox item={item} />;
+    } else {
+      return <OtherTasks item={item} />;
+    }
   };
 
   const headerSectionList = () => {

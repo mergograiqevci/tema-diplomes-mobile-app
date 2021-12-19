@@ -7,7 +7,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 const OtherTasks = ({ item }) => {
   const toDoReducer = useSelector((state) => state?.ToDo);
-  const unFormatedToDoData = toDoReducer?.unFormatedToDoData?.groupTasks;
+  const toDoData = toDoReducer?.toDoData;
   const navigation = useNavigation();
   const title =
     item.isGroup === true
@@ -55,15 +55,13 @@ const OtherTasks = ({ item }) => {
       ]}
       onPress={() =>
         item.isGroup === true
-          ? // const d=groupTasks.filter((i)=>i.group._id.toString()===id);
-
-            navigation.push("GroupDetailsScreen", {
+          ? navigation.push("GroupDetailsScreen", {
               item: item,
               tasks: [
                 {
                   title: "Detyrat",
-                  data: unFormatedToDoData.filter(
-                    (i) => i.group._id.toString() === item.group._id
+                  data: toDoData[0].data.filter(
+                    (i) => i.group && i.group._id.toString() === item.group._id
                   ),
                 },
               ],

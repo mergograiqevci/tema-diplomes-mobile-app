@@ -23,25 +23,7 @@ const HomeScreen = () => {
   const toDoError = toDoReducer?.toDoError;
   const toDoState = toDoReducer?.toDoState;
 
-  const DATA = [
-    {
-      title: "Detyrat",
-      data: tasksData,
-    },
-    {
-      title: "Grupet",
-      data: groupsData,
-    },
-    {
-      title: "Perfunduara",
-      data: completedData,
-    },
-    {
-      title: "Deshtuara",
-      data: failedData,
-    },
-  ];
-
+  // console.log("toDoData", toDoData[0].data);
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
   }, []);

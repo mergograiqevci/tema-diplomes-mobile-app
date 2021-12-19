@@ -17,8 +17,11 @@ export default StyleSheet.create({
   },
   textView: {
     flexDirection: "column",
-    width: "65%",
+    width: "60%",
     height: "70%",
+    maxWidth: "60%",
+    marginLeft: 10,
+    alignItems: "center",
   },
   title: {
     color: Colors.white,
@@ -37,6 +40,23 @@ export default StyleSheet.create({
   icon: {
     position: "absolute",
     bottom: 10,
-    right: 10,
+    right: 20,
+  },
+  readBookView: {
+    position: "absolute",
+    bottom: 15,
+    right: 20,
+  },
+  readBookText: {
+    color: Colors.blue,
+    textAlign: "center",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  bgText: {
+    backgroundColor: Colors.white,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderRadius: 5,
   },
 });
