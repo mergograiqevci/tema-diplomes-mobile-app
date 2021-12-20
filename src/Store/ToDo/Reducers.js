@@ -40,6 +40,11 @@ const slice = createSlice({
     unFormatedToDo(state, action) {
       state.unFormatedToDoData = action.payload;
     },
+    clearPrevQuizCompleted(state) {
+      state.completeQuizData = {};
+      state.completeQuizError = null;
+      state.completeQuizState = State.NOT_PROCESSED;
+    },
   },
 });
 
@@ -52,4 +57,5 @@ export const {
   completeQuizStart,
   completeQuizDone,
   completeQuizFailed,
+  clearPrevQuizCompleted,
 } = slice.actions;

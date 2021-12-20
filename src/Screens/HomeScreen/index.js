@@ -31,7 +31,6 @@ const HomeScreen = () => {
   const handleOptionsInFlat = (e) => {
     setFlatListPosition(e.nativeEvent.contentOffset.y);
   };
-
   const renderItem = ({ item }) => {
     if (item?.isTask === true && item?.type !== "quiz") {
       return <TasksBox item={item} />;

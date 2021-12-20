@@ -10,14 +10,19 @@ import OtherTasks from "~/Components/OtherTasks";
 import Plus from "~/Assets/Svg/plus";
 import AddGroup from "~/Assets/Svg/addGroup";
 import isProfessor from "~/Functions/isProfessor";
+import { useSelector } from "react-redux";
+import TasksBox from "~/Components/TasksBox";
 const GroupsScreen = ({ navigation }) => {
+  const toDoReducer = useSelector((state) => state?.ToDo);
+  const toDoData = toDoReducer?.toDoData;
+  const toDoError = toDoReducer?.toDoError;
+  const toDoState = toDoReducer?.toDoState;
   const [createGroupModalVisible, setCreateGroupModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const [id, setId] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [selectedLanguage, setSelectedLanguage] = useState();
-  const user = "professor";
 
   const professor = isProfessor();
 
@@ -50,7 +55,7 @@ const GroupsScreen = ({ navigation }) => {
   };
 
   const handleRightIcon = () => {
-    if (user === "professor") {
+    if (professor) {
       navigation.push("NewTaskScreen");
     } else {
       setDeleteModalVisible(true);
@@ -58,24 +63,26 @@ const GroupsScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    return <OtherTasks item={item} />;
+    if (item?.isTask === true && item?.type !== "quiz") {
+      return <TasksBox item={item} />;
+    } else {
+      return <OtherTasks item={item} />;
+    }
   };
-
   return (
     <View style={{ flex: 1 }}>
       <Header
-        title="Grupe"
-        leftIcon={<AddGroup />}
-        handleLeftIcon={() => setCreateGroupModalVisible(true)}
-        rightIcon={user === "professor" ? <Plus /> : <Logout />}
-        handleRightIcon={handleRightIcon}
+        title="Grupet"
+        leftIcon={professor && <AddGroup />}
+        handleLeftIcon={() => professor && setCreateGroupModalVisible(true)}
+        rightIcon={professor && <Plus />}
+        handleRightIcon={professor && handleRightIcon}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}
       />
       <FlatList
-        style={{ paddingTop: 30 }}
-        data={groupsData}
+        data={toDoData?.find((s) => s.key === "groups")?.data}
         bounces={false}
         keyExtractor={(item, index) => item + index}
         renderItem={renderItem}

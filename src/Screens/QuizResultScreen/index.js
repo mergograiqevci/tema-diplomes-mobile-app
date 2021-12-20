@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity } from "react-native";
 import Styles from "./styles";
 import Trophy from "~/Assets/Svg/trophy";
 import { useSelector } from "react-redux";
-const QuizResultScreen = ({ navigation }) => {
+const QuizResultScreen = ({ navigation, route }) => {
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
+  const { quizData } = route.params;
 
   const handleCloseButton = () => {
     navigation.push("HomeScreen");
@@ -19,11 +20,11 @@ const QuizResultScreen = ({ navigation }) => {
       <Text style={Styles.resultText}>Rezultati</Text>
       <Trophy />
       <Text style={Styles.congratsText}>Urime!</Text>
-      <Text style={Styles.congratsDescriptionText}>
+      {/* <Text style={Styles.congratsDescriptionText}>
         The Mathematics Placement Exam (MPE) is a 90-minute.
-      </Text>
+      </Text> */}
       <Text style={Styles.yourPointsText}>Piket e tua</Text>
-      <Text style={Styles.yourPointsValueText}>20/20</Text>
+      <Text style={Styles.yourPointsValueText}>{quizData?.data?.points}</Text>
 
       <View
         style={{

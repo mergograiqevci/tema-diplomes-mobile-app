@@ -20,19 +20,23 @@ class ToDoActions {
         });
     };
   }
-  static completeQuiz(quiz_id) {
+  static completeQuiz(quiz_id, quiz_answers) {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       dispatch(ToDoReducers.completeQuizStart());
-      API.ToDo.completeQuiz(token, quiz_id)
+      API.ToDo.completeQuiz(token, quiz_id, quiz_answers)
         .then((res) => {
-          console.log("SUCC:", res);
           dispatch(ToDoReducers.completeQuizDone(res));
+          dispatch(this.getToDo());
         })
         .catch((err) => {
-          console.log("err", err);
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
+    };
+  }
+  static clearPrevQuizCompleted() {
+    return (dispatch) => {
+      dispatch(ToDoReducers.clearPrevQuizCompleted());
     };
   }
 }
