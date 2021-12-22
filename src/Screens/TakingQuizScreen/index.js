@@ -15,6 +15,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
   const focused = useIsFocused();
   const dispatch = useDispatch();
   const { item } = route.params;
+  console.log("ITEM:", item);
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
   const toDoReducer = useSelector((state) => state?.ToDo);
 

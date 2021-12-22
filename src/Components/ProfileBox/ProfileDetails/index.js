@@ -4,7 +4,7 @@ import Styles from "./styles";
 const ProfileDetails = ({ item }) => {
   return (
     <View style={Styles.singleItemView}>
-      <Text style={Styles.valueTitle}>{item.count}</Text>
+      <Text style={Styles.valueTitle}>{item.length}</Text>
       <Text style={Styles.name}>{item.title}</Text>
     </View>
   );

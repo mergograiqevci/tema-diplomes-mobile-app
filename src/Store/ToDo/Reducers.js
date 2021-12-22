@@ -9,6 +9,12 @@ const initialState = {
   completeQuizData: {},
   completeQuizError: null,
   completeQuizState: State.NOT_PROCESSED,
+  canCompleteQuizData: {},
+  canCompleteQuizError: null,
+  canCompleteQuizState: State.NOT_PROCESSED,
+  getQuizResultError: null,
+  getQuizResultState: State.NOT_PROCESSED,
+  getQuizResultData: {},
 };
 
 const slice = createSlice({
@@ -45,6 +51,33 @@ const slice = createSlice({
       state.completeQuizError = null;
       state.completeQuizState = State.NOT_PROCESSED;
     },
+    canCompleteQuizStart(state) {
+      state.canCompleteQuizState = State.PROCESSING;
+    },
+    canCompleteQuizDone(state, action) {
+      state.canCompleteQuizData = action.payload;
+      state.canCompleteQuizState = State.DONE;
+    },
+    canCompleteQuizFailed(state, action) {
+      state.canCompleteQuizError = action.payload;
+      state.canCompleteQuizState = State.FAILED;
+    },
+    clearPrevCanCompleteQuiz(state) {
+      state.canCompleteQuizData = {};
+      state.canCompleteQuizError = null;
+      state.canCompleteQuizState = State.NOT_PROCESSED;
+    },
+    getQuizResultStart(state) {
+      state.getQuizResultState = State.PROCESSING;
+    },
+    getQuizResultDone(state, action) {
+      state.getQuizResultData = action.payload;
+      state.getQuizResultState = State.DONE;
+    },
+    getQuizResultFailed(state, action) {
+      state.getQuizResultError = action.payload;
+      state.getQuizResultState = State.FAILED;
+    },
   },
 });
 
@@ -58,4 +91,11 @@ export const {
   completeQuizDone,
   completeQuizFailed,
   clearPrevQuizCompleted,
+  canCompleteQuizStart,
+  canCompleteQuizDone,
+  canCompleteQuizFailed,
+  clearPrevCanCompleteQuiz,
+  getQuizResultStart,
+  getQuizResultDone,
+  getQuizResultFailed,
 } = slice.actions;

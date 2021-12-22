@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "~/Assets/Colors";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ToDoActions from "~/Store/ToDo/Actions";
+import State from "~/Store/State";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
 const OtherTasks = ({ item }) => {
+  const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
+  const canCompleteQuizData = toDoReducer?.canCompleteQuizData;
+  const canCompleteQuizError = toDoReducer?.canCompleteQuizError;
+  const canCompleteQuizState = toDoReducer?.canCompleteQuizState;
+  const getQuizResultError = toDoReducer?.getQuizResultData;
+  const getQuizResultState = toDoReducer?.getQuizResultState;
+
   const navigation = useNavigation();
+
   const title =
     item.isGroup === true
       ? item.group.title
@@ -45,6 +56,46 @@ const OtherTasks = ({ item }) => {
       ? Colors.negative
       : Colors.appBaseColor;
 
+  useEffect(() => {
+    if (canCompleteQuizState === State.FAILED) {
+      setTimeout(() => {
+        dispatch(ToDoActions.clearPrevCanCompleteQuiz());
+      }, 500);
+    }
+    if (getQuizResultState === State.FAILED) {
+      toasterMessage("Ndodhi nje gabim gjate leximit te pergjigjeve", "error");
+    }
+  }, [canCompleteQuizState, getQuizResultState]);
+
+  const redirectToQuiz = () => {
+    navigation.push("TakingQuizScreen", { item: item });
+  };
+
+  const redirectToAnswer = () => {
+    navigation.push("QuizAnswer", { quizName: item?.quiz?.title });
+  };
+
+  const handleTaskOnClick = () => {
+    if (item.isGroup === true) {
+      navigation.push("GroupDetailsScreen", {
+        item: item,
+        tasks: [
+          {
+            title: "Detyrat",
+            data: toDoData[0].data.filter(
+              (i) => i.group && i.group._id.toString() === item.group._id
+            ),
+          },
+        ],
+      });
+    } else {
+      if (item.grade === undefined) {
+        dispatch(ToDoActions.canCompleteQuiz(item?._id, redirectToQuiz));
+      } else if (parseInt(item.grade) >= 5) {
+        dispatch(ToDoActions.getQuizResult(item?._id, redirectToAnswer));
+      }
+    }
+  };
   return (
     <TouchableOpacity
       style={[
@@ -53,26 +104,18 @@ const OtherTasks = ({ item }) => {
           backgroundColor: backgroundColor,
         },
       ]}
-      onPress={() =>
-        item.isGroup === true
-          ? navigation.push("GroupDetailsScreen", {
-              item: item,
-              tasks: [
-                {
-                  title: "Detyrat",
-                  data: toDoData[0].data.filter(
-                    (i) => i.group && i.group._id.toString() === item.group._id
-                  ),
-                },
-              ],
-            })
-          : navigation.push("TakingQuizScreen", { item: item })
-      }
+      onPress={handleTaskOnClick}
       activeOpacity={item.isGroup === true ? 0 : 0.7}
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>
-        <Text style={Styles.rightTitle}>{subTitle}</Text>
+        <Text style={Styles.rightTitle}>
+          {canCompleteQuizError?.message === "cant_complete_task" &&
+          item.isTask === true &&
+          item?._id === canCompleteQuizError?.quiz_id
+            ? `Data e Provimit`
+            : subTitle}
+        </Text>
         {bottomSubTitle !== undefined && (
           <View
             style={[

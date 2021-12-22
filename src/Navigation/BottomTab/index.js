@@ -15,7 +15,8 @@ const BottomTabNavigator = () => {
     const routeName = getFocusedRouteNameFromRoute(route);
     if (
       routeName === "HomeWithoutBottomTab" ||
-      routeName === "TakingQuizScreen"
+      routeName === "TakingQuizScreen" ||
+      routeName === "QuizAnswer"
     ) {
       return "none";
     }

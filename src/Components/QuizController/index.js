@@ -1,13 +1,21 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 import Styles from "./styles";
-const QuizController = ({ item, textColor, backgroundColor, onPress }) => {
+const QuizController = ({
+  item,
+  textColor,
+  backgroundColor,
+  borderColor,
+  onPress,
+}) => {
   return (
     <TouchableOpacity
       style={[
         Styles.container,
         {
           backgroundColor: backgroundColor,
+          borderWidth: borderColor ? 2 : 0,
+          borderColor: borderColor && borderColor,
         },
       ]}
       activeOpacity={onPress ? 0 : 1}

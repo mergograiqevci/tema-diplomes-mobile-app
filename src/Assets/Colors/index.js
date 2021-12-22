@@ -9,7 +9,7 @@ const Colors = {
   inActiveBorderInput: "#DFE6EC",
   gray: "#AFAFAF",
   negative: "#F45D48",
-  green: "#76FFBB",
+  green: "#00FFBB",
   darkGreen: "#7DD1A7",
   inActiveNewTaskButton: "#7EA7A7",
   groupBackground: "#788E8B",

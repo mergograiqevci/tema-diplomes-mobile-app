@@ -25,6 +25,6 @@ export default StyleSheet.create({
   nameText: {
     marginTop: 10,
     marginBottom: 15,
-    fontSize: 20,
+    fontSize: 17,
   },
 });

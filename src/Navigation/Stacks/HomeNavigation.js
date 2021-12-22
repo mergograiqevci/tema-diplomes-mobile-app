@@ -12,6 +12,7 @@ import StudentRatingScreen from "~/Screens/StudentRatingScreen";
 import TakingQuizScreen from "~/Screens/TakingQuizScreen";
 import ReadingBookScreen from "~/Screens/ReadingBookScreen";
 import VideoWebViewScreen from "~/Screens/VideoWebViewScreen";
+import QuizAnswer from "~/Screens/QuizAnswer";
 const Stack = createStackNavigator();
 
 const HomeNavigation = () => {
@@ -42,6 +43,7 @@ const HomeNavigation = () => {
       <Stack.Screen name="TakingQuizScreen" component={TakingQuizScreen} />
       <Stack.Screen name="ReadingBookScreen" component={ReadingBookScreen} />
       <Stack.Screen name="VideoWebViewScreen" component={VideoWebViewScreen} />
+      <Stack.Screen name="QuizAnswer" component={QuizAnswer} />
     </Stack.Navigator>
   );
 };

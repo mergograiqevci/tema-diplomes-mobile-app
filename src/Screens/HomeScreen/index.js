@@ -8,6 +8,8 @@ import OtherTasks from "~/Components/OtherTasks";
 import SectionHeader from "~/Components/SectionHeader";
 import ToDoActions from "~/Store/ToDo/Actions";
 import { useSelector, useDispatch } from "react-redux";
+import State from "~/Store/State";
+import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;
@@ -18,10 +20,18 @@ const HomeScreen = () => {
   const toDoData = toDoReducer?.toDoData;
   const toDoError = toDoReducer?.toDoError;
   const toDoState = toDoReducer?.toDoState;
+  const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
+  const [toDoStatistic, setToDoStatistic] = useState([]);
 
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
   }, []);
+
+  useEffect(() => {
+    if (toDoState === State.DONE) {
+      setToDoStatistic(formatToDoStatistic(unFormatedToDoData));
+    }
+  }, [toDoData]);
 
   useEffect(() => {
     let position = threshold - flatListPosition;
@@ -57,7 +67,6 @@ const HomeScreen = () => {
         sections={toDoData}
         bounces={false}
         keyExtractor={(item, index) => item + index}
-        // ListHeaderComponent={headerFlatList()}
         renderItem={renderItem}
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />
@@ -66,7 +75,7 @@ const HomeScreen = () => {
         onScroll={handleOptionsInFlat}
       />
       {headerFlatList()}
-      <ProfileBox height={topHeaderHeight} />
+      <ProfileBox toDoStatistic={toDoStatistic} height={topHeaderHeight} />
     </View>
   );
 };
