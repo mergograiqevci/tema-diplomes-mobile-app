@@ -11,8 +11,10 @@ import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isTodayDay from "~/Functions/isTodayDay";
 const OtherTasks = ({ item }) => {
   const dispatch = useDispatch();
+  const myProfile = useSelector((state) => state?.myProfile);
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
+  const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const canCompleteQuizData = toDoReducer?.canCompleteQuizData;
   const canCompleteQuizError = toDoReducer?.canCompleteQuizError;
   const canCompleteQuizState = toDoReducer?.canCompleteQuizState;
@@ -22,40 +24,42 @@ const OtherTasks = ({ item }) => {
   const navigation = useNavigation();
 
   const title =
-    item.isGroup === true
-      ? item.group.title
-      : item.isTask === true
-      ? item.title
-      : item.quiz.title;
+    item?.isGroup === true
+      ? item?.group?.title
+        ? item?.group?.title
+        : item?.title
+      : item?.isTask === true
+      ? item?.title
+      : item?.quiz?.title;
 
   const subTitle =
-    item.isGroup === true
+    item?.isGroup === true
       ? "3"
-      : item.isTask === true
+      : item?.isTask === true
       ? moment(item?.quiz?.date)
           .utc()
           .format(isTodayDay(item?.quiz?.date) ? "HH:mm" : "DD/MM-HH:mm")
-      : item.grade === null
+      : item?.grade === null
       ? item?.points
       : "Nota: " + item?.grade;
 
   const bottomSubTitle =
-    item.isGroup === true
+    item?.isGroup === true
       ? "Students"
-      : item.isTask === true
+      : item?.isTask === true
       ? undefined
-      : item.grade === null
+      : item?.grade === null
       ? "Pike"
       : undefined;
 
   const backgroundColor =
-    item.isGroup === true
+    item?.isGroup === true
       ? Colors.groupBackground
-      : item.isTask === true
+      : item?.isTask === true
       ? Colors.upComingTasks
-      : item.grade === null
+      : item?.grade === null
       ? Colors.pendingQuiz
-      : item.grade.toString() === "5"
+      : item?.grade.toString() === "5"
       ? Colors.negative
       : Colors.appBaseColor;
 
@@ -80,16 +84,16 @@ const OtherTasks = ({ item }) => {
 
   const handleTaskOnClick = () => {
     if (item.isGroup === true) {
+      console.log("toDoData[0]", toDoData[0]);
+      const tasks = toDoData[0].data.filter((i) =>
+        i.group && i.group._id.toString() === item?.group?._id
+          ? item?.group?._id
+          : item?._id
+      );
+
       navigation.push("GroupDetailsScreen", {
         item: item,
-        tasks: [
-          {
-            title: "Detyrat",
-            data: toDoData[0].data.filter(
-              (i) => i.group && i.group._id.toString() === item.group._id
-            ),
-          },
-        ],
+        tasks: [{ title: "Detyrat", data: tasks }],
       });
     } else {
       if (item.grade === undefined) {

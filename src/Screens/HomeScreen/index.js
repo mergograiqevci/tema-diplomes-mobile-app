@@ -10,6 +10,7 @@ import ToDoActions from "~/Store/ToDo/Actions";
 import { useSelector, useDispatch } from "react-redux";
 import State from "~/Store/State";
 import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
+import isProfessor from "~/Functions/isProfessor";
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;
@@ -22,6 +23,11 @@ const HomeScreen = () => {
   const toDoState = toDoReducer?.toDoState;
   const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const [toDoStatistic, setToDoStatistic] = useState([]);
+  const professor = isProfessor();
+  const toDoSections = professor
+    ? toDoData?.filter((i) => i?.key === "groups")
+    : toDoData;
+  // console.log("toDoData", toDoSections);
 
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
@@ -64,7 +70,7 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <SectionList
-        sections={toDoData}
+        sections={toDoSections}
         bounces={false}
         keyExtractor={(item, index) => item + index}
         renderItem={renderItem}

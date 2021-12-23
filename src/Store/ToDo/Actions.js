@@ -7,8 +7,10 @@ class ToDoActions {
   static getToDo() {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
+      const myProfile = getState()?.User?.myProfile;
+      const role = myProfile?.data?.role;
       dispatch(ToDoReducers.getToDoStart());
-      API.ToDo.getToDo(token)
+      API.ToDo.getToDo(token, role)
         .then((res) => {
           dispatch(ToDoReducers.unFormatedToDo(res?.data));
           const formatedToDo = formatToDo(res?.data);

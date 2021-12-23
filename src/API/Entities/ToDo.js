@@ -1,12 +1,15 @@
 import Request from "~/API/Request";
 
 class ToDo {
-  static async getToDo(token) {
-    let toDoData = await Request.get(`/tasks/todo`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  static async getToDo(token, role) {
+    let toDoData = await Request.get(
+      `/tasks/${role === "professor" ? "todo_professor" : "todo"}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return toDoData;
   }
