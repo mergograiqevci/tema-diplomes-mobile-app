@@ -1,12 +1,24 @@
 import formatQuizTaken from "./formatQuizTaken";
 const formatSections = (formatedToDo) => {
   const allSections = [];
-  formatedToDo.tasks &&
-    formatedToDo.tasks.length > 0 &&
+
+  formatedToDo.todayTasks &&
+    formatedToDo.todayTasks.length > 0 &&
     allSections.push({
-      title: "Detyrat",
-      data: formatedToDo.tasks,
-      key: "tasks",
+      title: "Sot",
+      data: formatedToDo.todayTasks,
+      key: "todayTasks",
+    });
+
+  formatedToDo.otherTasks &&
+    formatedToDo.otherTasks.length > 0 &&
+    allSections.push({
+      title:
+        formatedToDo.todayTasks && formatedToDo.todayTasks.length > 0
+          ? "Detyra te tjera"
+          : "Detyrat",
+      data: formatedToDo.otherTasks,
+      key: "otherTasks",
     });
 
   formatedToDo.groups &&

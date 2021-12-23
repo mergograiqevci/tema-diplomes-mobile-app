@@ -27,14 +27,12 @@ const QuizAnswer = ({ navigation, route }) => {
         textColor={
           item?.style?.empty === true || item?.style?.borderRadius
             ? Colors.black
-            : convertColor(item?.style?.backgroundColor) === Colors.green
-            ? Colors.black
             : Colors.white
         }
         backgroundColor={
-          item?.style?.empty === true || item?.style?.borderRadius
-            ? Colors.white
-            : convertColor(item?.style?.backgroundColor)
+          item?.style?.backgroundColor
+            ? convertColor(item?.style?.backgroundColor)
+            : Colors.white
         }
         borderColor={
           item?.style?.borderRadius && convertColor(item?.style?.borderRadius)

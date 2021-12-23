@@ -1,4 +1,5 @@
 import findInCompletedTasks from "./findInCompletedTasks";
+import isTodayDay from "../isTodayDay";
 const formatToDo = (toDo) => {
   let tasks = findInCompletedTasks(
     "isTask",
@@ -14,8 +15,12 @@ const formatToDo = (toDo) => {
     groupTasks.length > 0 &&
     groupTasks.map((task) => tasks.push(task));
 
+  let todayTasks = tasks.filter((i) => isTodayDay(i?.quiz?.date));
+  let otherTasks = tasks.filter((i) => !isTodayDay(i?.quiz?.date));
+
   return {
-    tasks,
+    todayTasks,
+    otherTasks,
     groups: toDo?.groups.map((i) => ({ ...i, isGroup: true })),
     quizTaken: toDo?.quizTaken,
   };

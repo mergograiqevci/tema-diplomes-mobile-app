@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ToDoActions from "~/Store/ToDo/Actions";
 import State from "~/Store/State";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
+import isTodayDay from "~/Functions/isTodayDay";
 const OtherTasks = ({ item }) => {
   const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
@@ -31,7 +32,9 @@ const OtherTasks = ({ item }) => {
     item.isGroup === true
       ? "3"
       : item.isTask === true
-      ? moment(item?.quiz?.date).utc().format("DD/MM-HH:mm")
+      ? moment(item?.quiz?.date)
+          .utc()
+          .format(isTodayDay(item?.quiz?.date) ? "HH:mm" : "DD/MM-HH:mm")
       : item.grade === null
       ? item?.points
       : "Nota: " + item?.grade;
