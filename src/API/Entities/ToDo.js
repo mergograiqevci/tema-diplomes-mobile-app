@@ -52,6 +52,26 @@ class ToDo {
 
     return toDoData;
   }
+  static async createNewTask(
+    token,
+    title,
+    type,
+    to,
+    student_or_group_id,
+    task
+  ) {
+    let toDoData = await Request.post(
+      `/tasks/create_new_task`,
+      { title, type, to, student_or_group_id, task },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return toDoData;
+  }
 }
 
 export default ToDo;

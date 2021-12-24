@@ -15,6 +15,9 @@ const initialState = {
   getQuizResultError: null,
   getQuizResultState: State.NOT_PROCESSED,
   getQuizResultData: {},
+  createNewTaskError: null,
+  createNewTaskState: State.NOT_PROCESSED,
+  createNewTaskData: {},
 };
 
 const slice = createSlice({
@@ -78,6 +81,17 @@ const slice = createSlice({
       state.getQuizResultError = action.payload;
       state.getQuizResultState = State.FAILED;
     },
+    createNewTaskStart(state) {
+      state.createNewTaskState = State.PROCESSING;
+    },
+    createNewTaskDone(state, action) {
+      state.createNewTaskData = action.payload;
+      state.createNewTaskState = State.DONE;
+    },
+    createNewTaskFailed(state, action) {
+      state.createNewTaskError = action.payload;
+      state.createNewTaskState = State.FAILED;
+    },
   },
 });
 
@@ -98,4 +112,7 @@ export const {
   getQuizResultStart,
   getQuizResultDone,
   getQuizResultFailed,
+  createNewTaskStart,
+  createNewTaskDone,
+  createNewTaskFailed,
 } = slice.actions;

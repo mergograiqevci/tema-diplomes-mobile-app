@@ -83,7 +83,7 @@ const GroupDetailsScreen = ({ navigation, route }) => {
 
   const handleRightIcon = () => {
     if (professor) {
-      navigation.push("NewTaskScreen");
+      navigation.push("NewTaskScreen", { group_id: item?._id });
     } else {
       setDeleteModalVisible(true);
     }

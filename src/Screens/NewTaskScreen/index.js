@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import Header from "~/Components/Header";
 import ArrowLeft from "~/Assets/Svg/arrowLeft";
 import Colors from "~/Assets/Colors";
@@ -7,9 +7,13 @@ import Styles from "./styles";
 import Input from "~/Components/InputField";
 import User from "~/Assets/Svg/user";
 import Correct from "~/Assets/Svg/correct";
-const NewTaskScreen = ({ navigation }) => {
+import ToDoActions from "~/Store/ToDo/Actions";
+import { useSelector, useDispatch } from "react-redux";
+const NewTaskScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const { group_id } = route.params;
   const defaultBookValues = {
-    taskTitle: "Autori",
+    taskTitle: "Titulli",
     description: "Pershkrimi",
     link: "Pdf",
     image: "Image",
@@ -18,22 +22,58 @@ const NewTaskScreen = ({ navigation }) => {
     taskTitle: "Titulli",
     description: "Pershkrimi",
     link: "Video Linku",
+    image: "Image",
   };
   const [activeButton, setActiveButton] = useState("book");
-  // inActiveNewTaskButton
   const [taskTitle, setTaskTitle] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
   const [image, setImage] = useState("");
-  const [quizQuestions, setQuizQuestion] = useState([]);
+  const dataIsValid =
+    taskTitle?.trim() && description?.trim() && link?.trim() && image?.trim();
+
   const [errorMessages, setErrorMessages] = useState({});
   const [defaultValues, setDefaultValues] = useState(defaultBookValues);
 
-  const [question, setQuestion] = useState("Formula e kti");
+  const [question, setQuestion] = useState("");
   const [answerOne, setAnswerOne] = useState("");
   const [answerTwo, setAnswerTwo] = useState("");
   const [answerThird, setAnswerThird] = useState("");
   const [answerFour, setAnswerFour] = useState("");
+
+  const questionIsValid =
+    question?.trim() &&
+    answerOne?.trim() &&
+    answerTwo?.trim() &&
+    answerThird?.trim() &&
+    answerFour?.trim();
+
+  const newQuestion = (quizQuestions) => {
+    return {
+      id:
+        quizQuestions.length === 0
+          ? 1
+          : quizQuestions[quizQuestions.length - 1]?.i?.id + 1,
+      question,
+      answerOne,
+      answerTwo,
+      answerThird,
+      answerFour,
+    };
+  };
+
+  const [quizQuestions, setQuizQuestion] = useState([{ i: newQuestion([]) }]);
+
+  console.log("quizQuestions", quizQuestions);
+  useEffect(() => {
+    if (quizQuestions.length >= 1) {
+      setQuestion("");
+      setAnswerOne("");
+      setAnswerTwo("");
+      setAnswerThird("");
+      setAnswerFour("");
+    }
+  }, [quizQuestions]);
 
   useEffect(() => {
     if (activeButton === "book") {
@@ -56,11 +96,91 @@ const NewTaskScreen = ({ navigation }) => {
     }
   };
 
+  const buttonAction = () => {
+    if (activeButton === "book" || activeButton === "video") {
+      dispatch(
+        ToDoActions.createNewTask(taskTitle, activeButton, "group", group_id, {
+          description,
+          [activeButton === "book" ? "pdf" : "video_link"]: link,
+          image,
+        })
+      );
+    }
+    console.log("inside ruaj button");
+  };
+
   const questionText = (text) => {
     return (
       <Text style={{ fontSize: 18, fontWeight: "700", color: "#000000" }}>
         {text}
       </Text>
+    );
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={{ flex: 1, marginTop: 20 }}>
+        <TouchableOpacity
+          style={Styles.deleteQuestionButton}
+          onPress={() => quizQuestions.filter((q) => q?.i?.id !== item?.i?.id)}
+        >
+          <Text style={Styles.newQuestionText}>Fshije</Text>
+        </TouchableOpacity>
+        <Input
+          leftIcon={questionText("?")}
+          placeholder={"Pyetje shenohet ketu"}
+          secureText={false}
+          onChangeTextInput={setQuestion}
+          errorMessage={errorMessages.question ? errorMessages.question : null}
+          keyboardType="default"
+          secureTextEntry={false}
+          enabled={true}
+        />
+        <Input
+          leftIcon={questionText("1)")}
+          placeholder="Shkruaj Ketu"
+          onChangeTextInput={setAnswerOne}
+          errorMessage={null}
+          keyboardType="default"
+          secureTextEntry={false}
+          icon={answerOne.length >= 1 && <Correct />}
+          handleIcon={() => console.log("ONCLICK")}
+          enabled={true}
+        />
+        <Input
+          leftIcon={questionText("2)")}
+          placeholder="Shkruaj Ketu"
+          onChangeTextInput={setAnswerTwo}
+          errorMessage={null}
+          keyboardType="default"
+          secureTextEntry={false}
+          icon={answerTwo.length >= 1 && <Correct />}
+          handleIcon={() => console.log("ONCLICK")}
+          enabled={true}
+        />
+        <Input
+          leftIcon={questionText("3)")}
+          placeholder="Shkruaj Ketu"
+          onChangeTextInput={setAnswerThird}
+          errorMessage={null}
+          keyboardType="default"
+          secureTextEntry={false}
+          icon={answerThird.length >= 1 && <Correct />}
+          handleIcon={() => console.log("ONCLICK")}
+          enabled={true}
+        />
+        <Input
+          leftIcon={questionText("4)")}
+          placeholder="Shkruaj Ketu"
+          onChangeTextInput={setAnswerFour}
+          errorMessage={null}
+          keyboardType="default"
+          secureTextEntry={false}
+          icon={answerFour.length >= 1 && <Correct />}
+          handleIcon={() => console.log("ONCLICK")}
+          enabled={true}
+        />
+      </View>
     );
   };
 
@@ -102,21 +222,20 @@ const NewTaskScreen = ({ navigation }) => {
             secureTextEntry={false}
             enabled={true}
           />
-          {defaultValues.image && (
-            <Input
-              leftIcon={<User />}
-              placeholder={defaultValues.image}
-              secureText={false}
-              onChangeTextInput={setImage}
-              errorMessage={errorMessages.image ? errorMessages.image : null}
-              keyboardType="default"
-              secureTextEntry={false}
-              enabled={true}
-            />
-          )}
+          <Input
+            leftIcon={<User />}
+            placeholder={defaultValues.image}
+            secureText={false}
+            onChangeTextInput={setImage}
+            errorMessage={errorMessages.image ? errorMessages.image : null}
+            keyboardType="default"
+            secureTextEntry={false}
+            enabled={true}
+          />
           <TouchableOpacity
-            style={Styles.saveButton}
+            style={[Styles.saveButton, { opacity: !dataIsValid ? 0.6 : 1 }]}
             onPress={() => buttonAction()}
+            disabled={!dataIsValid}
           >
             <Text style={Styles.saveButtonText}>Ruaj</Text>
           </TouchableOpacity>
@@ -125,73 +244,30 @@ const NewTaskScreen = ({ navigation }) => {
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <Input
-            leftIcon={questionText("?")}
-            placeholder={"Pyetje shenohet ketu"}
-            secureText={false}
-            onChangeTextInput={setLink}
-            errorMessage={
-              errorMessages.question ? errorMessages.question : null
-            }
-            keyboardType="default"
-            secureTextEntry={false}
-            enabled={true}
+          <FlatList
+            data={quizQuestions}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
           />
-          <Input
-            leftIcon={questionText("a)")}
-            placeholder="Shkruaj Ketu"
-            onChangeTextInput={setAnswerOne}
-            errorMessage={null}
-            keyboardType="default"
-            secureTextEntry={false}
-            icon={answerOne.length >= 1 && <Correct />}
-            handleIcon={() => console.log("ONCLICK")}
-            enabled={true}
-          />
-          <Input
-            leftIcon={questionText("b)")}
-            placeholder="Shkruaj Ketu"
-            onChangeTextInput={setAnswerTwo}
-            errorMessage={null}
-            keyboardType="default"
-            secureTextEntry={false}
-            icon={answerTwo.length >= 1 && <Correct />}
-            handleIcon={() => console.log("ONCLICK")}
-            enabled={true}
-          />
-          <Input
-            leftIcon={questionText("c)")}
-            placeholder="Shkruaj Ketu"
-            onChangeTextInput={setAnswerThird}
-            errorMessage={null}
-            keyboardType="default"
-            secureTextEntry={false}
-            icon={answerThird.length >= 1 && <Correct />}
-            handleIcon={() => console.log("ONCLICK")}
-            enabled={true}
-          />
-          <Input
-            leftIcon={questionText("d)")}
-            placeholder="Shkruaj Ketu"
-            onChangeTextInput={setAnswerFour}
-            errorMessage={null}
-            keyboardType="default"
-            secureTextEntry={false}
-            icon={answerFour.length >= 1 && <Correct />}
-            handleIcon={() => console.log("ONCLICK")}
-            enabled={true}
-          />
+
           <TouchableOpacity
-            style={Styles.saveButton}
-            onPress={() => buttonAction()}
+            style={Styles.newQuestionButton}
+            onPress={() =>
+              questionIsValid &&
+              setQuizQuestion([
+                ...quizQuestions,
+                { i: newQuestion(quizQuestions) },
+              ])
+            }
           >
-            <Text style={Styles.saveButtonText}>Ruaj</Text>
+            <Text style={Styles.newQuestionText}>Shto nje pytje te re</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={Styles.saveButton}
             onPress={() => buttonAction()}
           >
-            <Text style={Styles.saveButtonText}>Perfundo Kuizin</Text>
+            <Text style={Styles.saveButtonText}>Ruaj</Text>
           </TouchableOpacity>
         </View>
       );
@@ -257,13 +333,19 @@ const NewTaskScreen = ({ navigation }) => {
         backgroundColor={Colors.appBaseColor}
         height={50}
       />
-      <View style={{ flex: 1, marginHorizontal: 25 }}>
-        <Text style={{ marginTop: 20, fontSize: 19, fontWeight: "600" }}>
-          Zgjedhni
-        </Text>
-        {buttonView()}
-        {childView()}
-      </View>
+      <FlatList
+        data={[]}
+        style={{ flex: 1 }}
+        ListHeaderComponent={
+          <View style={{ flex: 1, marginHorizontal: 25 }}>
+            <Text style={{ marginTop: 20, fontSize: 19, fontWeight: "600" }}>
+              Zgjedhni
+            </Text>
+            {buttonView()}
+            {childView()}
+          </View>
+        }
+      />
     </View>
   );
 };

@@ -84,7 +84,6 @@ const OtherTasks = ({ item }) => {
 
   const handleTaskOnClick = () => {
     if (item.isGroup === true) {
-      console.log("toDoData[0]", toDoData[0]);
       const tasks = toDoData[0].data.filter((i) =>
         i.group && i.group._id.toString() === item?.group?._id
           ? item?.group?._id

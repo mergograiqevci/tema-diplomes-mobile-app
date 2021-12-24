@@ -7,7 +7,7 @@ const formatSections = (formatedToDo) => {
     allSections.push({
       title: "Sot",
       data: formatedToDo.todayTasks,
-      key: "todayTasks",
+      key: "tasks",
     });
 
   formatedToDo.otherTasks &&
@@ -18,7 +18,7 @@ const formatSections = (formatedToDo) => {
           ? "Detyra te tjera"
           : "Detyrat",
       data: formatedToDo.otherTasks,
-      key: "otherTasks",
+      key: "tasks",
     });
 
   formatedToDo.groups &&
