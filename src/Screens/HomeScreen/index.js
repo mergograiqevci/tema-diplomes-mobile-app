@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import State from "~/Store/State";
 import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
 import isProfessor from "~/Functions/isProfessor";
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const threshold = 200;
   const [flatListPosition, setFlatListPosition] = useState(0);
@@ -24,9 +24,9 @@ const HomeScreen = () => {
   const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const [toDoStatistic, setToDoStatistic] = useState([]);
   const professor = isProfessor();
-  const toDoSections = professor
-    ? toDoData?.filter((i) => i?.key === "groups")
-    : toDoData;
+  // const toDoSections = professor
+  //   ? toDoData?.filter((i) => i?.key === "groups")
+  //   : toDoData;
   // console.log("toDoData", toDoSections);
 
   useEffect(() => {
@@ -38,6 +38,12 @@ const HomeScreen = () => {
       setToDoStatistic(formatToDoStatistic(unFormatedToDoData));
     }
   }, [toDoData]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     navigation.push("QuizStudentResultScreen");
+  //   }, 5000);
+  // }, []);
 
   useEffect(() => {
     let position = threshold - flatListPosition;
@@ -70,9 +76,9 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <SectionList
-        sections={toDoSections}
+        sections={toDoData}
         bounces={false}
-        keyExtractor={(item, index) => item + index}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />

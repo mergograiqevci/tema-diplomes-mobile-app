@@ -27,8 +27,8 @@ const ProfileBox = ({ height, toDoStatistic }) => {
         </View>
 
         <View style={Styles.mapView}>
-          {toDoStatistic.map((item) => (
-            <ProfileDetails key={item.count} item={item} />
+          {toDoStatistic.map((item, index) => (
+            <ProfileDetails key={index} item={item} />
           ))}
         </View>
       </View>

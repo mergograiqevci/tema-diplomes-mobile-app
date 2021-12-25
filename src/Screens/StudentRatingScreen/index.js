@@ -5,45 +5,82 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import QuizController from "~/Components/QuizController";
 import Colors from "~/Assets/Colors";
 import Header from "~/Components/Header";
 import ArrowLeft from "~/Assets/Svg/arrowLeft";
 import Styles from "./styles";
-const StudentRatingScreen = ({ navigation }) => {
-  const question = [
-    { id: 1, left: "Which is greater than 5?", correct: true },
-    { id: 2, left: "Which is greater than 5?", correct: true },
-    { id: 3, left: "Which is greater than 5?", right: "5", correct: false },
-    { id: 4, left: "Which is greater than 5?", correct: true },
-    { id: 5, left: "Which is greater than 5?", right: "5", correct: false },
-    { id: 6, left: "Which is greater than 5?", right: "3", correct: true },
-    { id: 7, left: "Which is greater than 5?", right: "7", correct: false },
-  ];
+import TaskActions from "~/Store/Task/Actions";
+import { useSelector, useDispatch } from "react-redux";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
+const StudentRatingScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const { styledQuestion, fullItem } = route.params;
   const [grade, setGrade] = useState("");
-  const renderItem = ({ item }) => {
-    return (
-      <QuizController
-        item={item}
-        textColor={Colors.white}
-        backgroundColor={item.correct ? Colors.darkGreen : Colors.negative}
-      />
-    );
-  };
 
   const flatListHeader = () => {
     return (
       <View style={Styles.headerView}>
         <Text style={Styles.headerText}>Pyetje</Text>
-        <Text style={Styles.headerText}>{question.length}</Text>
+        <Text style={Styles.headerText}>{styledQuestion.length}</Text>
       </View>
     );
   };
+
+  const renderQuestion = ({ item }) => {
+    return (
+      <View style={{ flex: 1, marginTop: 10 }}>
+        <Text style={Styles.question}>{item?.question}</Text>
+        <FlatList
+          data={item?.options}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+        />
+      </View>
+    );
+  };
+  const renderItem = ({ item, index }) => {
+    const convertedItem = {
+      left: index + 1 + " )",
+      center: item?.v,
+    };
+
+    return (
+      <QuizController
+        item={convertedItem}
+        textColor={
+          item?.style?.empty === true || item?.style?.borderRadius
+            ? Colors.black
+            : Colors.white
+        }
+        backgroundColor={
+          item?.style?.backgroundColor
+            ? convertColor(item?.style?.backgroundColor)
+            : Colors.white
+        }
+        borderColor={
+          item?.style?.borderRadius && convertColor(item?.style?.borderRadius)
+        }
+      />
+    );
+  };
+
+  const handleGradeTask = () => {
+    const request = {
+      task_id: fullItem?._id,
+      student_id: fullItem?.student?._id,
+      grade: grade,
+    };
+
+    dispatch(TaskActions.gradeTask(request, toasterMessage));
+  };
+
   const flatListFooter = () => {
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={Styles.footerText}>Total:4/5</Text>
+      <View style={{ flex: 1, marginBottom: 20 }}>
+        <Text style={Styles.footerText}>Piket: {fullItem?.points}</Text>
         <View style={Styles.gradeView}>
           <TextInput
             placeholder="Nota"
@@ -51,15 +88,23 @@ const StudentRatingScreen = ({ navigation }) => {
             keyboardType="numeric"
             style={Styles.inputStyle}
           />
-          <TouchableOpacity style={Styles.buttonSaveView}>
+          <TouchableOpacity
+            style={[
+              Styles.buttonSaveView,
+              { opacity: !(grade.trim() && parseInt(grade) >= 5) ? 0.5 : 1 },
+            ]}
+            onPress={handleGradeTask}
+            disabled={!(grade.trim() && parseInt(grade) >= 5)}
+          >
             <Text style={Styles.buttonSaveViewText}>Ruaj</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   };
+
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
       <Header
         title="Mergim Graiqevci"
         leftIcon={<ArrowLeft />}
@@ -69,14 +114,13 @@ const StudentRatingScreen = ({ navigation }) => {
         height={50}
       />
       <FlatList
-        data={question}
-        bounces={false}
+        data={styledQuestion}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
+        renderItem={renderQuestion}
         ListHeaderComponent={flatListHeader()}
         ListFooterComponent={flatListFooter()}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

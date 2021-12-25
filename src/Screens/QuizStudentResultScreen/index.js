@@ -1,27 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, FlatList } from "react-native";
 import QuizController from "~/Components/QuizController";
 import Colors from "~/Assets/Colors";
 import Header from "~/Components/Header";
 import ArrowLeft from "~/Assets/Svg/arrowLeft";
+import { useSelector, useDispatch } from "react-redux";
+import TaskActions from "~/Store/Task/Actions";
+import Styles from "./styles";
+import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 const QuizStudentResultScreen = ({ navigation }) => {
-  const students = [
-    { id: 1, left: "1", center: "Mergim Graiqevci", right: "18/20" },
-    { id: 2, left: "2", center: "Mergim Graiqevci", right: "14/20" },
-    { id: 3, left: "3", center: "Mergim Graiqevci", right: "13/20" },
-    { id: 4, left: "4", center: "Mergim Graiqevci", right: "20/20" },
-  ];
+  const dispatch = useDispatch();
+  const taskReducer = useSelector((state) => state?.Task);
+  const quizStudentsResultData = taskReducer?.quizStudentsResultData;
+  const quizStudentsResultError = taskReducer?.quizStudentsResultError;
+  const quizStudentsResultState = taskReducer?.quizStudentsResultState;
+
+  useEffect(() => {
+    dispatch(TaskActions.findStudentsByTask("61c756c4c764377c80a946c2"));
+  }, []);
+
   const renderItem = ({ item }) => {
+    const convertedItem = {
+      left: item?.student?.username,
+      right: item?.points,
+    };
     return (
       <QuizController
-        item={item}
-        textColor={Colors.black}
-        backgroundColor={Colors.white}
+        item={convertedItem}
+        textColor={Colors.white}
+        backgroundColor={Colors.green}
+        onPress={() =>
+          navigation.push("StudentRatingScreen", {
+            styledQuestion: formatQuizStyle([item], true),
+            fullItem: item,
+          })
+        }
       />
     );
   };
+
+  const flatListHeader = () => {
+    return (
+      <View style={Styles.headerView}>
+        <Text style={Styles.headerText}>Student</Text>
+        <Text style={Styles.headerText}>{quizStudentsResultData?.length}</Text>
+      </View>
+    );
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.appBaseColor }}>
+    <View style={{ flex: 1 }}>
       <Header
         title="Studentet"
         leftIcon={<ArrowLeft />}
@@ -31,12 +59,12 @@ const QuizStudentResultScreen = ({ navigation }) => {
         height={50}
       />
       <FlatList
-        style={{ marginTop: 100 }}
-        data={students}
+        style={{ marginTop: 20 }}
+        data={quizStudentsResultData}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        // ListHeaderComponent={flatListHeader()}
+        ListHeaderComponent={flatListHeader()}
       />
     </View>
   );

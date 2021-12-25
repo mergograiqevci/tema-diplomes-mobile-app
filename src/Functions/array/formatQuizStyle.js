@@ -1,5 +1,9 @@
-const formatQuizStyle = (quiz) => {
-  let quizData = [...quiz];
+const formatQuizStyle = (quiz, isSingleItem) => {
+  let quizD = [...quiz];
+  let quizData = isSingleItem ? quizD[0]?.completed_result : quizD;
+
+  // console.log("quizData", quizData[0].completed_result);
+  // return;
   for (let i = 0; i < quizData.length; i++) {
     const options = quizData[i]?.options;
     const your_answer = quizData[i]?.your_answer;
