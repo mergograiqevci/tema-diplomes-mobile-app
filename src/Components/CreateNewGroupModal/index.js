@@ -10,7 +10,8 @@ const CreateNewGroupModal = ({
   setModalVisible,
   leftButtonAction,
   rightButtonAction,
-  onChangeId,
+  title,
+  onChangeTitle,
   selectedLanguage,
   setSelectedLanguage,
   errorMessage,
@@ -29,7 +30,7 @@ const CreateNewGroupModal = ({
           leftIcon={<User />}
           placeholder="Emri i Lendes"
           secureText={false}
-          onChangeTextInput={onChangeId}
+          onChangeTextInput={onChangeTitle}
           errorMessage={errorMessage.id ? errorMessage.id : null}
           keyboardType="default"
           secureTextEntry={false}
@@ -59,8 +60,10 @@ const CreateNewGroupModal = ({
               {
                 backgroundColor: otherProps.leftButtonColor,
                 marginRight: "2%",
+                opacity: !title.trim() ? 0.5 : 1,
               },
             ]}
+            disabled={!title.trim()}
             onPress={leftButtonAction}
           >
             <Text style={Styles.buttonText}>{otherProps.leftButtonText}</Text>

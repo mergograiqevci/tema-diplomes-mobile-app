@@ -5,6 +5,9 @@ const initialState = {
   leaveGroupData: [],
   leaveGroupError: null,
   leaveGroupState: State.NOT_PROCESSED,
+  createGroupData: [],
+  createGroupError: null,
+  createGroupState: State.NOT_PROCESSED,
 };
 
 const slice = createSlice({
@@ -27,6 +30,22 @@ const slice = createSlice({
       state.leaveGroupError = null;
       state.leaveGroupState = State.NOT_PROCESSED;
     },
+    createNewGroupStart(state) {
+      state.createGroupState = State.PROCESSING;
+    },
+    createNewGroupDone(state, action) {
+      state.createGroupData = action.payload;
+      state.createGroupState = State.DONE;
+    },
+    createNewGroupFailed(state, action) {
+      state.createGroupError = action.payload;
+      state.createGroupState = State.FAILED;
+    },
+    clearPrevCreateGroupData(state) {
+      state.createGroupData = [];
+      state.createGroupError = null;
+      state.createGroupState = State.NOT_PROCESSED;
+    },
   },
 });
 
@@ -36,4 +55,8 @@ export const {
   leaveGroupDone,
   leaveGroupFailed,
   clearPrevLeaveGroupData,
+  createNewGroupStart,
+  createNewGroupDone,
+  createNewGroupFailed,
+  clearPrevCreateGroupData,
 } = slice.actions;

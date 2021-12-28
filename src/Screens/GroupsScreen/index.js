@@ -5,14 +5,14 @@ import Logout from "~/Assets/Svg/logout";
 import Colors from "~/Assets/Colors";
 import CreateNewGroupModal from "~/Components/CreateNewGroupModal";
 import PopUpModal from "~/Components/PopUpModal";
-import groupsData from "~/Functions/fakeData/groupsData";
 import OtherTasks from "~/Components/OtherTasks";
-import Plus from "~/Assets/Svg/plus";
 import AddGroup from "~/Assets/Svg/addGroup";
 import isProfessor from "~/Functions/isProfessor";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import TasksBox from "~/Components/TasksBox";
+import GroupActions from "~/Store/Group/Actions";
 const GroupsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
   const toDoError = toDoReducer?.toDoError;
@@ -20,7 +20,7 @@ const GroupsScreen = ({ navigation }) => {
   const [createGroupModalVisible, setCreateGroupModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
-  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [selectedLanguage, setSelectedLanguage] = useState();
 
@@ -45,8 +45,8 @@ const GroupsScreen = ({ navigation }) => {
   };
 
   const leftButtonAction = () => {
-    console.log("Left Button onclick");
-    navigation.pop();
+    dispatch(GroupActions.createNewGroup(title));
+    setCreateGroupModalVisible(false);
   };
 
   const rightButtonAction = () => {
@@ -82,7 +82,8 @@ const GroupsScreen = ({ navigation }) => {
         setModalVisible={setCreateGroupModalVisible}
         leftButtonAction={leftButtonAction}
         rightButtonAction={rightButtonAction}
-        onChangeId={setId}
+        title={title}
+        onChangeTitle={setTitle}
         selectedLanguage={selectedLanguage}
         setSelectedLanguage={setSelectedLanguage}
         errorMessage={errorMessages}
