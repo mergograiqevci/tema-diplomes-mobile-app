@@ -9,6 +9,7 @@ import ToDoActions from "~/Store/ToDo/Actions";
 import State from "~/Store/State";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isTodayDay from "~/Functions/isTodayDay";
+import isProfessor from "~/Functions/isProfessor";
 const OtherTasks = ({ item }) => {
   const dispatch = useDispatch();
   const myProfile = useSelector((state) => state?.myProfile);
@@ -22,7 +23,7 @@ const OtherTasks = ({ item }) => {
   const getQuizResultState = toDoReducer?.getQuizResultState;
 
   const navigation = useNavigation();
-
+  const professor = isProfessor();
   const title =
     item?.isGroup === true
       ? item?.group?.title
@@ -111,7 +112,8 @@ const OtherTasks = ({ item }) => {
         },
       ]}
       onPress={handleTaskOnClick}
-      activeOpacity={item.isGroup === true ? 0 : 0.7}
+      activeOpacity={item.isGroup === true ? 0.7 : professor ? 1 : 0.7}
+      disabled={item.isTask === true ? (professor ? true : false) : false}
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>

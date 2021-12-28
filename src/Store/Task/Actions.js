@@ -1,6 +1,6 @@
 import * as API from "~/API";
 import * as TaskReducers from "./Reducers";
-// import formatQuizResult from "~/Functions/array/formatQuizResult";
+import formatQuizResults from "~/Functions/array/formatQuizResults";
 class TaskActions {
   static findStudentsByTask(id) {
     return (dispatch, getState) => {
@@ -8,14 +8,13 @@ class TaskActions {
       dispatch(TaskReducers.getQuizStudentsResultStart());
       API.Task.findStudentsByTask(token, id)
         .then((res) => {
-          let data = [...res?.data];
-          const formatedResult = data.sort((a, b) =>
-            parseInt(
-              a?.points.subString(0, a?.points.indexOf("/")) -
-                parseInt(b?.points.subString(0, b?.points.indexOf("/")))
-            )
+          const formatedResults = formatQuizResults(res?.data);
+          dispatch(
+            TaskReducers.getQuizStudentsResultDone({
+              d: formatedResults,
+              totalStudents: res?.data?.length,
+            })
           );
-          dispatch(TaskReducers.getQuizStudentsResultDone(formatedResult));
         })
         .catch((err) => {
           dispatch(TaskReducers.getQuizStudentsResultFailed(err));
@@ -29,6 +28,7 @@ class TaskActions {
       API.Task.gradeTask(token, request)
         .then((res) => {
           toasterMessage("Studenti eshte notuar me sukses", "success");
+          dispatch(TaskActions.findStudentsByTask(request?.task_id));
           dispatch(TaskReducers.setGradeTaskDone(res));
         })
         .catch((err) => {

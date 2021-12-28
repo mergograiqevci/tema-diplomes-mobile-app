@@ -24,10 +24,7 @@ const HomeScreen = ({ navigation }) => {
   const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const [toDoStatistic, setToDoStatistic] = useState([]);
   const professor = isProfessor();
-  // const toDoSections = professor
-  //   ? toDoData?.filter((i) => i?.key === "groups")
-  //   : toDoData;
-  // console.log("toDoData", toDoSections);
+  const toDoWithoutGroups = toDoData?.filter((i) => i?.key !== "groups");
 
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
@@ -38,12 +35,6 @@ const HomeScreen = ({ navigation }) => {
       setToDoStatistic(formatToDoStatistic(unFormatedToDoData));
     }
   }, [toDoData]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     navigation.push("QuizStudentResultScreen");
-  //   }, 5000);
-  // }, []);
 
   useEffect(() => {
     let position = threshold - flatListPosition;
@@ -76,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <SectionList
-        sections={toDoData}
+        sections={toDoWithoutGroups}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}

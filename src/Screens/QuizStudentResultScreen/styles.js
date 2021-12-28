@@ -8,8 +8,8 @@ export default StyleSheet.create({
     marginVertical: 10,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "700",
-    color: Colors.gray,
+    color: Colors.white,
   },
 });

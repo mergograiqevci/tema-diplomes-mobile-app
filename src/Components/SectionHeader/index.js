@@ -12,7 +12,6 @@ const SectionHeader = ({ title }) => {
         color: Colors.gray,
         paddingVertical: 10,
         paddingLeft: 15,
-        backgroundColor: Colors.white,
         height: safeAreaSize.top,
       }}
     >

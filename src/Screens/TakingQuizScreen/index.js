@@ -15,7 +15,6 @@ const TakingQuizScreen = ({ navigation, route }) => {
   const focused = useIsFocused();
   const dispatch = useDispatch();
   const { item } = route.params;
-  console.log("ITEM:", item);
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
   const toDoReducer = useSelector((state) => state?.ToDo);
 
@@ -45,6 +44,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
       navigation.push("QuizResultScreen", { quizData: completeQuizData });
     } else if (completeQuizState === State.FAILED) {
       console.log("duhet me qit naj error");
+      console.log("completeQuizError", completeQuizError);
     }
   }, [completeQuizState]);
 
@@ -173,7 +173,9 @@ const TakingQuizScreen = ({ navigation, route }) => {
 
   const handleContinueToNextQuestion = () => {
     if (lastQuestion) {
-      dispatch(ToDoActions.completeQuiz(item._id, currentAnswers));
+      dispatch(
+        ToDoActions.completeQuiz(item._id, currentAnswers, item?.group?._id)
+      );
     } else {
       setQuestinIndex(questionIndex + 1);
     }

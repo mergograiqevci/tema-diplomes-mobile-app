@@ -51,4 +51,11 @@ export default StyleSheet.create({
     borderRadius: 6,
     color: Colors.white,
   },
+  question: {
+    marginLeft: 12,
+    fontSize: 17,
+    marginVertical: 5,
+    fontWeight: "800",
+    color: "gray",
+  },
 });

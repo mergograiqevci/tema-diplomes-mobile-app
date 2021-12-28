@@ -17,32 +17,32 @@ const PopUpModal = ({
       onBackdropPress={() => setModalVisible(false)}
     >
       <View style={Styles.container}>
-        <Text style={Styles.title}>{otherProps.title}</Text>
-        <Text style={Styles.subTitle}>{otherProps.subTitle}</Text>
+        <Text style={Styles.title}>{otherProps?.title}</Text>
+        <Text style={Styles.subTitle}>{otherProps?.subTitle}</Text>
         <View style={Styles.buttonView}>
           <TouchableOpacity
             style={[
               Styles.button,
               {
-                backgroundColor: otherProps.leftButtonColor,
+                backgroundColor: otherProps?.leftButtonColor,
                 marginRight: "2%",
               },
             ]}
             onPress={leftButtonAction}
           >
-            <Text style={Styles.buttonText}>{otherProps.leftButtonText}</Text>
+            <Text style={Styles.buttonText}>{otherProps?.leftButtonText}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               Styles.button,
               {
-                backgroundColor: otherProps.rightButtonColor,
+                backgroundColor: otherProps?.rightButtonColor,
                 marginLeft: "2%",
               },
             ]}
             onPress={rightButtonAction}
           >
-            <Text style={Styles.buttonText}>{otherProps.rightButtonText}</Text>
+            <Text style={Styles.buttonText}>{otherProps?.rightButtonText}</Text>
           </TouchableOpacity>
         </View>
       </View>

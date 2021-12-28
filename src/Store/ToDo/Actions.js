@@ -23,11 +23,13 @@ class ToDoActions {
         });
     };
   }
-  static completeQuiz(quiz_id, quiz_answers) {
+  static completeQuiz(quiz_id, quiz_answers, group_id) {
+    let request = { quiz_id, quiz_answers };
+    group_id && Object.assign(request, { group_id });
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       dispatch(ToDoReducers.completeQuizStart());
-      API.ToDo.completeQuiz(token, quiz_id, quiz_answers)
+      API.ToDo.completeQuiz(token, request)
         .then((res) => {
           dispatch(ToDoReducers.completeQuizDone(res));
           dispatch(this.getToDo());
@@ -77,8 +79,6 @@ class ToDoActions {
           redirectToAnswer();
         })
         .catch((err) => {
-          console.log("inside qetu eerrr", err);
-
           dispatch(ToDoReducers.getQuizResultFailed(err));
         });
     };

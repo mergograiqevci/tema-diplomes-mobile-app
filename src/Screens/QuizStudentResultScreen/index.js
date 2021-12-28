@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, SectionList } from "react-native";
 import QuizController from "~/Components/QuizController";
 import Colors from "~/Assets/Colors";
 import Header from "~/Components/Header";
@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TaskActions from "~/Store/Task/Actions";
 import Styles from "./styles";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
+import SectionHeader from "~/Components/SectionHeader";
 const QuizStudentResultScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const taskReducer = useSelector((state) => state?.Task);
@@ -16,7 +17,7 @@ const QuizStudentResultScreen = ({ navigation }) => {
   const quizStudentsResultState = taskReducer?.quizStudentsResultState;
 
   useEffect(() => {
-    dispatch(TaskActions.findStudentsByTask("61c756c4c764377c80a946c2"));
+    dispatch(TaskActions.findStudentsByTask("61cb6c793688c7f1d1c8a76e"));
   }, []);
 
   const renderItem = ({ item }) => {
@@ -31,7 +32,10 @@ const QuizStudentResultScreen = ({ navigation }) => {
         backgroundColor={Colors.green}
         onPress={() =>
           navigation.push("StudentRatingScreen", {
-            styledQuestion: formatQuizStyle([item], true),
+            styledQuestion: formatQuizStyle(
+              JSON.parse(JSON.stringify(item?.completed_result)),
+              true
+            ),
             fullItem: item,
           })
         }
@@ -39,12 +43,11 @@ const QuizStudentResultScreen = ({ navigation }) => {
     );
   };
 
-  const flatListHeader = () => {
+  const studentsLength = () => {
     return (
-      <View style={Styles.headerView}>
-        <Text style={Styles.headerText}>Student</Text>
-        <Text style={Styles.headerText}>{quizStudentsResultData?.length}</Text>
-      </View>
+      <Text style={Styles.headerText}>
+        {quizStudentsResultData?.totalStudents}
+      </Text>
     );
   };
 
@@ -54,17 +57,19 @@ const QuizStudentResultScreen = ({ navigation }) => {
         title="Studentet"
         leftIcon={<ArrowLeft />}
         handleLeftIcon={() => navigation.goBack()}
+        rightIcon={studentsLength()}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}
       />
-      <FlatList
-        style={{ marginTop: 20 }}
-        data={quizStudentsResultData}
+      <SectionList
+        sections={quizStudentsResultData?.d}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        ListHeaderComponent={flatListHeader()}
+        renderSectionHeader={({ section: { title } }) => (
+          <SectionHeader title={title} />
+        )}
       />
     </View>
   );

@@ -1,9 +1,7 @@
-const formatQuizStyle = (quiz, isSingleItem) => {
-  let quizD = [...quiz];
-  let quizData = isSingleItem ? quizD[0]?.completed_result : quizD;
+import Colors from "~/Assets/Colors";
+const formatQuizStyle = (quizData) => {
+  // let quizData = [...quiz];
 
-  // console.log("quizData", quizData[0].completed_result);
-  // return;
   for (let i = 0; i < quizData.length; i++) {
     const options = quizData[i]?.options;
     const your_answer = quizData[i]?.your_answer;
@@ -13,12 +11,12 @@ const formatQuizStyle = (quiz, isSingleItem) => {
       let inYourAnswer = your_answer.find((o) => o === options[j]);
       if (inYourAnswer) {
         if (correct_answer.find((c) => c === inYourAnswer)) {
-          style = { backgroundColor: "green" };
+          style = { backgroundColor: Colors.green };
         } else {
-          style = { backgroundColor: "red" };
+          style = { backgroundColor: Colors.red };
         }
       } else if (correct_answer.find((o) => o === options[j])) {
-        style = { borderRadius: "green" };
+        style = { borderRadius: Colors.green };
       } else {
         style = { empty: true };
       }

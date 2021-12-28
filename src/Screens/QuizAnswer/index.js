@@ -12,9 +12,6 @@ const QuizAnswer = ({ navigation, route }) => {
   const safeAreaSize = useSelector((state) => state?.User.safeAreaSize);
   const quizResultData = toDoReducer?.getQuizResultData;
 
-  const convertColor = (color) => {
-    return color === "red" ? Colors.negative : Colors.green;
-  };
   const renderItem = ({ item, index }) => {
     const convertedItem = {
       left: index + 1 + " )",
@@ -31,12 +28,10 @@ const QuizAnswer = ({ navigation, route }) => {
         }
         backgroundColor={
           item?.style?.backgroundColor
-            ? convertColor(item?.style?.backgroundColor)
+            ? item?.style?.backgroundColor
             : Colors.white
         }
-        borderColor={
-          item?.style?.borderRadius && convertColor(item?.style?.borderRadius)
-        }
+        borderColor={item?.style?.borderRadius && item?.style?.borderRadius}
       />
     );
   };

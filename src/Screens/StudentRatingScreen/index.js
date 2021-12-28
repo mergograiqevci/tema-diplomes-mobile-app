@@ -46,7 +46,6 @@ const StudentRatingScreen = ({ navigation, route }) => {
       left: index + 1 + " )",
       center: item?.v,
     };
-
     return (
       <QuizController
         item={convertedItem}
@@ -57,12 +56,10 @@ const StudentRatingScreen = ({ navigation, route }) => {
         }
         backgroundColor={
           item?.style?.backgroundColor
-            ? convertColor(item?.style?.backgroundColor)
+            ? item?.style?.backgroundColor
             : Colors.white
         }
-        borderColor={
-          item?.style?.borderRadius && convertColor(item?.style?.borderRadius)
-        }
+        borderColor={item?.style?.borderRadius && item?.style?.borderRadius}
       />
     );
   };
@@ -91,10 +88,20 @@ const StudentRatingScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               Styles.buttonSaveView,
-              { opacity: !(grade.trim() && parseInt(grade) >= 5) ? 0.5 : 1 },
+              {
+                opacity: !(
+                  grade.trim() &&
+                  parseInt(grade) >= 5 &&
+                  parseInt(grade) <= 10
+                )
+                  ? 0.5
+                  : 1,
+              },
             ]}
             onPress={handleGradeTask}
-            disabled={!(grade.trim() && parseInt(grade) >= 5)}
+            disabled={
+              !(grade.trim() && parseInt(grade) >= 5 && parseInt(grade) <= 10)
+            }
           >
             <Text style={Styles.buttonSaveViewText}>Ruaj</Text>
           </TouchableOpacity>
@@ -106,7 +113,7 @@ const StudentRatingScreen = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <Header
-        title="Mergim Graiqevci"
+        title={fullItem?.student?.username}
         leftIcon={<ArrowLeft />}
         handleLeftIcon={() => navigation.goBack()}
         safeAreaBackgroundColor={Colors.appBaseColor}
