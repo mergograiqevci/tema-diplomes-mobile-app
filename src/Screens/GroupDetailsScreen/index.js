@@ -89,6 +89,15 @@ const GroupDetailsScreen = ({ navigation, route }) => {
     }
   };
 
+  const leftButtonActionInInviteOtherModal = () => {
+    const request = {
+      group_id: item?._id,
+      student_id: id,
+    };
+    dispatch(GroupActions.insertStudentInGroup(request));
+    setInviteModalVisible(false);
+  };
+
   const renderItem = ({ item }) => {
     if (item?.isTask === true && item?.type !== "quiz") {
       return <TasksBox item={item} />;
@@ -126,8 +135,9 @@ const GroupDetailsScreen = ({ navigation, route }) => {
       <InviteOtherModal
         modalVisible={inviteModalVisible}
         setModalVisible={setInviteModalVisible}
-        leftButtonAction={leftButtonAction}
+        leftButtonAction={leftButtonActionInInviteOtherModal}
         rightButtonAction={rightButtonAction}
+        id={id}
         onChangeId={setId}
         errorMessage={errorMessages}
         otherProps={inviteModalProps}

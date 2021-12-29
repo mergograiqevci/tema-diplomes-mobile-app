@@ -86,9 +86,9 @@ const OtherTasks = ({ item }) => {
   const handleTaskOnClick = () => {
     if (item.isGroup === true) {
       const tasks = toDoData[0].data.filter((i) =>
-        i.group && i.group._id.toString() === item?.group?._id
-          ? item?.group?._id
-          : item?._id
+        i.group && i.group._id.toString() === item?.group?._id.toString()
+          ? item?.group?._id.toString()
+          : item?._id.toString()
       );
 
       navigation.push("GroupDetailsScreen", {

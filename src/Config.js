@@ -4,6 +4,7 @@ const Config = {
   },
   ErrorMessages: {
     user_not_found: "ID ose fjalëkalimi është i gabuar",
+    group_not_found: "Grupi nuk eshte gjendur",
     email_exists: "Ju lutem zgjidhni një email tjetër",
     username_exists: "Ju lutem zgjidhni një përdorues tjetër",
     fill_data: "Ju lutem plotësoni të dhënat",

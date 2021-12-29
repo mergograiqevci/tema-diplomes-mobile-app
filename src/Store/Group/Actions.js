@@ -4,6 +4,7 @@ import * as ToDoReducers from "../ToDo/Reducers";
 import removeGroupInToDo from "~/Functions/array/removeGroupInToDo";
 import ToDoActions from "../ToDo/Actions";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
+import Config from "~/Config";
 class GroupActions {
   static leaveGroup(id) {
     return (dispatch, getState) => {
@@ -26,11 +27,18 @@ class GroupActions {
       dispatch(GroupReducers.createNewGroupStart());
       API.Group.createNewGroup(token, title, students)
         .then((res) => {
+          if (
+            res?.data === "group_created_successfully_failed_to_insert_students"
+          ) {
+            toasterMessage(
+              "Grupi eshte krijuar me suksese por studentet kan deshtuar te regjistrohen",
+              "error"
+            );
+          }
           dispatch(ToDoActions.getToDo());
           dispatch(GroupReducers.createNewGroupDone(res));
         })
         .catch((err) => {
-          console.log("ERRORI:", err);
           toasterMessage(
             "Ka ndodhur nje gabim gjate regjistrimit te grupit",
             "error"
@@ -45,10 +53,45 @@ class GroupActions {
       dispatch(GroupReducers.findAllStudentsByProfessorStart());
       API.Group.findAllStudentsByProfessor(token, title)
         .then((res) => {
+          // let removeDuplicated = [];
+          // for (let i = 0; i < res?.data; i++) {
+          //   const findStudent = removeDuplicated.find(
+          //     (s) => s?._id?.toString() === res?.data[i]?._id?.toString()
+          //   );
+          //   if (!findStudent) {
+          //     removeDuplicated.push(res?.data[i]);
+          //   }
+          // }
+          // console.log("removeDuplicated", removeDuplicated);
           dispatch(GroupReducers.findAllStudentsByProfessorDone(res?.data));
         })
         .catch((err) => {
           dispatch(GroupReducers.findAllStudentsByProfessorFailed(err));
+        });
+    };
+  }
+  static insertStudentInGroup(request) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      dispatch(GroupReducers.insertStudentInGroupStart());
+      API.Group.insertStudentInGroup(token, request)
+        .then((res) => {
+          toasterMessage("Studenti eshte regjistruar me suksese", "success");
+          dispatch(GroupReducers.insertStudentInGroupDone(res?.data));
+        })
+        .catch((err) => {
+          // console.log("duhet me kqyr prap");
+          const error =
+            Config.ErrorMessages[
+              err?.error
+                ? err?.error
+                : err?.error?.path === "_id"
+                ? "id_not_valid"
+                : "default_error"
+            ];
+
+          toasterMessage(error, "error");
+          dispatch(GroupReducers.insertStudentInGroupFailed(err));
         });
     };
   }

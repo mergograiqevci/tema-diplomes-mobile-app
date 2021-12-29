@@ -39,6 +39,19 @@ class Group {
 
     return groupData;
   }
+  static async insertStudentInGroup(token, request) {
+    let groupData = await Request.post(
+      `/groups/insert_student_in_group`,
+      request,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return groupData;
+  }
 }
 
 export default Group;

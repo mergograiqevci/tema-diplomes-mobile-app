@@ -9,6 +9,7 @@ const InviteOtherModal = ({
   setModalVisible,
   leftButtonAction,
   rightButtonAction,
+  id,
   onChangeId,
   errorMessage,
   otherProps,
@@ -39,8 +40,10 @@ const InviteOtherModal = ({
               {
                 backgroundColor: otherProps.leftButtonColor,
                 marginRight: "2%",
+                opacity: id && id.trim() ? 1 : 0.5,
               },
             ]}
+            disabled={!(id && id.trim())}
             onPress={leftButtonAction}
           >
             <Text style={Styles.buttonText}>{otherProps.leftButtonText}</Text>

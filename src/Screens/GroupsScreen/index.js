@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import Header from "~/Components/Header";
-import Logout from "~/Assets/Svg/logout";
 import Colors from "~/Assets/Colors";
 import CreateNewGroupModal from "~/Components/CreateNewGroupModal";
 import PopUpModal from "~/Components/PopUpModal";
@@ -11,12 +10,18 @@ import isProfessor from "~/Functions/isProfessor";
 import { useSelector, useDispatch } from "react-redux";
 import TasksBox from "~/Components/TasksBox";
 import GroupActions from "~/Store/Group/Actions";
+import State from "~/Store/State";
 const GroupsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
   const toDoError = toDoReducer?.toDoError;
   const toDoState = toDoReducer?.toDoState;
+  const groupReducer = useSelector((state) => state?.Group);
+  const studentByProfessorData = groupReducer?.studentByProfessorData;
+  const studentByProfessorError = groupReducer?.studentByProfessorError;
+  const studentByProfessorState = groupReducer?.studentByProfessorState;
+
   const [createGroupModalVisible, setCreateGroupModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -45,8 +50,13 @@ const GroupsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    dispatch(GroupActions.findAllStudentsByProfessor());
-  }, []);
+    if (
+      studentByProfessorState === State.NOT_PROCESSED ||
+      studentByProfessorState === State.FAILED
+    ) {
+      dispatch(GroupActions.findAllStudentsByProfessor());
+    }
+  }, [studentByProfessorState]);
 
   const leftButtonAction = () => {
     dispatch(GroupActions.createNewGroup(title, selectedStudents));
