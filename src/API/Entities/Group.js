@@ -14,10 +14,22 @@ class Group {
 
     return groupData;
   }
-  static async createNewGroup(token, title) {
+  static async createNewGroup(token, title, students) {
     let groupData = await Request.post(
       `/groups/create_new_group`,
-      { title },
+      { title, students },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return groupData;
+  }
+  static async findAllStudentsByProfessor(token, title) {
+    let groupData = await Request.get(
+      `/groups/find_all_students_by_professor`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

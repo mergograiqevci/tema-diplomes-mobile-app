@@ -8,6 +8,9 @@ const initialState = {
   createGroupData: [],
   createGroupError: null,
   createGroupState: State.NOT_PROCESSED,
+  studentByProfessorData: [],
+  studentByProfessorError: null,
+  studentByProfessorState: State.NOT_PROCESSED,
 };
 
 const slice = createSlice({
@@ -46,6 +49,17 @@ const slice = createSlice({
       state.createGroupError = null;
       state.createGroupState = State.NOT_PROCESSED;
     },
+    findAllStudentsByProfessorStart(state) {
+      state.studentByProfessorState = State.PROCESSING;
+    },
+    findAllStudentsByProfessorDone(state, action) {
+      state.studentByProfessorData = action.payload;
+      state.studentByProfessorState = State.DONE;
+    },
+    findAllStudentsByProfessorFailed(state, action) {
+      state.studentByProfessorError = action.payload;
+      state.studentByProfessorState = State.FAILED;
+    },
   },
 });
 
@@ -59,4 +73,7 @@ export const {
   createNewGroupDone,
   createNewGroupFailed,
   clearPrevCreateGroupData,
+  findAllStudentsByProfessorStart,
+  findAllStudentsByProfessorDone,
+  findAllStudentsByProfessorFailed,
 } = slice.actions;

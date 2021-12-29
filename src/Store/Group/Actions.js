@@ -20,21 +20,35 @@ class GroupActions {
         });
     };
   }
-  static createNewGroup(title) {
+  static createNewGroup(title, students) {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       dispatch(GroupReducers.createNewGroupStart());
-      API.Group.createNewGroup(token, title)
+      API.Group.createNewGroup(token, title, students)
         .then((res) => {
           dispatch(ToDoActions.getToDo());
           dispatch(GroupReducers.createNewGroupDone(res));
         })
         .catch((err) => {
+          console.log("ERRORI:", err);
           toasterMessage(
             "Ka ndodhur nje gabim gjate regjistrimit te grupit",
             "error"
           );
           dispatch(GroupReducers.createNewGroupFailed(err));
+        });
+    };
+  }
+  static findAllStudentsByProfessor(title) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      dispatch(GroupReducers.findAllStudentsByProfessorStart());
+      API.Group.findAllStudentsByProfessor(token, title)
+        .then((res) => {
+          dispatch(GroupReducers.findAllStudentsByProfessorDone(res?.data));
+        })
+        .catch((err) => {
+          dispatch(GroupReducers.findAllStudentsByProfessorFailed(err));
         });
     };
   }

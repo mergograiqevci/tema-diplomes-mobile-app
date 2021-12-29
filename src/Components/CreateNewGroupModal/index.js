@@ -1,10 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import Modal from "react-native-modal";
 import Styles from "./styles";
 import User from "~/Assets/Svg/user";
 import Input from "../InputField";
 import { Picker } from "@react-native-picker/picker";
+import { useSelector } from "react-redux";
+import QuizController from "../QuizController";
+import Colors from "~/Assets/Colors";
 const CreateNewGroupModal = ({
   modalVisible,
   setModalVisible,
@@ -12,11 +15,40 @@ const CreateNewGroupModal = ({
   rightButtonAction,
   title,
   onChangeTitle,
-  selectedLanguage,
-  setSelectedLanguage,
+  selectedStudents,
+  setSelectedStudents,
   errorMessage,
   otherProps,
 }) => {
+  const groupReducer = useSelector((state) => state?.Group);
+  const studentByProfessorData = groupReducer?.studentByProfessorData;
+  const studentByProfessorError = groupReducer?.studentByProfessorError;
+  const studentByProfessorState = groupReducer?.studentByProfessorState;
+
+  const renderItem = ({ item, index }) => {
+    const convertedItem = {
+      center: item?.student?.username,
+    };
+    const findItem = selectedStudents.find((i) => i?._id === item?._id);
+    return (
+      <QuizController
+        item={convertedItem}
+        textColor={findItem ? Colors.white : Colors.black}
+        backgroundColor={findItem ? Colors.green : Colors.white}
+        onPress={() => {
+          if (findItem) {
+            const fileredStudents = selectedStudents.filter(
+              (i) => i._id !== item?._id
+            );
+            setSelectedStudents(fileredStudents);
+          } else {
+            setSelectedStudents([...selectedStudents, item]);
+          }
+        }}
+      />
+    );
+  };
+
   return (
     <Modal
       isVisible={modalVisible}
@@ -38,21 +70,16 @@ const CreateNewGroupModal = ({
         />
         <Text style={Styles.selectStudents}>Selekto studentat</Text>
         <Text style={Styles.selectedStudents}>
-          Studentat e selektuar: {selectedLanguage}
+          Studentat e selektuar:{" "}
+          {selectedStudents.map((i) => i?.student?.username).join(", ")}
         </Text>
-        <Picker
-          selectedValue={setSelectedLanguage[setSelectedLanguage.length - 1]}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage([...selectedLanguage, " ", itemValue])
-          }
-        >
-          <Picker.Item label="Java" value="java" />
-          <Picker.Item label="JavaScript" value="js1" />
-          <Picker.Item label="Java" value="java1" />
-          <Picker.Item label="JavaScript" value="js2" />
-          <Picker.Item label="Java" value="java2" />
-          <Picker.Item label="JavaScript" value="js3" />
-        </Picker>
+        <FlatList
+          style={{ height: 200 }}
+          data={studentByProfessorData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+
         <View style={Styles.buttonView}>
           <TouchableOpacity
             style={[

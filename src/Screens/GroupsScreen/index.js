@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import Header from "~/Components/Header";
 import Logout from "~/Assets/Svg/logout";
@@ -22,7 +22,7 @@ const GroupsScreen = ({ navigation }) => {
 
   const [title, setTitle] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   const professor = isProfessor();
 
@@ -44,8 +44,12 @@ const GroupsScreen = ({ navigation }) => {
     rightButtonColor: Colors.appBaseColor,
   };
 
+  useEffect(() => {
+    dispatch(GroupActions.findAllStudentsByProfessor());
+  }, []);
+
   const leftButtonAction = () => {
-    dispatch(GroupActions.createNewGroup(title));
+    dispatch(GroupActions.createNewGroup(title, selectedStudents));
     setCreateGroupModalVisible(false);
   };
 
@@ -61,12 +65,13 @@ const GroupsScreen = ({ navigation }) => {
       return <OtherTasks item={item} />;
     }
   };
+
   return (
     <View style={{ flex: 1 }}>
       <Header
         title="Grupet"
-        leftIcon={professor && <AddGroup />}
-        handleLeftIcon={() => professor && setCreateGroupModalVisible(true)}
+        rightIcon={professor && <AddGroup />}
+        handleRightIcon={() => professor && setCreateGroupModalVisible(true)}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}
@@ -84,8 +89,8 @@ const GroupsScreen = ({ navigation }) => {
         rightButtonAction={rightButtonAction}
         title={title}
         onChangeTitle={setTitle}
-        selectedLanguage={selectedLanguage}
-        setSelectedLanguage={setSelectedLanguage}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
         errorMessage={errorMessages}
         otherProps={createGroupModalProps}
       />
