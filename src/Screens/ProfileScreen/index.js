@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Header from "~/Components/Header";
 import Colors from "~/Assets/Colors";
 import AuthForm from "~/Components/AuthForm";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import State from "~/Store/State";
 import Config from "~/Config";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
+import isProfessor from "~/Functions/isProfessor";
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
@@ -22,6 +23,8 @@ const ProfileScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+
+  const professor = isProfessor();
 
   const modalProps = {
     title: "A jeni te sigurt qe deshironi te dilni?",
@@ -73,7 +76,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Header
         title="Profili"
         rightIcon={<Logout />}
@@ -100,6 +103,16 @@ const ProfileScreen = ({ navigation }) => {
         rightButtonAction={rightButtonAction}
         otherProps={modalProps}
       />
+      {professor && (
+        <TouchableOpacity
+          style={Styles.accountButton}
+          onPress={() => navigation.push("CreateAccountScreen")}
+        >
+          <Text style={Styles.accountButtonText}>
+            Krijo llogari per student
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

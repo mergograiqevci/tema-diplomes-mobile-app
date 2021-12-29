@@ -25,9 +25,7 @@ class UserActions {
       role: "student",
     };
     return (dispatch, getState) => {
-      // const token = getState().User?.token;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb2Zlc29yQGdtYWlsLmNvbSIsImlhdCI6MTYzODcwODY1OCwiZXhwIjoyMTc4NzA4NjU4fQ.beSjl-u9rbPyHhVR2jv-yUZZJSxa9DLEQ6M0SpSZ3wo";
+      const token = getState().User?.token;
       dispatch(UserReducers.registerStart());
       API.User.register_student(token, request)
         .then((res) => {

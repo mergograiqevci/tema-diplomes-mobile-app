@@ -7,6 +7,21 @@ export default StyleSheet.create({
     marginBottom: -15,
     fontSize: 20,
     marginLeft: 25,
-    // fontFamily: "Montserrat-Bold",
+  },
+  accountButton: {
+    paddingVertical: 13,
+    borderRadius: 8,
+    marginHorizontal: 60,
+    backgroundColor: Colors.green,
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+  },
+  accountButtonText: {
+    color: Colors.white,
+    fontWeight: "600",
+    textAlign: "center",
+    fontSize: 16,
   },
 });

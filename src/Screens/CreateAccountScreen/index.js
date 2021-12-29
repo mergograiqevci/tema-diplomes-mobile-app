@@ -31,7 +31,10 @@ const CreateAccountScreen = ({ navigation }) => {
   useEffect(() => {
     if (registerState === State.DONE) {
       toasterMessage(
-        `Keni krijuar me sukses një llogari të re për studentin: ${username} `,
+        `Keni krijuar me sukses një llogari të re për studentin: ${username.replaceAll(
+          " ",
+          ""
+        )} `,
         "success"
       );
       dispatch(UserActions.clearPrevRegisterStudentData());
@@ -47,7 +50,9 @@ const CreateAccountScreen = ({ navigation }) => {
 
   const handleRegisterPressed = () => {
     if (username.trim() && password.trim()) {
-      dispatch(UserActions.registerStudent(username, password));
+      dispatch(
+        UserActions.registerStudent(username.replaceAll(" ", ""), password)
+      );
     } else {
       setErrorMessages({ password: Config.ErrorMessages["fill_data"] });
     }

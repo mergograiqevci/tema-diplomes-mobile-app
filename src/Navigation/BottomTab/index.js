@@ -16,7 +16,8 @@ const BottomTabNavigator = () => {
     if (
       routeName === "HomeWithoutBottomTab" ||
       routeName === "TakingQuizScreen" ||
-      routeName === "QuizAnswer"
+      routeName === "QuizAnswer" ||
+      routeName === "CreateAccountScreen"
     ) {
       return "none";
     }
