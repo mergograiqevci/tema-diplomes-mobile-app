@@ -70,8 +70,6 @@ class UserActions {
     return async (dispatch) => {
       const token = await UserActions.getLocalToken();
 
-      const token1 =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnRAZ21haWwuY29tIiwiaWF0IjoxNjM4NzA4NTYwLCJleHAiOjIxNzg3MDg1NjB9.s9eymBEoZVvzYrte1lR5VbL34I4ZcX3x4C8rRYh92SQ";
       dispatch(UserReducers.getProfileStart());
       API.User.my_profile(token)
         .then(async (res) => {

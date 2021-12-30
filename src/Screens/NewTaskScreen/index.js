@@ -66,7 +66,6 @@ const NewTaskScreen = ({ navigation, route }) => {
     };
   };
 
-  console.log("questionIsValid", questionIsValid);
   const [quizQuestions, setQuizQuestions] = useState([
     { i: newQuestion(quizQuestions) },
   ]);
@@ -88,19 +87,19 @@ const NewTaskScreen = ({ navigation, route }) => {
     } else if (activeButton === "video") {
       setDefaultValues(defaultVideoValues);
     } else if (activeButton === "quiz") {
-      console.log("Kuiz");
+      // console.log("Kuiz");
     }
   }, [activeButton]);
 
   const handleButtons = (button) => {
     setActiveButton(button);
-    if (button === "book") {
-      console.log("Book");
-    } else if (button === "video") {
-      console.log("video");
-    } else if (button === "quiz") {
-      console.log("Kuiz");
-    }
+    // if (button === "book") {
+    //   console.log("Book");
+    // } else if (button === "video") {
+    //   console.log("video");
+    // } else if (button === "quiz") {
+    //   console.log("Kuiz");
+    // }
   };
 
   const buttonAction = () => {
@@ -218,6 +217,7 @@ const NewTaskScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[Styles.saveButton, { opacity: questionIsValid ? 1 : 0.5 }]}
             onPress={() => buttonAction()}
+            disabled={!questionIsValid}
           >
             <Text style={Styles.saveButtonText}>Ruaj</Text>
           </TouchableOpacity>

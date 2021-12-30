@@ -35,7 +35,7 @@ const OtherTasks = ({ item }) => {
 
   const subTitle =
     item?.isGroup === true
-      ? "3"
+      ? item?.number_of_students
       : item?.isTask === true
       ? moment(item?.quiz?.date)
           .utc()

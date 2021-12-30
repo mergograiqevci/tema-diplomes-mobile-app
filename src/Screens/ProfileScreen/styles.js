@@ -12,7 +12,7 @@ export default StyleSheet.create({
     paddingVertical: 13,
     borderRadius: 8,
     marginHorizontal: 60,
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.appBaseColor,
     position: "absolute",
     bottom: 20,
     left: 0,

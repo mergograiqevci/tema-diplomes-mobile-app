@@ -78,6 +78,7 @@ const CreateNewGroupModal = ({
           data={studentByProfessorData}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
         />
 
         <View style={Styles.buttonView}>

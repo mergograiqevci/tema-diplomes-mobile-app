@@ -15,6 +15,7 @@ export default StyleSheet.create({
     fontSize: 19,
     fontWeight: "500",
     color: Colors.white,
+    maxWidth: "75%",
   },
   subTextView: {
     flexDirection: "column",

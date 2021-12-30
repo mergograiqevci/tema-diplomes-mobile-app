@@ -42,7 +42,7 @@ const NewQuiz = ({
       </TouchableOpacity>
       <Input
         leftIcon={questionText("?")}
-        placeholder={"Pyetje shenohet ketu"}
+        placeholder={"Pyetja shenohet ketu"}
         secureText={false}
         onChangeTextInput={setQuestion}
         errorMessage={errorMessages.question ? errorMessages.question : null}
@@ -94,7 +94,7 @@ const NewQuiz = ({
         handleIcon={() => console.log("ONCLICK")}
         enabled={true}
       />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[
           Styles.deleteQuestionButton,
           { opacity: questionIsValid ? 1 : 0.5 },
@@ -109,7 +109,7 @@ const NewQuiz = ({
         <Text style={Styles.newQuestionText}>
           {findItem ? "Ndrysho" : "Ruaj"}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

@@ -5,6 +5,7 @@ import removeGroupInToDo from "~/Functions/array/removeGroupInToDo";
 import ToDoActions from "../ToDo/Actions";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import Config from "~/Config";
+import removeDuplicatedStudents from "~/Functions/array/removeDuplicatedStudents";
 class GroupActions {
   static leaveGroup(id) {
     return (dispatch, getState) => {
@@ -53,19 +54,14 @@ class GroupActions {
       dispatch(GroupReducers.findAllStudentsByProfessorStart());
       API.Group.findAllStudentsByProfessor(token, title)
         .then((res) => {
-          // let removeDuplicated = [];
-          // for (let i = 0; i < res?.data; i++) {
-          //   const findStudent = removeDuplicated.find(
-          //     (s) => s?._id?.toString() === res?.data[i]?._id?.toString()
-          //   );
-          //   if (!findStudent) {
-          //     removeDuplicated.push(res?.data[i]);
-          //   }
-          // }
-          // console.log("removeDuplicated", removeDuplicated);
-          dispatch(GroupReducers.findAllStudentsByProfessorDone(res?.data));
+          const removedDuplicated = removeDuplicatedStudents(res?.data);
+          dispatch(
+            GroupReducers.findAllStudentsByProfessorDone(removedDuplicated)
+          );
         })
         .catch((err) => {
+          console.log("inside hereeee errerr", err);
+
           dispatch(GroupReducers.findAllStudentsByProfessorFailed(err));
         });
     };
