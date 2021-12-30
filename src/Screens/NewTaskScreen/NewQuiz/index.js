@@ -8,15 +8,21 @@ const NewQuiz = ({
   index,
   questionIsValid,
   setQuizQuestions,
+  numQuestion,
+  setNumQuestion,
   quizQuestions,
   setQuestion,
   setAnswerOne,
   setAnswerTwo,
   setAnswerThird,
   setAnswerFour,
+  newQuestion,
+  changeQuestion,
   errorMessages,
 }) => {
-  const findItem = quizQuestions.find((q) => q?.i?.id === item?.i?.id);
+  const findItemIndex = quizQuestions.findIndex(
+    (q) => parseInt(q?.id) === parseInt(item)
+  );
   const questionText = (text) => {
     return (
       <Text style={{ fontSize: 18, fontWeight: "700", color: "#000000" }}>
@@ -26,20 +32,6 @@ const NewQuiz = ({
   };
   return (
     <View style={{ flex: 1, marginTop: 20 }}>
-      <TouchableOpacity
-        style={[
-          Styles.deleteQuestionButton,
-          { opacity: index === 0 ? 0.5 : 1 },
-        ]}
-        onPress={() =>
-          setQuizQuestions(
-            quizQuestions.filter((q) => q?.i?.id !== item?.i?.id)
-          )
-        }
-        disabled={index === 0}
-      >
-        <Text style={Styles.newQuestionText}>Fshije</Text>
-      </TouchableOpacity>
       <Input
         leftIcon={questionText("?")}
         placeholder={"Pyetja shenohet ketu"}
@@ -110,6 +102,46 @@ const NewQuiz = ({
           {findItem ? "Ndrysho" : "Ruaj"}
         </Text>
       </TouchableOpacity> */}
+
+      <View
+        style={{
+          flexDirection: "row",
+          alignSelf: "flex-end",
+        }}
+      >
+        {index !== 0 && (
+          <TouchableOpacity
+            style={Styles.deleteQuestionButton}
+            onPress={() => {
+              const filterdQuestion = quizQuestions.filter(
+                (q) => parseInt(q?.id) !== parseInt(item)
+              );
+              const filterdNumQuestion = numQuestion.filter(
+                (nq) => nq !== item
+              );
+              setQuizQuestions(filterdQuestion);
+              setNumQuestion(filterdNumQuestion);
+            }}
+          >
+            <Text style={Styles.newQuestionText}>Fshije</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={[Styles.deleteQuestionButton, { marginLeft: 10 }]}
+          onPress={() => {
+            if (findItemIndex !== -1) {
+              changeQuestion(item);
+            } else {
+              console.log("new question");
+              newQuestion();
+            }
+          }}
+        >
+          <Text style={Styles.newQuestionText}>
+            {findItemIndex !== -1 ? "Ndrysho" : "Ruaj"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

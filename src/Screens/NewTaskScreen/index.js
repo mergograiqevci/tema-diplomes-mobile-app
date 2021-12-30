@@ -52,23 +52,48 @@ const NewTaskScreen = ({ navigation, route }) => {
       ? true
       : false;
 
-  const newQuestion = (quizQuestions) => {
-    return {
-      id:
-        quizQuestions === undefined
-          ? 0
-          : quizQuestions[quizQuestions.length - 1]?.i?.id + 1,
-      question,
-      answerOne,
-      answerTwo,
-      answerThird,
-      answerFour,
-    };
+  const newQuestion = () => {
+    setQuizQuestions([
+      ...quizQuestions,
+      {
+        id: numQuestion[numQuestion.length - 1],
+        question,
+        answerOne,
+        answerTwo,
+        answerThird,
+        answerFour,
+      },
+    ]);
   };
 
-  const [quizQuestions, setQuizQuestions] = useState([
-    { i: newQuestion(quizQuestions) },
-  ]);
+  const changeQuestion = (item) => {
+    const findItemIndex = quizQuestions.findIndex(
+      (q) => parseInt(q?.id) === item
+    );
+    let quizQ = [...quizQuestions];
+    quizQ[findItemIndex] = {
+      id: quizQuestions[findItemIndex]?.id,
+      question: question.trim()
+        ? question
+        : quizQuestions[findItemIndex]?.question,
+      answerOne: answerOne.trim()
+        ? answerOne
+        : quizQuestions[findItemIndex]?.answerOne,
+      answerTwo: answerTwo.trim()
+        ? answerTwo
+        : quizQuestions[findItemIndex]?.answerTwo,
+      answerThird: answerThird.trim()
+        ? answerThird
+        : quizQuestions[findItemIndex]?.answerThird,
+      answerFour: answerFour.trim()
+        ? answerFour
+        : quizQuestions[findItemIndex]?.answerFour,
+    };
+    setQuizQuestions(quizQ);
+  };
+
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [numQuestion, setNumQuestion] = useState([1]);
 
   console.log("quizQuestions", quizQuestions);
   useEffect(() => {
@@ -123,18 +148,22 @@ const NewTaskScreen = ({ navigation, route }) => {
         questionIsValid={questionIsValid}
         quizQuestions={quizQuestions}
         setQuizQuestions={setQuizQuestions}
+        numQuestion={numQuestion}
+        setNumQuestion={setNumQuestion}
         setQuestion={setQuestion}
         setAnswerOne={setAnswerOne}
         setAnswerTwo={setAnswerTwo}
         setAnswerThird={setAnswerThird}
         setAnswerFour={setAnswerFour}
+        changeQuestion={changeQuestion}
+        newQuestion={newQuestion}
         errorMessages={errorMessages}
       />
     );
   };
 
   const handleNewQuestionButton = () => {
-    setQuizQuestions([...quizQuestions, { i: newQuestion(quizQuestions) }]);
+    setNumQuestion([...numQuestion, numQuestion[numQuestion.length - 1] + 1]);
   };
 
   const childView = () => {
@@ -198,7 +227,7 @@ const NewTaskScreen = ({ navigation, route }) => {
       return (
         <View style={{ flex: 1 }}>
           <FlatList
-            data={quizQuestions}
+            data={numQuestion}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
@@ -207,19 +236,24 @@ const NewTaskScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               Styles.newQuestionButton,
-              { opacity: questionIsValid ? 1 : 0.5 },
+              {
+                opacity: questionIsValid || numQuestion.length === 1 ? 1 : 0.5,
+              },
             ]}
             onPress={handleNewQuestionButton}
-            disabled={!questionIsValid}
+            disabled={!(questionIsValid || numQuestion.length === 1)}
           >
             <Text style={Styles.newQuestionText}>Shto nje pytje te re</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[Styles.saveButton, { opacity: questionIsValid ? 1 : 0.5 }]}
+            style={[
+              Styles.saveButton,
+              { opacity: quizQuestions.length === 0 ? 0.5 : 1 },
+            ]}
             onPress={() => buttonAction()}
-            disabled={!questionIsValid}
+            disabled={quizQuestions.length === 0}
           >
-            <Text style={Styles.saveButtonText}>Ruaj</Text>
+            <Text style={Styles.saveButtonText}>Dergo</Text>
           </TouchableOpacity>
         </View>
       );
