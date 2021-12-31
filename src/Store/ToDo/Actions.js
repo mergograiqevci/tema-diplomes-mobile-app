@@ -83,28 +83,6 @@ class ToDoActions {
         });
     };
   }
-  ////TASK
-
-  static createNewTask(title, type, to, student_or_group_id, task) {
-    console.log(title, type, to, student_or_group_id, task);
-
-    return (dispatch, getState) => {
-      const token = getState()?.User?.token;
-      dispatch(ToDoReducers.createNewTaskStart());
-      API.ToDo.createNewTask(token, title, type, to, student_or_group_id, task)
-        .then((res) => {
-          console.log("NEW HEHE:", res);
-          dispatch(ToDoReducers.createNewTaskDone(res));
-        })
-        .catch((err) => {
-          console.log("inside qetu eerrr", err);
-
-          dispatch(ToDoReducers.createNewTaskFailed(err));
-        });
-    };
-  }
-
-  create_new_task;
 }
 
 export default ToDoActions;

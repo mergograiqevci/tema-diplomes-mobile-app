@@ -8,6 +8,9 @@ const initialState = {
   gradeTaskState: State.NOT_PROCESSED,
   gradeTaskData: [],
   gradeTaskError: null,
+  createNewTaskError: null,
+  createNewTaskState: State.NOT_PROCESSED,
+  createNewTaskData: {},
 };
 
 const slice = createSlice({
@@ -36,6 +39,17 @@ const slice = createSlice({
       state.gradeTaskError = action.payload;
       state.gradeTaskState = State.FAILED;
     },
+    createNewTaskStart(state) {
+      state.createNewTaskState = State.PROCESSING;
+    },
+    createNewTaskDone(state, action) {
+      state.createNewTaskData = action.payload;
+      state.createNewTaskState = State.DONE;
+    },
+    createNewTaskFailed(state, action) {
+      state.createNewTaskError = action.payload;
+      state.createNewTaskState = State.FAILED;
+    },
   },
 });
 
@@ -47,4 +61,7 @@ export const {
   setGradeTaskStart,
   setGradeTaskDone,
   setGradeTaskFailed,
+  createNewTaskStart,
+  createNewTaskDone,
+  createNewTaskFailed,
 } = slice.actions;

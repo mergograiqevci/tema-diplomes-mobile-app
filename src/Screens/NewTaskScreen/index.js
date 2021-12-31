@@ -6,10 +6,14 @@ import Colors from "~/Assets/Colors";
 import Styles from "./styles";
 import Input from "~/Components/InputField";
 import User from "~/Assets/Svg/user";
-import Correct from "~/Assets/Svg/correct";
-import ToDoActions from "~/Store/ToDo/Actions";
-import { useSelector, useDispatch } from "react-redux";
+import TaskActions from "~/Store/Task/Actions";
+import { useDispatch } from "react-redux";
 import NewQuiz from "./NewQuiz";
+import moment from "moment";
+import formatQuizRequest from "~/Functions/array/formatQuizRequest";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
+import DatePicker from "react-native-date-picker";
+
 const NewTaskScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { group_id } = route.params;
@@ -25,6 +29,9 @@ const NewTaskScreen = ({ navigation, route }) => {
     link: "Video Linku",
     image: "Image",
   };
+
+  const keys_to_keep_in_quiz_request = ["options", "question", "answer"];
+
   const [activeButton, setActiveButton] = useState("book");
   const [taskTitle, setTaskTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -36,12 +43,12 @@ const NewTaskScreen = ({ navigation, route }) => {
   const [errorMessages, setErrorMessages] = useState({});
   const [defaultValues, setDefaultValues] = useState(defaultBookValues);
 
-  const [questionsLength, setQuestionsLength] = useState([]);
   const [question, setQuestion] = useState("");
   const [answerOne, setAnswerOne] = useState("");
   const [answerTwo, setAnswerTwo] = useState("");
   const [answerThird, setAnswerThird] = useState("");
   const [answerFour, setAnswerFour] = useState("");
+  const [answer, setAnswer] = useState([]);
 
   const questionIsValid =
     question?.trim() &&
@@ -58,44 +65,21 @@ const NewTaskScreen = ({ navigation, route }) => {
       {
         id: numQuestion[numQuestion.length - 1],
         question,
+        options: [answerOne, answerTwo, answerThird, answerFour],
         answerOne,
         answerTwo,
         answerThird,
         answerFour,
+        answer,
       },
     ]);
   };
 
-  const changeQuestion = (item) => {
-    const findItemIndex = quizQuestions.findIndex(
-      (q) => parseInt(q?.id) === item
-    );
-    let quizQ = [...quizQuestions];
-    quizQ[findItemIndex] = {
-      id: quizQuestions[findItemIndex]?.id,
-      question: question.trim()
-        ? question
-        : quizQuestions[findItemIndex]?.question,
-      answerOne: answerOne.trim()
-        ? answerOne
-        : quizQuestions[findItemIndex]?.answerOne,
-      answerTwo: answerTwo.trim()
-        ? answerTwo
-        : quizQuestions[findItemIndex]?.answerTwo,
-      answerThird: answerThird.trim()
-        ? answerThird
-        : quizQuestions[findItemIndex]?.answerThird,
-      answerFour: answerFour.trim()
-        ? answerFour
-        : quizQuestions[findItemIndex]?.answerFour,
-    };
-    setQuizQuestions(quizQ);
-  };
-
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [numQuestion, setNumQuestion] = useState([1]);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(true);
 
-  console.log("quizQuestions", quizQuestions);
   useEffect(() => {
     if (quizQuestions.length >= 1) {
       setQuestion("");
@@ -103,6 +87,7 @@ const NewTaskScreen = ({ navigation, route }) => {
       setAnswerTwo("");
       setAnswerThird("");
       setAnswerFour("");
+      setAnswer([]);
     }
   }, [quizQuestions]);
 
@@ -111,33 +96,49 @@ const NewTaskScreen = ({ navigation, route }) => {
       setDefaultValues(defaultBookValues);
     } else if (activeButton === "video") {
       setDefaultValues(defaultVideoValues);
-    } else if (activeButton === "quiz") {
-      // console.log("Kuiz");
     }
   }, [activeButton]);
 
   const handleButtons = (button) => {
     setActiveButton(button);
-    // if (button === "book") {
-    //   console.log("Book");
-    // } else if (button === "video") {
-    //   console.log("video");
-    // } else if (button === "quiz") {
-    //   console.log("Kuiz");
-    // }
+  };
+
+  const onResponse = (type) => {
+    if (type === "error") {
+      toasterMessage(
+        "Ka ndodhur nje gabim gjate regjistrimit te detyres",
+        "error"
+      );
+    } else {
+      toasterMessage("Detyra eshte regjistruar me suksese", "success");
+      navigation.pop();
+    }
   };
 
   const buttonAction = () => {
+    let task;
     if (activeButton === "book" || activeButton === "video") {
-      dispatch(
-        ToDoActions.createNewTask(taskTitle, activeButton, "group", group_id, {
-          description,
-          [activeButton === "book" ? "pdf" : "video_link"]: link,
-          image,
-        })
-      );
+      task = {
+        description,
+        [activeButton === "book" ? "pdf" : "video_link"]: link,
+        image,
+      };
+    } else {
+      task = {
+        date: moment().utc(),
+        details: formatQuizRequest(quizQuestions, keys_to_keep_in_quiz_request),
+      };
     }
-    console.log("inside ruaj button");
+    dispatch(
+      TaskActions.createNewTask(
+        taskTitle,
+        activeButton,
+        "group",
+        group_id,
+        task,
+        onResponse
+      )
+    );
   };
 
   const renderItem = ({ item, index }) => {
@@ -150,12 +151,19 @@ const NewTaskScreen = ({ navigation, route }) => {
         setQuizQuestions={setQuizQuestions}
         numQuestion={numQuestion}
         setNumQuestion={setNumQuestion}
+        answer={answer}
+        setAnswer={setAnswer}
         setQuestion={setQuestion}
+        answerOne={answerOne}
+        answerTwo={answerTwo}
+        answerThird={answerThird}
+        answerFour={answerFour}
+        answer={answer}
         setAnswerOne={setAnswerOne}
         setAnswerTwo={setAnswerTwo}
         setAnswerThird={setAnswerThird}
         setAnswerFour={setAnswerFour}
-        changeQuestion={changeQuestion}
+        setAnswer={setAnswer}
         newQuestion={newQuestion}
         errorMessages={errorMessages}
       />
@@ -163,25 +171,51 @@ const NewTaskScreen = ({ navigation, route }) => {
   };
 
   const handleNewQuestionButton = () => {
-    setNumQuestion([...numQuestion, numQuestion[numQuestion.length - 1] + 1]);
+    if (numQuestion.length === 0) {
+      setNumQuestion([1]);
+    } else {
+      setNumQuestion([...numQuestion, numQuestion[numQuestion.length - 1] + 1]);
+    }
+  };
+
+  const title = () => {
+    return (
+      <Input
+        leftIcon={<User />}
+        placeholder={defaultValues.taskTitle}
+        secureText={false}
+        onChangeTextInput={setTaskTitle}
+        errorMessage={errorMessages.taskTitle ? errorMessages.taskTitle : null}
+        keyboardType="default"
+        secureTextEntry={false}
+        enabled={true}
+      />
+    );
+  };
+
+  const datePicker = () => {
+    return (
+      <DatePicker
+        modal
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          console.log("DATEE:", date);
+          setOpen(false);
+          setDate(date);
+        }}
+        onCancel={() => {
+          console.log("onCancel:", onCancel);
+        }}
+      />
+    );
   };
 
   const childView = () => {
     if (activeButton === "book" || activeButton === "video") {
       return (
         <View style={{ flex: 1 }}>
-          <Input
-            leftIcon={<User />}
-            placeholder={defaultValues.taskTitle}
-            secureText={false}
-            onChangeTextInput={setTaskTitle}
-            errorMessage={
-              errorMessages.taskTitle ? errorMessages.taskTitle : null
-            }
-            keyboardType="default"
-            secureTextEntry={false}
-            enabled={true}
-          />
+          {title()}
           <Input
             leftIcon={<User />}
             placeholder={defaultValues.description}
@@ -226,32 +260,37 @@ const NewTaskScreen = ({ navigation, route }) => {
     } else {
       return (
         <View style={{ flex: 1 }}>
+          {title()}
+          {datePicker()}
           <FlatList
             data={numQuestion}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
           />
-
-          <TouchableOpacity
-            style={[
-              Styles.newQuestionButton,
-              {
-                opacity: questionIsValid || numQuestion.length === 1 ? 1 : 0.5,
-              },
-            ]}
-            onPress={handleNewQuestionButton}
-            disabled={!(questionIsValid || numQuestion.length === 1)}
-          >
-            <Text style={Styles.newQuestionText}>Shto nje pytje te re</Text>
-          </TouchableOpacity>
+          {numQuestion.length === quizQuestions.length && (
+            <TouchableOpacity
+              style={[Styles.newQuestionButton]}
+              onPress={handleNewQuestionButton}
+            >
+              <Text style={Styles.newQuestionText}>Shto nje pytje te re</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={[
               Styles.saveButton,
-              { opacity: quizQuestions.length === 0 ? 0.5 : 1 },
+              {
+                opacity:
+                  numQuestion.length === quizQuestions.length &&
+                  taskTitle.trim()
+                    ? 1
+                    : 0.5,
+              },
             ]}
             onPress={() => buttonAction()}
-            disabled={quizQuestions.length === 0}
+            disabled={
+              !(numQuestion.length === quizQuestions.length && taskTitle.trim())
+            }
           >
             <Text style={Styles.saveButtonText}>Dergo</Text>
           </TouchableOpacity>

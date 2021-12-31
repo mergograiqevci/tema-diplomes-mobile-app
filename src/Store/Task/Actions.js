@@ -37,6 +37,22 @@ class TaskActions {
         });
     };
   }
+  static createNewTask(title, type, to, student_or_group_id, task, onResponse) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      const request = { token, title, type, to, student_or_group_id, task };
+      dispatch(ToDoReducers.createNewTaskStart());
+      API.Task.createNewTask(token, request)
+        .then((res) => {
+          onResponse("success");
+          dispatch(ToDoReducers.createNewTaskDone(res));
+        })
+        .catch((err) => {
+          onResponse("error");
+          dispatch(ToDoReducers.createNewTaskFailed(err));
+        });
+    };
+  }
 }
 
 export default TaskActions;

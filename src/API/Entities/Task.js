@@ -25,6 +25,15 @@ class Task {
     );
     return taskData;
   }
+  static async createNewTask(token, request) {
+    let taskData = await Request.post(`/tasks/create_new_task`, request, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return taskData;
+  }
 }
 
 export default Task;
