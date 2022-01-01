@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, SectionList, Text } from "react-native";
+import { View, SectionList, RefreshControl } from "react-native";
 import Header from "~/Components/Header";
 import Colors from "~/Assets/Colors";
 import ProfileBox from "~/Components/ProfileBox";
@@ -17,6 +17,7 @@ const HomeScreen = ({ navigation }) => {
   const threshold = 200;
   const [flatListPosition, setFlatListPosition] = useState(0);
   const [topHeaderHeight, setTopHeaderHeight] = useState(threshold);
+  const [refreshing, setRefreshing] = useState(false);
 
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
@@ -30,6 +31,13 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     dispatch(ToDoActions.getToDo());
   }, []);
+
+  useEffect(() => {
+    if (refreshing) {
+      dispatch(ToDoActions.toDo());
+      setRefreshing(false);
+    }
+  }, [refreshing]);
 
   useEffect(() => {
     if (toDoState === State.DONE) {
@@ -81,6 +89,13 @@ const HomeScreen = ({ navigation }) => {
           toDoState === State.PROCESSING && (
             <Loading animating={toDoState === State.PROCESSING} />
           )
+        }
+        refreshControl={
+          <RefreshControl
+            tintColor={Colors.white}
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+          />
         }
       />
       {headerFlatList()}
