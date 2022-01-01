@@ -57,7 +57,9 @@ const OtherTasks = ({ item }) => {
     item?.isGroup === true
       ? Colors.groupBackground
       : item?.isTask === true
-      ? Colors.upComingTasks
+      ? item?.grade === "-1"
+        ? Colors.quiz_not_taken
+        : Colors.upComingTasks
       : item?.grade === null
       ? Colors.pendingQuiz
       : item?.grade.toString() === "5"
@@ -85,6 +87,7 @@ const OtherTasks = ({ item }) => {
 
   const handleTaskOnClick = () => {
     if (item.isGroup === true) {
+      console.log("item?.group?._id", item?.group?._id);
       const tasks = toDoData[0].data.filter((i) =>
         i.group && i.group._id.toString() === item?.group?._id.toString()
           ? item?.group?._id.toString()
@@ -125,9 +128,7 @@ const OtherTasks = ({ item }) => {
         },
       ]}
       onPress={handleTaskOnClick}
-      // activeOpacity={item.isGroup === true ? 0.7 : professor ? 1 : 0.7}
       activeOpacity={0.7}
-      // disabled={item.isTask === true ? (professor ? true : false) : false}
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>

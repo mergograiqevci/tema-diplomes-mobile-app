@@ -1,5 +1,5 @@
 import formatQuizTaken from "./formatQuizTaken";
-const formatSections = (formatedToDo) => {
+const formatSections = (formatedToDo, role) => {
   const allSections = [];
 
   formatedToDo.todayTasks &&
@@ -29,7 +29,7 @@ const formatSections = (formatedToDo) => {
       key: "groups",
     });
 
-  const quizTaken = formatQuizTaken(formatedToDo?.quizTaken);
+  const quizTaken = formatQuizTaken(formatedToDo?.quizTaken, role);
 
   quizTaken &&
     quizTaken.completed.length > 0 &&
@@ -42,7 +42,7 @@ const formatSections = (formatedToDo) => {
   quizTaken &&
     quizTaken.pending.length > 0 &&
     allSections.push({
-      title: "Duke Pritur",
+      title: role === "professor" ? "Ne te ardhmen" : "Duke Pritur",
       data: quizTaken.pending,
       key: "pending",
     });

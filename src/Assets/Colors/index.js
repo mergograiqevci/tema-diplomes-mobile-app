@@ -15,7 +15,7 @@ const Colors = {
   groupBackground: "#788E8B",
   upComingTasks: "#3EAAB3",
   pendingQuiz: "#F29339",
-
+  quiz_not_taken: "#FF4025",
   youtubeBackground: "#212121",
 };
 export default Colors;

@@ -14,7 +14,7 @@ class ToDoActions {
         .then((res) => {
           dispatch(ToDoReducers.unFormatedToDo(res?.data));
           const formatedToDo = formatToDo(res?.data);
-          const formatedSections = formatSections(formatedToDo);
+          const formatedSections = formatSections(formatedToDo, role);
           dispatch(ToDoReducers.getToDoDone(formatedSections));
         })
         .catch((err) => {
