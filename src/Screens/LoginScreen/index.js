@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import UserActions from "~/Store/User/Actions";
 import Styles from "./styles";
@@ -9,6 +15,8 @@ import Colors from "~/Assets/Colors";
 import Student from "~/Assets/Svg/student";
 import State from "~/Store/State";
 import Config from "~/Config";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
@@ -47,24 +55,28 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={Styles.container}>
-      <SafeAreaView style={{ flex: 0 }} />
-      <View style={Styles.loginLogo}>
-        <Student width={130} height={90} />
-        {/* <LoginLogo /> */}
-      </View>
+    <KeyboardAwareScrollView style={{ flex: 1 }} bounces={false}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={Styles.container}>
+          <SafeAreaView style={{ flex: 0 }} />
+          <View style={Styles.loginLogo}>
+            <Student width={130} height={90} />
+            {/* <LoginLogo /> */}
+          </View>
 
-      <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>
-      <AuthForm
-        onChangeId={setId}
-        onChangePassword={setPassword}
-        errorMessage={errorMessages}
-        buttonAction={handleLoginPressed}
-        buttonBackgroundColor={Colors.blue}
-        buttonText="Kyçu"
-        otherProps={otherAuthProps}
-      />
-    </View>
+          <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>
+          <AuthForm
+            onChangeId={setId}
+            onChangePassword={setPassword}
+            errorMessage={errorMessages}
+            buttonAction={handleLoginPressed}
+            buttonBackgroundColor={Colors.blue}
+            buttonText="Kyçu"
+            otherProps={otherAuthProps}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 

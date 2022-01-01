@@ -44,11 +44,15 @@ class ToDoActions {
       dispatch(ToDoReducers.clearPrevQuizCompleted());
     };
   }
-  static canCompleteQuiz(quiz_id, redirectToQuiz) {
+  static canCompleteQuiz(quiz_id, group_id, redirectToQuiz) {
+    //duhet me kqyr
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
+      let request = { quiz_id };
+      group_id && Object.assign(request, group_id);
+      console.log("REQUESTI", request);
       dispatch(ToDoReducers.canCompleteQuizStart());
-      API.ToDo.canCompleteQuiz(token, quiz_id)
+      API.ToDo.canCompleteQuiz(token, request)
         .then((res) => {
           console.log("DONE :", res);
           redirectToQuiz();

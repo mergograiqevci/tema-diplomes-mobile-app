@@ -9,7 +9,8 @@ import TaskActions from "~/Store/Task/Actions";
 import Styles from "./styles";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 import SectionHeader from "~/Components/SectionHeader";
-const QuizStudentResultScreen = ({ navigation }) => {
+const QuizStudentResultScreen = ({ navigation, route }) => {
+  const { quiz_id } = route.params;
   const dispatch = useDispatch();
   const taskReducer = useSelector((state) => state?.Task);
   const quizStudentsResultData = taskReducer?.quizStudentsResultData;
@@ -17,7 +18,7 @@ const QuizStudentResultScreen = ({ navigation }) => {
   const quizStudentsResultState = taskReducer?.quizStudentsResultState;
 
   useEffect(() => {
-    dispatch(TaskActions.findStudentsByTask("61cb6c793688c7f1d1c8a76e"));
+    dispatch(TaskActions.findStudentsByTask(quiz_id));
   }, []);
 
   const renderItem = ({ item }) => {

@@ -1,6 +1,6 @@
 const Config = {
   Server: {
-    API_BASE_URL: "http://localhost:8080",
+    API_BASE_URL: "http://192.168.1.37:8080",
   },
   ErrorMessages: {
     user_not_found: "ID ose fjalëkalimi është i gabuar",

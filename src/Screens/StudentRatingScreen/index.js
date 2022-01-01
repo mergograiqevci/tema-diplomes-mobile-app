@@ -5,7 +5,8 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import QuizController from "~/Components/QuizController";
 import Colors from "~/Assets/Colors";
@@ -15,6 +16,8 @@ import Styles from "./styles";
 import TaskActions from "~/Store/Task/Actions";
 import { useSelector, useDispatch } from "react-redux";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const StudentRatingScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { styledQuestion, fullItem } = route.params;
@@ -111,23 +114,27 @@ const StudentRatingScreen = ({ navigation, route }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
-      <Header
-        title={fullItem?.student?.username}
-        leftIcon={<ArrowLeft />}
-        handleLeftIcon={() => navigation.goBack()}
-        safeAreaBackgroundColor={Colors.appBaseColor}
-        backgroundColor={Colors.appBaseColor}
-        height={50}
-      />
-      <FlatList
-        data={styledQuestion}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderQuestion}
-        ListHeaderComponent={flatListHeader()}
-        ListFooterComponent={flatListFooter()}
-      />
-    </KeyboardAvoidingView>
+    <KeyboardAwareScrollView style={{ flex: 1 }} bounces={false}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <Header
+            title={fullItem?.student?.username}
+            leftIcon={<ArrowLeft />}
+            handleLeftIcon={() => navigation.goBack()}
+            safeAreaBackgroundColor={Colors.appBaseColor}
+            backgroundColor={Colors.appBaseColor}
+            height={50}
+          />
+          <FlatList
+            data={styledQuestion}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderQuestion}
+            ListHeaderComponent={flatListHeader()}
+            ListFooterComponent={flatListFooter()}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 

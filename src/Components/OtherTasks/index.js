@@ -96,10 +96,23 @@ const OtherTasks = ({ item }) => {
         tasks: [{ title: "Detyrat", data: tasks }],
       });
     } else {
-      if (item.grade === undefined) {
-        dispatch(ToDoActions.canCompleteQuiz(item?._id, redirectToQuiz));
-      } else if (parseInt(item.grade) >= 5) {
-        dispatch(ToDoActions.getQuizResult(item?._id, redirectToAnswer));
+      if (professor) {
+        navigation.push("QuizStudentResultScreen", {
+          quiz_id: item?._id,
+        });
+      } else {
+        if (item.grade === undefined) {
+          redirectToQuiz();
+          // dispatch(
+          //   ToDoActions.canCompleteQuiz(
+          //     item?._id,
+          //     item?.group?._id,
+          //     redirectToQuiz
+          //   )
+          // );
+        } else if (parseInt(item.grade) >= 5) {
+          dispatch(ToDoActions.getQuizResult(item?._id, redirectToAnswer));
+        }
       }
     }
   };
@@ -112,8 +125,9 @@ const OtherTasks = ({ item }) => {
         },
       ]}
       onPress={handleTaskOnClick}
-      activeOpacity={item.isGroup === true ? 0.7 : professor ? 1 : 0.7}
-      disabled={item.isTask === true ? (professor ? true : false) : false}
+      // activeOpacity={item.isGroup === true ? 0.7 : professor ? 1 : 0.7}
+      activeOpacity={0.7}
+      // disabled={item.isTask === true ? (professor ? true : false) : false}
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>

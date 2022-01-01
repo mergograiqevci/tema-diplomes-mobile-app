@@ -50,11 +50,13 @@ const GroupsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (
-      studentByProfessorState === State.NOT_PROCESSED ||
-      studentByProfessorState === State.FAILED
-    ) {
-      dispatch(GroupActions.findAllStudentsByProfessor());
+    if (professor) {
+      if (
+        studentByProfessorState === State.NOT_PROCESSED ||
+        studentByProfessorState === State.FAILED
+      ) {
+        dispatch(GroupActions.findAllStudentsByProfessor());
+      }
     }
   }, [studentByProfessorState]);
 

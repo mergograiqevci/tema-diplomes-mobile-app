@@ -22,16 +22,12 @@ class ToDo {
 
     return toDoData;
   }
-  static async canCompleteQuiz(token, quiz_id) {
-    let toDoData = await Request.post(
-      `/tasks/can_complete_quiz`,
-      { quiz_id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  static async canCompleteQuiz(token, request) {
+    let toDoData = await Request.post(`/tasks/can_complete_quiz`, request, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return toDoData;
   }
