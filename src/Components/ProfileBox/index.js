@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 import Colors from "~/Assets/Colors";
 import Profile from "~/Assets/Svg/profile";
 import Styles from "./styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ProfileDetails from "./ProfileDetails";
+import UserActions from "~/Store/User/Actions";
 const ProfileBox = ({ height, toDoStatistic }) => {
+  const dispatch = useDispatch();
   const myProfile = useSelector((state) => state.User?.myProfile);
+
+  useEffect(() => {
+    if (Object.keys(myProfile).length === 0) {
+      dispatch(UserActions.myProfile());
+    }
+  }, []);
 
   return (
     <View style={Styles.container}>

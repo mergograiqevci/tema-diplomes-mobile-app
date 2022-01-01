@@ -16,7 +16,7 @@ import Student from "~/Assets/Svg/student";
 import State from "~/Store/State";
 import Config from "~/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import Loader from "~/Components/Loader";
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
@@ -74,6 +74,7 @@ const LoginScreen = () => {
             buttonText="Kyçu"
             otherProps={otherAuthProps}
           />
+          {loginState === State.PROCESSING && <Loader />}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>

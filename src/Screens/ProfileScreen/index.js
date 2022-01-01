@@ -26,6 +26,20 @@ const ProfileScreen = ({ navigation }) => {
 
   const professor = isProfessor();
 
+  useEffect(() => {
+    if (Object.keys(myProfile).length === 0) {
+      dispatch(UserActions.myProfile());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(myProfile).length !== 0) {
+      if (!username) {
+        setUsername(myProfile?.data?.username);
+      }
+    }
+  }, [myProfile]);
+
   const modalProps = {
     title: "A jeni te sigurt qe deshironi te dilni?",
     subTitle: "",

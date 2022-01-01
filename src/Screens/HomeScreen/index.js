@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import State from "~/Store/State";
 import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
 import isProfessor from "~/Functions/isProfessor";
+import Loading from "~/Components/Loading";
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const threshold = 200;
@@ -76,8 +77,14 @@ const HomeScreen = ({ navigation }) => {
         )}
         style={{ marginTop: topHeaderHeight + 80 }}
         onScroll={handleOptionsInFlat}
+        ListHeaderComponent={
+          toDoState === State.PROCESSING && (
+            <Loading animating={toDoState === State.PROCESSING} />
+          )
+        }
       />
       {headerFlatList()}
+
       <ProfileBox toDoStatistic={toDoStatistic} height={topHeaderHeight} />
     </View>
   );
