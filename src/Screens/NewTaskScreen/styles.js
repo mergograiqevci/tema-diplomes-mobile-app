@@ -21,7 +21,7 @@ export default StyleSheet.create({
   saveButton: {
     paddingVertical: 13,
     borderRadius: 8,
-    marginTop: 30,
+    marginVertical: 30,
     backgroundColor: Colors.appBaseColor,
   },
   deleteQuestionButton: {
@@ -53,5 +53,19 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     // fontFamily: "Montserrat-SemiBold",
+  },
+  quizDateButton: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.appBaseColor,
+    marginTop: 18,
+  },
+  quizDate: {
+    textAlign: "center",
+    color: Colors.appBaseColor,
+    fontWeight: "600",
+    fontSize: 17,
+    paddingVertical: 5,
   },
 });

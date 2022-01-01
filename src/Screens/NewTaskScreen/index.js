@@ -13,7 +13,6 @@ import moment from "moment";
 import formatQuizRequest from "~/Functions/array/formatQuizRequest";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import DatePicker from "react-native-date-picker";
-
 const NewTaskScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { group_id } = route.params;
@@ -78,7 +77,8 @@ const NewTaskScreen = ({ navigation, route }) => {
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [numQuestion, setNumQuestion] = useState([1]);
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(true);
+  const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
+  const [datePickerConfirmed, setDatePickerConfirmed] = useState(false);
 
   useEffect(() => {
     if (quizQuestions.length >= 1) {
@@ -125,7 +125,7 @@ const NewTaskScreen = ({ navigation, route }) => {
       };
     } else {
       task = {
-        date: moment().utc(),
+        date,
         details: formatQuizRequest(quizQuestions, keys_to_keep_in_quiz_request),
       };
     }
@@ -197,15 +197,17 @@ const NewTaskScreen = ({ navigation, route }) => {
     return (
       <DatePicker
         modal
-        open={open}
+        open={datePickerIsOpen}
         date={date}
+        minimumDate={date}
         onConfirm={(date) => {
-          console.log("DATEE:", date);
-          setOpen(false);
+          setDatePickerIsOpen(false);
           setDate(date);
+          setDatePickerConfirmed(true);
         }}
         onCancel={() => {
-          console.log("onCancel:", onCancel);
+          setDatePickerIsOpen(false);
+          setDatePickerConfirmed(false);
         }}
       />
     );
@@ -261,6 +263,16 @@ const NewTaskScreen = ({ navigation, route }) => {
       return (
         <View style={{ flex: 1 }}>
           {title()}
+          <TouchableOpacity
+            style={Styles.quizDateButton}
+            onPress={() => setDatePickerIsOpen(true)}
+          >
+            <Text style={Styles.quizDate}>
+              {datePickerConfirmed
+                ? "Data: " + moment(date).utc().format("HH:mm (DD-MM-YYYY)")
+                : "Zgjedh daten"}
+            </Text>
+          </TouchableOpacity>
           {datePicker()}
           <FlatList
             data={numQuestion}
@@ -282,14 +294,19 @@ const NewTaskScreen = ({ navigation, route }) => {
               {
                 opacity:
                   numQuestion.length === quizQuestions.length &&
-                  taskTitle.trim()
+                  taskTitle.trim() &&
+                  datePickerConfirmed
                     ? 1
                     : 0.5,
               },
             ]}
             onPress={() => buttonAction()}
             disabled={
-              !(numQuestion.length === quizQuestions.length && taskTitle.trim())
+              !(
+                numQuestion.length === quizQuestions.length &&
+                taskTitle.trim() &&
+                datePickerConfirmed
+              )
             }
           >
             <Text style={Styles.saveButtonText}>Dergo</Text>

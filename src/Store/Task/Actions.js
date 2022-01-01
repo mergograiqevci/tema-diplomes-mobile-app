@@ -41,15 +41,15 @@ class TaskActions {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       const request = { token, title, type, to, student_or_group_id, task };
-      dispatch(ToDoReducers.createNewTaskStart());
+      dispatch(TaskReducers.createNewTaskStart());
       API.Task.createNewTask(token, request)
         .then((res) => {
           onResponse("success");
-          dispatch(ToDoReducers.createNewTaskDone(res));
+          dispatch(TaskReducers.createNewTaskDone(res));
         })
         .catch((err) => {
           onResponse("error");
-          dispatch(ToDoReducers.createNewTaskFailed(err));
+          dispatch(TaskReducers.createNewTaskFailed(err));
         });
     };
   }
