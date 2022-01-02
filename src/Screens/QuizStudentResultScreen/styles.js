@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import Colors from "~/Assets/Colors";
+const { height } = Dimensions.get("window");
 export default StyleSheet.create({
   headerView: {
     flexDirection: "row",
@@ -11,5 +12,16 @@ export default StyleSheet.create({
     fontSize: 22,
     fontWeight: "700",
     color: Colors.white,
+  },
+  notFoundView: {
+    height: height,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  notFoundText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: Colors.gray,
+    marginTop: -200,
   },
 });

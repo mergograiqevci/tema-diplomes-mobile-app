@@ -11,6 +11,7 @@ import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 import SectionHeader from "~/Components/SectionHeader";
 import moment from "moment";
 import DeleteIcon from "~/Assets/Svg/delete";
+import State from "~/Store/State";
 const QuizStudentResultScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const dispatch = useDispatch();
@@ -36,7 +37,9 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    dispatch(TaskActions.findStudentsByTask(item?._id));
+    if (!canDelete) {
+      dispatch(TaskActions.findStudentsByTask(item?._id));
+    }
   }, []);
 
   const renderItem = ({ item }) => {
@@ -71,6 +74,13 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
     );
   };
 
+  const notFound = () => {
+    return (
+      <View style={Styles.notFoundView}>
+        <Text style={Styles.notFoundText}>Nuk u gjete asnje student</Text>
+      </View>
+    );
+  };
   return (
     <View style={{ flex: 1 }}>
       <Header
@@ -84,7 +94,7 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
         height={50}
       />
       <SectionList
-        sections={quizStudentsResultData?.d}
+        sections={[]}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
@@ -92,6 +102,11 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
           <SectionHeader title={title} />
         )}
         stickySectionHeadersEnabled={false}
+        ListEmptyComponent={
+          quizStudentsResultState === State.DONE &&
+          quizStudentsResultData?.d?.length === 0 &&
+          notFound()
+        }
       />
     </View>
   );

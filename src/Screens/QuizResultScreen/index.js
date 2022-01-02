@@ -15,6 +15,8 @@ const QuizResultScreen = ({ navigation, route }) => {
     navigation.push("QuizStudentResultScreen");
   };
 
+  console.log("quizData", quizData);
+
   return (
     <View style={[Styles.container, { paddingTop: safeAreaSize.top + 40 }]}>
       <Text style={Styles.resultText}>Rezultati</Text>

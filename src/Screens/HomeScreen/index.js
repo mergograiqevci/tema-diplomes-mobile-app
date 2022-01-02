@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, SectionList, RefreshControl } from "react-native";
+import { View, SectionList, TouchableOpacity } from "react-native";
 import Header from "~/Components/Header";
 import Colors from "~/Assets/Colors";
 import ProfileBox from "~/Components/ProfileBox";
@@ -12,7 +12,9 @@ import State from "~/Store/State";
 import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
 import isProfessor from "~/Functions/isProfessor";
 import Loading from "~/Components/Loading";
-const HomeScreen = ({ navigation }) => {
+import Reload from "~/Assets/Svg/reload";
+import Styles from "./styles";
+const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;
   const [flatListPosition, setFlatListPosition] = useState(0);
@@ -28,13 +30,17 @@ const HomeScreen = ({ navigation }) => {
   const professor = isProfessor();
   const toDoWithoutGroups = toDoData?.filter((i) => i?.key !== "groups");
 
-  useEffect(() => {
+  const getToDo = () => {
     dispatch(ToDoActions.getToDo());
+  };
+
+  useEffect(() => {
+    getToDo();
   }, []);
 
   useEffect(() => {
     if (refreshing) {
-      dispatch(ToDoActions.getToDo());
+      getToDo();
       setRefreshing(false);
     }
   }, [refreshing]);
@@ -75,6 +81,19 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  const sectionListHeader = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity style={Styles.reload} onPress={getToDo}>
+          <Reload />
+        </TouchableOpacity>
+        {toDoState === State.PROCESSING && (
+          <Loading animating={toDoState === State.PROCESSING} />
+        )}
+      </View>
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <SectionList
@@ -88,18 +107,7 @@ const HomeScreen = ({ navigation }) => {
         stickySectionHeadersEnabled={false}
         style={{ marginTop: topHeaderHeight + 80 }}
         onScroll={handleOptionsInFlat}
-        ListHeaderComponent={
-          toDoState === State.PROCESSING && (
-            <Loading animating={toDoState === State.PROCESSING} />
-          )
-        }
-        refreshControl={
-          <RefreshControl
-            tintColor={Colors.white}
-            refreshing={refreshing}
-            onRefresh={() => setRefreshing(true)}
-          />
-        }
+        ListHeaderComponent={sectionListHeader}
       />
       {header()}
 
