@@ -1,6 +1,7 @@
 import * as API from "~/API";
 import * as TaskReducers from "./Reducers";
 import formatQuizResults from "~/Functions/array/formatQuizResults";
+import ToDoActions from "../ToDo/Actions";
 class TaskActions {
   static findStudentsByTask(id) {
     return (dispatch, getState) => {
@@ -45,11 +46,32 @@ class TaskActions {
       API.Task.createNewTask(token, request)
         .then((res) => {
           onResponse("success");
+          dispatch(ToDoActions.getToDo());
           dispatch(TaskReducers.createNewTaskDone(res));
         })
         .catch((err) => {
           onResponse("error");
           dispatch(TaskReducers.createNewTaskFailed(err));
+        });
+    };
+  }
+  static deleteTask(task_id, onResponse) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      dispatch(TaskReducers.deleteTaskStart());
+      API.Task.deleteTask(token, task_id)
+        .then((res) => {
+          console.log("res:", res);
+          onResponse("success");
+
+          dispatch(ToDoActions.getToDo());
+          dispatch(TaskReducers.deleteTaskDone(res));
+        })
+        .catch((err) => {
+          console.log("error:", err);
+
+          onResponse("error");
+          dispatch(TaskReducers.deleteTaskFailed(err));
         });
     };
   }

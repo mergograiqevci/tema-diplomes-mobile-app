@@ -11,6 +11,9 @@ const initialState = {
   createNewTaskError: null,
   createNewTaskState: State.NOT_PROCESSED,
   createNewTaskData: {},
+  deleteTaskError: null,
+  deleteTaskState: State.NOT_PROCESSED,
+  deleteTaskData: {},
 };
 
 const slice = createSlice({
@@ -50,6 +53,17 @@ const slice = createSlice({
       state.createNewTaskError = action.payload;
       state.createNewTaskState = State.FAILED;
     },
+    deleteTaskStart(state) {
+      state.deleteTaskState = State.PROCESSING;
+    },
+    deleteTaskDone(state, action) {
+      state.deleteTaskData = action.payload;
+      state.deleteTaskState = State.DONE;
+    },
+    deleteTaskFailed(state, action) {
+      state.deleteTaskError = action.payload;
+      state.deleteTaskState = State.FAILED;
+    },
   },
 });
 
@@ -64,4 +78,7 @@ export const {
   createNewTaskStart,
   createNewTaskDone,
   createNewTaskFailed,
+  deleteTaskStart,
+  deleteTaskDone,
+  deleteTaskFailed,
 } = slice.actions;

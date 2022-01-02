@@ -11,7 +11,7 @@ export default function App() {
   return (
     <Provider store={Store}>
       <View style={Styles.appContainer}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <NavigationContainer>
           <Redirect />
         </NavigationContainer>

@@ -9,22 +9,41 @@ import TaskActions from "~/Store/Task/Actions";
 import Styles from "./styles";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 import SectionHeader from "~/Components/SectionHeader";
+import moment from "moment";
+import DeleteIcon from "~/Assets/Svg/delete";
 const QuizStudentResultScreen = ({ navigation, route }) => {
-  const { quiz_id } = route.params;
+  const { item } = route.params;
   const dispatch = useDispatch();
   const taskReducer = useSelector((state) => state?.Task);
   const quizStudentsResultData = taskReducer?.quizStudentsResultData;
   const quizStudentsResultError = taskReducer?.quizStudentsResultError;
   const quizStudentsResultState = taskReducer?.quizStudentsResultState;
 
+  const dateInMilliSeconds = moment(item?.quiz?.date).utc().valueOf();
+  const currentTimeInMilliSeconds = moment().utc().valueOf();
+  const canDelete = dateInMilliSeconds >= currentTimeInMilliSeconds;
+
+  const onResponse = (type) => {
+    if (type === "error") {
+      toasterMessage("Ka ndodhur nje gabim gjate largimit te detyres", "error");
+    } else {
+      navigation.pop();
+    }
+  };
+
+  const handleRemoveTask = () => {
+    dispatch(TaskActions.deleteTask(item?._id, onResponse));
+  };
+
   useEffect(() => {
-    dispatch(TaskActions.findStudentsByTask(quiz_id));
+    dispatch(TaskActions.findStudentsByTask(item?._id));
   }, []);
 
   const renderItem = ({ item }) => {
     const convertedItem = {
       left: item?.student?.username,
-      right: item?.points,
+      right: item?.grade ? "Nota:" + item?.grade : item?.points,
+      center: item?.grade && "Piket:" + item?.points,
     };
     return (
       <QuizController
@@ -58,7 +77,8 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
         title="Studentet"
         leftIcon={<ArrowLeft />}
         handleLeftIcon={() => navigation.goBack()}
-        rightIcon={studentsLength()}
+        rightIcon={canDelete ? <DeleteIcon /> : studentsLength()}
+        handleRightIcon={canDelete && handleRemoveTask}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}
@@ -71,6 +91,7 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />
         )}
+        stickySectionHeadersEnabled={false}
       />
     </View>
   );

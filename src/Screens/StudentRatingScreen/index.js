@@ -21,7 +21,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 const StudentRatingScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { styledQuestion, fullItem } = route.params;
-  const [grade, setGrade] = useState("");
+  const [grade, setGrade] = useState(fullItem?.grade ? fullItem?.grade : "");
 
   const flatListHeader = () => {
     return (
@@ -87,6 +87,7 @@ const StudentRatingScreen = ({ navigation, route }) => {
             onChangeText={setGrade}
             keyboardType="numeric"
             style={Styles.inputStyle}
+            value={grade}
           />
           <TouchableOpacity
             style={[

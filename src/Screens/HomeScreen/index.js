@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, SectionList, RefreshControl, Dimensions } from "react-native";
+import { View, SectionList, RefreshControl } from "react-native";
 import Header from "~/Components/Header";
 import Colors from "~/Assets/Colors";
 import ProfileBox from "~/Components/ProfileBox";
@@ -12,7 +12,6 @@ import State from "~/Store/State";
 import formatToDoStatistic from "~/Functions/array/formatToDoStatistic";
 import isProfessor from "~/Functions/isProfessor";
 import Loading from "~/Components/Loading";
-const { height } = Dimensions.get("window");
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const threshold = 200;
@@ -52,9 +51,9 @@ const HomeScreen = ({ navigation }) => {
   }, [flatListPosition]);
 
   const handleOptionsInFlat = (e) => {
-    if (e.nativeEvent.contentOffset.y > height / 3) {
-      setFlatListPosition(e.nativeEvent.contentOffset.y);
-    }
+    // if (e.nativeEvent.contentOffset.y > height / 10) {
+    setFlatListPosition(e.nativeEvent.contentOffset.y);
+    // }
   };
   const renderItem = ({ item }) => {
     if (item?.isTask === true && item?.type !== "quiz") {
@@ -64,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const headerFlatList = () => {
+  const header = () => {
     return (
       <View style={{ flex: 1, marginBottom: 70, position: "absolute" }}>
         <Header
@@ -102,7 +101,7 @@ const HomeScreen = ({ navigation }) => {
           />
         }
       />
-      {headerFlatList()}
+      {header()}
 
       <ProfileBox toDoStatistic={toDoStatistic} height={topHeaderHeight} />
     </View>

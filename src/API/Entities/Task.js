@@ -34,6 +34,20 @@ class Task {
 
     return taskData;
   }
+
+  static async deleteTask(token, task_id) {
+    let taskData = await Request.post(
+      `/tasks/delete_task`,
+      { task_id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return taskData;
+  }
 }
 
 export default Task;

@@ -10,6 +10,7 @@ import State from "~/Store/State";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isTodayDay from "~/Functions/isTodayDay";
 import isProfessor from "~/Functions/isProfessor";
+import findGroupTasks from "~/Functions/array/findGroupTasks";
 const OtherTasks = ({ item }) => {
   const dispatch = useDispatch();
   const myProfile = useSelector((state) => state?.myProfile);
@@ -82,26 +83,23 @@ const OtherTasks = ({ item }) => {
   };
 
   const redirectToAnswer = () => {
-    navigation.push("QuizAnswer", { quizName: item?.quiz?.title });
+    navigation.push("QuizAnswer", { item });
   };
 
   const handleTaskOnClick = () => {
     if (item.isGroup === true) {
-      console.log("item?.group?._id", item?.group?._id);
-      const tasks = toDoData[0].data.filter((i) =>
-        i.group && i.group._id.toString() === item?.group?._id.toString()
-          ? item?.group?._id.toString()
-          : item?._id.toString()
+      const tasks = findGroupTasks(
+        toDoData,
+        item?.group?._id ? item?.group?._id : item?._id
       );
-
       navigation.push("GroupDetailsScreen", {
-        item: item,
-        tasks: [{ title: "Detyrat", data: tasks }],
+        item,
+        tasks,
       });
     } else {
       if (professor) {
         navigation.push("QuizStudentResultScreen", {
-          quiz_id: item?._id,
+          item,
         });
       } else {
         if (item.grade === undefined) {

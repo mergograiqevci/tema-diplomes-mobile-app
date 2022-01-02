@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Header from "~/Components/Header";
 import ArrowLeft from "~/Assets/Svg/arrowLeft";
 import Colors from "~/Assets/Colors";
@@ -13,6 +20,8 @@ import moment from "moment";
 import formatQuizRequest from "~/Functions/array/formatQuizRequest";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import DatePicker from "react-native-date-picker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const NewTaskScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { group_id } = route.params;
@@ -111,7 +120,7 @@ const NewTaskScreen = ({ navigation, route }) => {
       );
     } else {
       toasterMessage("Detyra eshte regjistruar me suksese", "success");
-      navigation.pop();
+      navigation.navigate("GroupsScreen");
     }
   };
 
@@ -366,29 +375,35 @@ const NewTaskScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Header
-        title="Detyre e re"
-        leftIcon={<ArrowLeft />}
-        handleLeftIcon={() => navigation.goBack()}
-        safeAreaBackgroundColor={Colors.appBaseColor}
-        backgroundColor={Colors.appBaseColor}
-        height={50}
-      />
-      <FlatList
-        data={[]}
-        style={{ flex: 1 }}
-        ListHeaderComponent={
-          <View style={{ flex: 1, marginHorizontal: 25 }}>
-            <Text style={{ marginTop: 20, fontSize: 19, fontWeight: "600" }}>
-              Zgjedhni
-            </Text>
-            {buttonView()}
-            {childView()}
-          </View>
-        }
-      />
-    </View>
+    <KeyboardAwareScrollView style={{ flex: 1 }} bounces={false}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <Header
+            title="Detyre e re"
+            leftIcon={<ArrowLeft />}
+            handleLeftIcon={() => navigation.goBack()}
+            safeAreaBackgroundColor={Colors.appBaseColor}
+            backgroundColor={Colors.appBaseColor}
+            height={50}
+          />
+          <FlatList
+            data={[]}
+            style={{ flex: 1 }}
+            ListHeaderComponent={
+              <View style={{ flex: 1, marginHorizontal: 25 }}>
+                <Text
+                  style={{ marginTop: 20, fontSize: 19, fontWeight: "600" }}
+                >
+                  Zgjedhni
+                </Text>
+                {buttonView()}
+                {childView()}
+              </View>
+            }
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 

@@ -17,7 +17,7 @@ import toasterMessage from "~/Functions/toaster/toasterMessage";
 import State from "~/Store/State";
 import { useIsFocused } from "@react-navigation/native";
 import * as GroupReducers from "~/Store/Group/Reducers";
-
+import TaskNotFound from "~/Components/TaskNotFound";
 const GroupDetailsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const focused = useIsFocused();
@@ -106,10 +106,10 @@ const GroupDetailsScreen = ({ navigation, route }) => {
     }
   };
 
-  const headerSectionList = () => {
-    return (
+  return (
+    <View style={{ flex: 1 }}>
       <Header
-        title={item?.group?.title}
+        title={item?.group?.title ? item?.group?.title : item?.title}
         leftIcon={<AddPerson />}
         handleLeftIcon={() => setInviteModalVisible(true)}
         rightIcon={professor ? <Plus /> : <Logout />}
@@ -118,19 +118,15 @@ const GroupDetailsScreen = ({ navigation, route }) => {
         backgroundColor={Colors.appBaseColor}
         height={50}
       />
-    );
-  };
-  return (
-    <View style={{ flex: 1 }}>
       <SectionList
         sections={tasks}
         bounces={false}
         keyExtractor={(item, index) => item + index}
-        ListHeaderComponent={headerSectionList()}
         renderItem={renderItem}
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />
         )}
+        stickySectionHeadersEnabled={false}
       />
       <InviteOtherModal
         modalVisible={inviteModalVisible}
@@ -149,6 +145,9 @@ const GroupDetailsScreen = ({ navigation, route }) => {
         rightButtonAction={rightButtonAction}
         otherProps={deleteModalProps}
       />
+      {(!tasks || tasks.length === 0) && (
+        <TaskNotFound message={"Ky grup nuk ka asnjë detyrë"} />
+      )}
     </View>
   );
 };

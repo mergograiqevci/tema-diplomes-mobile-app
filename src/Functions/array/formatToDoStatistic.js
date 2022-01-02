@@ -1,15 +1,6 @@
 const formatToDoStatistic = (unFormatedToDoData) => {
-  const findVideoStudentTask = unFormatedToDoData?.studentTasks.filter(
-    (i) => i.type === "video"
-  );
   const findVideoGroupTask = unFormatedToDoData?.groupTasks.filter(
     (i) => i.type === "video"
-  );
-  const findBookStudentTask = unFormatedToDoData?.studentTasks.filter(
-    (i) => i.type === "book"
-  );
-  const findQuizStudenTask = unFormatedToDoData?.studentTasks.filter(
-    (i) => i.type === "quiz"
   );
   const findBookGroupTask = unFormatedToDoData?.groupTasks.filter(
     (i) => i.type === "book"
@@ -24,15 +15,15 @@ const formatToDoStatistic = (unFormatedToDoData) => {
     },
     {
       title: "Kuize",
-      length: findQuizStudenTask.length + findQuizGroupTask.length,
+      length: findQuizGroupTask.length,
     },
     {
       title: "Libra",
-      length: findBookStudentTask?.length + findBookGroupTask?.length,
+      length: findBookGroupTask?.length,
     },
     {
       title: "Video",
-      length: findVideoStudentTask?.length + findVideoGroupTask?.length,
+      length: findVideoGroupTask?.length,
     },
   ];
 };
