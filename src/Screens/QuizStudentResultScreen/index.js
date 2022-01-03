@@ -94,7 +94,7 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
         height={50}
       />
       <SectionList
-        sections={[]}
+        sections={quizStudentsResultData?.d}
         bounces={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}

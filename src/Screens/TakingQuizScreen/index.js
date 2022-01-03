@@ -11,6 +11,7 @@ import PopUpModal from "~/Components/PopUpModal";
 import ToDoActions from "~/Store/ToDo/Actions";
 import State from "~/Store/State";
 import { useIsFocused } from "@react-navigation/native";
+import toasterMessage from "~/Functions/toaster/toasterMessage";
 const TakingQuizScreen = ({ navigation, route }) => {
   const focused = useIsFocused();
   const dispatch = useDispatch();
@@ -31,8 +32,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
   const lastQuestion = questionIndex + 1 === item?.quiz?.details?.length;
   const modalProps = {
     title: "A jeni te sigurt qe deshironi te dilni nga kuizi ?",
-    subTitle:
-      " The Mathematics Placement Exam (MPE) is a 90-minute, 60-item multiple choice exam that tests skills and understandings from precalculus",
+    subTitle: "Pergjigjet qe i keni selektuar do te notohen poashtu!",
     leftButtonText: "Konfirmo",
     leftButtonColor: Colors.negative,
     rightButtonText: "Kthehu",
@@ -43,8 +43,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
     if (completeQuizState === State.DONE) {
       navigation.push("QuizResultScreen", { quizData: completeQuizData });
     } else if (completeQuizState === State.FAILED) {
-      console.log("duhet me qit naj error");
-      console.log("completeQuizError", completeQuizError);
+      toasterMessage(completeQuizError?.message, "error");
     }
   }, [completeQuizState]);
 
@@ -104,17 +103,14 @@ const TakingQuizScreen = ({ navigation, route }) => {
       left: index + 1 + " )",
       center: item,
     };
+    const findAnswer = currentAnswers[questionIndex]?.answer?.find(
+      (i) => i.toString() === convertedItem?.answer.toString()
+    );
     return (
       <QuizController
         item={convertedItem}
-        textColor={Colors.black}
-        backgroundColor={
-          currentAnswers[questionIndex]?.answer?.find(
-            (i) => i.toString() === convertedItem?.answer.toString()
-          )
-            ? Colors.green
-            : Colors.white
-        }
+        textColor={findAnswer ? Colors.white : Colors.black}
+        backgroundColor={findAnswer ? Colors.green : Colors.white}
         onPress={setSingleAnswer}
       />
     );
@@ -171,11 +167,15 @@ const TakingQuizScreen = ({ navigation, route }) => {
     );
   };
 
+  const completeQuiz = () => {
+    dispatch(
+      ToDoActions.completeQuiz(item?._id, currentAnswers, item?.group?._id)
+    );
+  };
+
   const handleContinueToNextQuestion = () => {
     if (lastQuestion) {
-      dispatch(
-        ToDoActions.completeQuiz(item._id, currentAnswers, item?.group?._id)
-      );
+      completeQuiz();
     } else {
       setQuestinIndex(questionIndex + 1);
     }
@@ -185,6 +185,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
   };
 
   const handleModalLeftButton = () => {
+    completeQuiz();
     setModalVisible(false);
     navigation.pop();
   };

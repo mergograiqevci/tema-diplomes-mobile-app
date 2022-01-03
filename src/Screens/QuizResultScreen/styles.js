@@ -16,8 +16,6 @@ export default StyleSheet.create({
   buttonView: {
     width: "100%",
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-around",
     marginTop: 30,
   },
   endButtonText: {
@@ -70,18 +68,11 @@ export default StyleSheet.create({
     maxWidth: "80%",
     textAlign: "center",
   },
-  seeAnswerButtonText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: Colors.black,
-    alignSelf: "center",
-  },
-  seeAnswerButton: {
-    flexDirection: "row",
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 9,
-    backgroundColor: Colors.white,
-    marginLeft: "7%",
+
+  bottomContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
+    width: "100%",
   },
 });

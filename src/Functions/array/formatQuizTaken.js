@@ -11,20 +11,16 @@ const formatQuizTaken = (quizTaken, role) => {
       if (dateInMilliSeconds >= currentTimeInMilliSeconds) {
         pending.push(quizTaken[i]);
       } else {
-        completed.push(quizTaken[i]);
+        completed.push({ ...quizTaken[i], time_passed: true });
       }
     } else {
       if (!quizTaken[i]?.grade) {
-        failed.push({ ...quizTaken[i], grade: "-1" });
+        pending.push(quizTaken[i]);
       } else {
-        if (quizTaken[i]?.grade === null) {
-          pending.push(quizTaken[i]);
+        if (quizTaken[i]?.grade.toString() === "5") {
+          failed.push(quizTaken[i]);
         } else {
-          if (quizTaken[i]?.grade.toString() === "5") {
-            failed.push(quizTaken[i]);
-          } else {
-            completed.push(quizTaken[i]);
-          }
+          completed.push(quizTaken[i]);
         }
       }
     }

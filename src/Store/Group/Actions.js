@@ -73,6 +73,7 @@ class GroupActions {
       API.Group.insertStudentInGroup(token, request)
         .then((res) => {
           toasterMessage("Studenti eshte regjistruar me suksese", "success");
+          dispatch(ToDoActions.getToDo());
           dispatch(GroupReducers.insertStudentInGroupDone(res?.data));
         })
         .catch((err) => {

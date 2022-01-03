@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TasksBox from "~/Components/TasksBox";
 import GroupActions from "~/Store/Group/Actions";
 import State from "~/Store/State";
+import Styles from "./styles";
 const GroupsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
@@ -30,6 +31,8 @@ const GroupsScreen = ({ navigation }) => {
   const [selectedStudents, setSelectedStudents] = useState([]);
 
   const professor = isProfessor();
+
+  const groups = toDoData?.find((s) => s.key === "groups")?.data;
 
   const createGroupModalProps = {
     title: "Krijio nje grup te ri",
@@ -78,6 +81,14 @@ const GroupsScreen = ({ navigation }) => {
     }
   };
 
+  const notFound = () => {
+    return (
+      <View style={Styles.notFoundView}>
+        <Text style={Styles.notFoundText}>Nuk u gjetë asnjë grupë</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Header
@@ -90,9 +101,10 @@ const GroupsScreen = ({ navigation }) => {
       />
       <FlatList
         style={{ paddingTop: 20 }}
-        data={toDoData?.find((s) => s.key === "groups")?.data}
+        data={groups}
         keyExtractor={(item, index) => item + index}
         renderItem={renderItem}
+        ListEmptyComponent={notFound()}
       />
       <CreateNewGroupModal
         modalVisible={createGroupModalVisible}

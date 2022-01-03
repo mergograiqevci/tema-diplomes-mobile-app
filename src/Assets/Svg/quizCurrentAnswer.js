@@ -12,8 +12,8 @@ function QuizCurrentAnswer(props) {
       {...props}
     >
       <Circle cx={8.5} cy={8.5} r={8.5} fill="#078080" />
-      <Circle cx={8.5} cy={8.5} r={8.5} fill="#0F597E" />
-      <Circle cx={8.5} cy={8.5} r={5.5} fill="#078080" />
+      <Circle cx={8.5} cy={8.5} r={8.5} fill="#fff" />
+      <Circle cx={8.5} cy={8.5} r={5.5} fill="#fff" />
       <Circle cx={8.5} cy={8.5} r={5.5} fill="#fff" />
     </Svg>
   );

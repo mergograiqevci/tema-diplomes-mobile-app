@@ -12,7 +12,7 @@ import Config from "~/Config";
 import State from "~/Store/State";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import Loader from "~/Components/Loader";
 const CreateAccountScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);

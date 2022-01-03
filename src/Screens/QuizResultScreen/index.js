@@ -15,26 +15,22 @@ const QuizResultScreen = ({ navigation, route }) => {
     navigation.push("QuizStudentResultScreen");
   };
 
-  console.log("quizData", quizData);
-
   return (
     <View style={[Styles.container, { paddingTop: safeAreaSize.top + 40 }]}>
       <Text style={Styles.resultText}>Rezultati</Text>
       <Trophy />
       <Text style={Styles.congratsText}>Urime!</Text>
-      {/* <Text style={Styles.congratsDescriptionText}>
-        The Mathematics Placement Exam (MPE) is a 90-minute.
-      </Text> */}
+
       <Text style={Styles.yourPointsText}>Piket e tua</Text>
       <Text style={Styles.yourPointsValueText}>{quizData?.data?.points}</Text>
 
       <View
-        style={{
-          flex: 1,
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
-          paddingBottom: safeAreaSize.bottom + 15,
-        }}
+        style={[
+          Styles.bottomContainer,
+          {
+            paddingBottom: safeAreaSize.bottom + 40,
+          },
+        ]}
       >
         <TouchableOpacity
           style={{ alignSelf: "center" }}
@@ -45,12 +41,6 @@ const QuizResultScreen = ({ navigation, route }) => {
           </Text>
         </TouchableOpacity>
         <View style={Styles.buttonView}>
-          <TouchableOpacity
-            style={Styles.seeAnswerButton}
-            onPress={handleSeeStudentResults}
-          >
-            <Text style={Styles.seeAnswerButtonText}>Shiko pergjigjet</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={Styles.endButton}
             onPress={handleCloseButton}

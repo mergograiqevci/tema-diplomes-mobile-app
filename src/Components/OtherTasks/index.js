@@ -58,8 +58,8 @@ const OtherTasks = ({ item }) => {
     item?.isGroup === true
       ? Colors.groupBackground
       : item?.isTask === true
-      ? item?.grade === "-1"
-        ? Colors.quiz_not_taken
+      ? item?.time_passed
+        ? Colors.appBaseColor
         : Colors.upComingTasks
       : item?.grade === null
       ? Colors.pendingQuiz
