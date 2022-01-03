@@ -3,6 +3,8 @@ import * as ToDoReducers from "./Reducers";
 import formatToDo from "~/Functions/array/formatToDo";
 import formatSections from "~/Functions/array/formatSections";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
+import openSocket from "socket.io-client";
+
 class ToDoActions {
   static getToDo() {
     return (dispatch, getState) => {
@@ -37,6 +39,13 @@ class ToDoActions {
         .catch((err) => {
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
+      const socket = openSocket("http://192.168.1.37:8080");
+      socket.on("quiz", (data) => {
+        if (data.action === "completed") {
+          console.log("KAN ARDH DO DATA:", data);
+          dispatch(ToDoReducers.completedQuizStudentResult(data));
+        }
+      });
     };
   }
   static clearPrevQuizCompleted() {

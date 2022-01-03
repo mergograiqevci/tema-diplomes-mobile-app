@@ -15,6 +15,7 @@ const initialState = {
   getQuizResultError: null,
   getQuizResultState: State.NOT_PROCESSED,
   getQuizResultData: {},
+  completedQuizStudentData: [],
 };
 
 const slice = createSlice({
@@ -42,6 +43,12 @@ const slice = createSlice({
     completeQuizFailed(state, action) {
       state.completeQuizError = action.payload;
       state.completeQuizState = State.FAILED;
+    },
+    completedQuizStudentResult(state, action) {
+      state.completedQuizStudentData = [
+        ...state.completedQuizStudentData,
+        action.payload,
+      ];
     },
     unFormatedToDo(state, action) {
       state.unFormatedToDoData = action.payload;
@@ -98,4 +105,5 @@ export const {
   getQuizResultStart,
   getQuizResultDone,
   getQuizResultFailed,
+  completedQuizStudentResult,
 } = slice.actions;

@@ -1,11 +1,18 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import Styles from "./styles";
 import Trophy from "~/Assets/Svg/trophy";
 import { useSelector } from "react-redux";
+import QuizController from "~/Components/QuizController";
+import Colors from "~/Assets/Colors";
 const QuizResultScreen = ({ navigation, route }) => {
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
-  const { quizData } = route.params;
+  // const { quizData } = route.params;
+  const completedQuizStudentData = useSelector(
+    (state) => state?.ToDo?.completedQuizStudentData
+  );
+
+  console.log("completedQuizStudentData", completedQuizStudentData);
 
   const handleCloseButton = () => {
     navigation.push("HomeScreen");
@@ -15,14 +22,37 @@ const QuizResultScreen = ({ navigation, route }) => {
     navigation.push("QuizStudentResultScreen");
   };
 
+  const renderItem = ({ item }) => {
+    const convertedItem = {
+      left: "ID:" + item?.quiz?.student,
+      right: "Piket:" + item?.quiz?.points,
+    };
+    return (
+      <QuizController
+        item={convertedItem}
+        textColor={Colors.white}
+        backgroundColor={Colors.green}
+      />
+    );
+  };
+
   return (
     <View style={[Styles.container, { paddingTop: safeAreaSize.top + 40 }]}>
       <Text style={Styles.resultText}>Rezultati</Text>
       <Trophy />
-      <Text style={Styles.congratsText}>Urime!</Text>
+      <View style={Styles.pointContainer}>
+        <Text style={Styles.yourPointsText}>Piket:</Text>
+        <Text style={Styles.yourPointsValueText}>10</Text>
+        <Text style={Styles.seeStudentResultsText}>
+          Rezultatet e studenteve te tjere
+        </Text>
+      </View>
 
-      <Text style={Styles.yourPointsText}>Piket e tua</Text>
-      <Text style={Styles.yourPointsValueText}>{quizData?.data?.points}</Text>
+      <FlatList
+        data={completedQuizStudentData}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
 
       <View
         style={[
@@ -32,14 +62,6 @@ const QuizResultScreen = ({ navigation, route }) => {
           },
         ]}
       >
-        <TouchableOpacity
-          style={{ alignSelf: "center" }}
-          onPress={handleSeeStudentResults}
-        >
-          <Text style={Styles.seeStudentResultsText}>
-            Shiko rezultatet e studenteve
-          </Text>
-        </TouchableOpacity>
         <View style={Styles.buttonView}>
           <TouchableOpacity
             style={Styles.endButton}

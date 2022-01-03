@@ -36,7 +36,6 @@ export default StyleSheet.create({
     fontWeight: "600",
     color: Colors.white,
     alignSelf: "center",
-    marginTop: 70,
   },
   congratsDescriptionText: {
     fontSize: 17,
@@ -51,20 +50,19 @@ export default StyleSheet.create({
     fontWeight: "400",
     color: Colors.white,
     alignSelf: "center",
-    marginTop: 50,
+    // marginTop: 50,
   },
   yourPointsValueText: {
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: "800",
     color: Colors.white,
     alignSelf: "center",
-    marginTop: 8,
   },
   seeStudentResultsText: {
     fontSize: 17,
     color: Colors.white,
     alignSelf: "center",
-    marginTop: 20,
+    marginVertical: 20,
     maxWidth: "80%",
     textAlign: "center",
   },
@@ -74,5 +72,10 @@ export default StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
     width: "100%",
+  },
+  pointContainer: {
+    width: "100%",
+    marginTop: 40,
+    alignSelf: "center",
   },
 });

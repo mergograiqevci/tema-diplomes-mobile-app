@@ -102,6 +102,8 @@ const OtherTasks = ({ item }) => {
           item,
         });
       } else {
+        redirectToQuiz();
+        return;
         if (item.grade === undefined) {
           redirectToQuiz();
           // dispatch(
