@@ -1,18 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import Styles from "./styles";
 import Trophy from "~/Assets/Svg/trophy";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import QuizController from "~/Components/QuizController";
 import Colors from "~/Assets/Colors";
-const QuizResultScreen = ({ navigation, route }) => {
-  const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
-  // const { quizData } = route.params;
-  const completedQuizStudentData = useSelector(
-    (state) => state?.ToDo?.completedQuizStudentData
-  );
+import ToDoActions from "~/Store/ToDo/Actions";
+import { useIsFocused } from "@react-navigation/native";
+import State from "~/Store/State";
+import * as ToDoReducers from "~/Store/ToDo/Reducers";
 
-  console.log("completedQuizStudentData", completedQuizStudentData);
+const QuizResultScreen = ({ navigation, route }) => {
+  const focused = useIsFocused();
+  const dispatch = useDispatch();
+  const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
+  const { quizData } = route.params;
+  const toDoReducer = useSelector((state) => state?.ToDo);
+  const completedQuizStudentData = toDoReducer?.completedQuizStudentData;
+  const quizResultData = toDoReducer?.getQuizResultData;
+  const getQuizResultState = toDoReducer?.getQuizResultState;
+  const [allStudents, setAllStudents] = useState(completedQuizStudentData);
+
+  useEffect(() => {
+    if (getQuizResultState === State.DONE) {
+      let allSResults = allStudents;
+      if (quizResultData.length > 0) {
+        quizResultData.map((s) => allSResults.push(s));
+      }
+      setAllStudents(allSResults);
+    }
+  }, [getQuizResultState]);
+
+  console.log("quizResultData", quizResultData);
+  useEffect(() => {
+    if (focused) {
+      dispatch(ToDoActions.getQuizResult(quizData?.data?.quiz));
+    } else {
+      dispatch(ToDoReducers.clearPrevCompletedQuizStudentResult());
+    }
+  }, [focused]);
 
   const handleCloseButton = () => {
     navigation.push("HomeScreen");
@@ -49,7 +75,7 @@ const QuizResultScreen = ({ navigation, route }) => {
       </View>
 
       <FlatList
-        data={completedQuizStudentData}
+        data={allStudents}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />

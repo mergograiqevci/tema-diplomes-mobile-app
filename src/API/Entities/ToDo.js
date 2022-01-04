@@ -31,10 +31,9 @@ class ToDo {
 
     return toDoData;
   }
-  static async getQuizResult(token, id) {
-    let toDoData = await Request.post(
-      `/tasks/get_quiz_result`,
-      { quiz_id: id },
+  static async getQuizResult(token, quiz_id) {
+    let toDoData = await Request.get(
+      `/tasks/get_quiz_result?quiz_id=${quiz_id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

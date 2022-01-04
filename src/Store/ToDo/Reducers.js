@@ -85,6 +85,9 @@ const slice = createSlice({
       state.getQuizResultError = action.payload;
       state.getQuizResultState = State.FAILED;
     },
+    clearPrevCompletedQuizStudentResult(state) {
+      state.completedQuizStudentData = [];
+    },
   },
 });
 
@@ -106,4 +109,5 @@ export const {
   getQuizResultDone,
   getQuizResultFailed,
   completedQuizStudentResult,
+  clearPrevCompletedQuizStudentResult,
 } = slice.actions;

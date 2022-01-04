@@ -1,4 +1,5 @@
 import moment from "moment";
+import Colors from "~/Assets/Colors";
 const formatQuizTaken = (quizTaken, role) => {
   const currentTimeInMilliSeconds = moment().utc().valueOf();
 
@@ -9,18 +10,31 @@ const formatQuizTaken = (quizTaken, role) => {
     const dateInMilliSeconds = moment(quizTaken[i]?.quiz?.date).utc().valueOf();
     if (role === "professor") {
       if (dateInMilliSeconds >= currentTimeInMilliSeconds) {
-        pending.push(quizTaken[i]);
+        pending.push({ ...quizTaken[i], backgroundColor: Colors.pendingQuiz });
       } else {
-        completed.push({ ...quizTaken[i], time_passed: true });
+        completed.push({
+          ...quizTaken[i],
+          backgroundColor: Colors.appBaseColor,
+        });
       }
     } else {
       if (!quizTaken[i]?.grade) {
-        pending.push(quizTaken[i]);
+        if (quizTaken[i]?.points) {
+          pending.push({
+            ...quizTaken[i],
+            backgroundColor: Colors.pendingQuiz,
+          });
+        } else {
+          failed.push({ ...quizTaken[i], backgroundColor: Colors.negative });
+        }
       } else {
         if (quizTaken[i]?.grade.toString() === "5") {
-          failed.push(quizTaken[i]);
+          failed.push({ ...quizTaken[i], backgroundColor: Colors.negative });
         } else {
-          completed.push(quizTaken[i]);
+          completed.push({
+            ...quizTaken[i],
+            backgroundColor: Colors.appBaseColor,
+          });
         }
       }
     }

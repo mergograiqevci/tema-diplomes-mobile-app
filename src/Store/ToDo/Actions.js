@@ -4,6 +4,7 @@ import formatToDo from "~/Functions/array/formatToDo";
 import formatSections from "~/Functions/array/formatSections";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 import openSocket from "socket.io-client";
+import Config from "~/Config";
 
 class ToDoActions {
   static getToDo() {
@@ -27,6 +28,7 @@ class ToDoActions {
   }
   static completeQuiz(quiz_id, quiz_answers, group_id) {
     let request = { quiz_id, quiz_answers };
+    console.log("quiz_id native", quiz_id);
     group_id && Object.assign(request, { group_id });
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
@@ -39,15 +41,16 @@ class ToDoActions {
         .catch((err) => {
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
-      const socket = openSocket("http://192.168.1.37:8080");
+      const socket = openSocket(Config.Server.API_BASE_URL);
       socket.on("quiz", (data) => {
-        if (data.action === "completed") {
+        if (data.action === `completed-${quiz_id}`) {
           console.log("KAN ARDH DO DATA:", data);
           dispatch(ToDoReducers.completedQuizStudentResult(data));
         }
       });
     };
   }
+
   static clearPrevQuizCompleted() {
     return (dispatch) => {
       dispatch(ToDoReducers.clearPrevQuizCompleted());
@@ -89,9 +92,10 @@ class ToDoActions {
             res?.data?.completed_result
           );
           dispatch(ToDoReducers.getQuizResultDone(formatedQuizStyle));
-          redirectToAnswer();
+          redirectToAnswer && redirectToAnswer();
         })
         .catch((err) => {
+          console.log("ERRRORRIII:", err);
           dispatch(ToDoReducers.getQuizResultFailed(err));
         });
     };

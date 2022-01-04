@@ -54,18 +54,9 @@ const OtherTasks = ({ item }) => {
       ? "Pike"
       : undefined;
 
-  const backgroundColor =
-    item?.isGroup === true
-      ? Colors.groupBackground
-      : item?.isTask === true
-      ? item?.time_passed
-        ? Colors.appBaseColor
-        : Colors.upComingTasks
-      : item?.grade === null
-      ? Colors.pendingQuiz
-      : item?.grade.toString() === "5"
-      ? Colors.negative
-      : Colors.appBaseColor;
+  const backgroundColor = item?.backgroundColor
+    ? item?.backgroundColor
+    : Colors.upComingTasks;
 
   useEffect(() => {
     if (canCompleteQuizState === State.FAILED) {
@@ -73,9 +64,9 @@ const OtherTasks = ({ item }) => {
         dispatch(ToDoActions.clearPrevCanCompleteQuiz());
       }, 500);
     }
-    if (getQuizResultState === State.FAILED) {
-      toasterMessage("Ndodhi nje gabim gjate leximit te pergjigjeve", "error");
-    }
+    // if (getQuizResultState === State.FAILED) {
+    //   toasterMessage("Ndodhi nje gabim gjate leximit te pergjigjeve", "error");
+    // }
   }, [canCompleteQuizState, getQuizResultState]);
 
   const redirectToQuiz = () => {
@@ -102,8 +93,8 @@ const OtherTasks = ({ item }) => {
           item,
         });
       } else {
-        redirectToQuiz();
-        return;
+        // redirectToQuiz();
+        // return;
         if (item.grade === undefined) {
           redirectToQuiz();
           // dispatch(
@@ -124,7 +115,7 @@ const OtherTasks = ({ item }) => {
       style={[
         Styles.container,
         {
-          backgroundColor: backgroundColor,
+          backgroundColor,
         },
       ]}
       onPress={handleTaskOnClick}

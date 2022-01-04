@@ -1,6 +1,7 @@
 import findInCompletedTasks from "./findInCompletedTasks";
 import isTodayDay from "../isTodayDay";
 import moment from "moment";
+import Colors from "~/Assets/Colors";
 const formatToDo = (toDo) => {
   let quizTaken = [...toDo?.quizTaken];
   // let tasks = findInCompletedTasks("isTask", toDo?.studentTasks, quizTaken);
@@ -34,7 +35,11 @@ const formatToDo = (toDo) => {
   return {
     todayTasks,
     otherTasks,
-    groups: toDo?.groups.map((i) => ({ ...i, isGroup: true })),
+    groups: toDo?.groups.map((i) => ({
+      ...i,
+      isGroup: true,
+      backgroundColor: Colors.groupBackground,
+    })),
     quizTaken,
   };
 };
