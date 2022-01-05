@@ -16,6 +16,7 @@ const initialState = {
   myProfileError: null,
   myProfileState: State.NOT_PROCESSED,
   token: undefined,
+  userIsValid: undefined,
 };
 
 const slice = createSlice({
@@ -98,6 +99,9 @@ const slice = createSlice({
       state.myProfileState = State.NOT_PROCESSED;
       state.token = undefined;
     },
+    setUserIsValid(state, action) {
+      state.userIsValid = action.payload;
+    },
   },
 });
 
@@ -120,4 +124,5 @@ export const {
   clearPrevRegisterStudentData,
   clearPrevResetPasswordData,
   logoutDone,
+  setUserIsValid,
 } = slice.actions;

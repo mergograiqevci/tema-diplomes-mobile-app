@@ -10,7 +10,7 @@ const SplashScreen = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(UserActions.myProfile());
+      dispatch(UserActions.setTokenToRedux());
     }, 1500);
   }, []);
 

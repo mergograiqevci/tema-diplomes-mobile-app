@@ -66,19 +66,26 @@ class UserActions {
     };
   }
 
-  static myProfile() {
+  static setTokenToRedux() {
     return async (dispatch) => {
       const token = await UserActions.getLocalToken();
+      dispatch(UserReducers.setToken(token));
+    };
+  }
+
+  static myProfile() {
+    return async (dispatch, getState) => {
+      const token = getState().User?.token;
 
       dispatch(UserReducers.getProfileStart());
       API.User.my_profile(token)
         .then(async (res) => {
           await dispatch(this.setSafeAreaSize());
+          dispatch(UserReducers.setUserIsValid(true));
           dispatch(UserReducers.getProfileDone(res));
-          dispatch(UserReducers.setToken(res?.data?.token));
         })
         .catch((err) => {
-          dispatch(UserReducers.setToken(null));
+          dispatch(UserReducers.setUserIsValid(false));
           dispatch(UserReducers.getProfileFailed(err));
         });
     };
@@ -89,6 +96,7 @@ class UserActions {
       this.clearLocalToken();
       const token = await UserActions.getLocalToken();
       if (!token) {
+        dispatch(this.setTokenToRedux(token));
         dispatch(UserReducers.logoutDone());
       }
     };
