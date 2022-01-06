@@ -9,6 +9,7 @@ import UserActions from "~/Store/User/Actions";
 const ProfileBox = ({ height, toDoStatistic }) => {
   const dispatch = useDispatch();
   const myProfile = useSelector((state) => state.User?.myProfile);
+  const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
 
   useEffect(() => {
     if (Object.keys(myProfile).length === 0) {
@@ -22,7 +23,7 @@ const ProfileBox = ({ height, toDoStatistic }) => {
         style={[
           Styles.profileView,
           {
-            marginTop: 70, //safeAreaSize?.top + 20,
+            marginTop: safeAreaSize?.top ? safeAreaSize?.top + 20 : 60, //safeAreaSize?.top + 20,
             height: height,
           },
         ]}

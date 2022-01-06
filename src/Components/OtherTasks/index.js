@@ -13,10 +13,8 @@ import isProfessor from "~/Functions/isProfessor";
 import findGroupTasks from "~/Functions/array/findGroupTasks";
 const OtherTasks = ({ item }) => {
   const dispatch = useDispatch();
-  const myProfile = useSelector((state) => state?.myProfile);
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
-  const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const canCompleteQuizData = toDoReducer?.canCompleteQuizData;
   const canCompleteQuizError = toDoReducer?.canCompleteQuizError;
   const canCompleteQuizState = toDoReducer?.canCompleteQuizState;
@@ -59,22 +57,26 @@ const OtherTasks = ({ item }) => {
     : Colors.upComingTasks;
 
   useEffect(() => {
-    if (canCompleteQuizState === State.FAILED) {
+    if (
+      canCompleteQuizState === State.FAILED ||
+      canCompleteQuizState === State.DONE
+    ) {
       setTimeout(() => {
         dispatch(ToDoActions.clearPrevCanCompleteQuiz());
       }, 500);
     }
-    // if (getQuizResultState === State.FAILED) {
-    //   toasterMessage("Ndodhi nje gabim gjate leximit te pergjigjeve", "error");
-    // }
-  }, [canCompleteQuizState, getQuizResultState]);
+  }, [canCompleteQuizState]);
 
   const redirectToQuiz = () => {
     navigation.push("TakingQuizScreen", { item: item });
   };
 
-  const redirectToAnswer = () => {
-    navigation.push("QuizAnswer", { item });
+  const handleQuizAnswerResponse = (type) => {
+    if (type === "error") {
+      toasterMessage("Ndodhi një gabim gjatë leximit të përgjigjeve", "error");
+    } else {
+      navigation.navigate("QuizAnswer", { item });
+    }
   };
 
   const handleTaskOnClick = () => {
@@ -83,29 +85,30 @@ const OtherTasks = ({ item }) => {
         toDoData,
         item?.group?._id ? item?.group?._id : item?._id
       );
-      navigation.push("GroupDetailsScreen", {
+      navigation.navigate("GroupDetailsScreen", {
         item,
         tasks,
       });
     } else {
       if (professor) {
-        navigation.push("QuizStudentResultScreen", {
+        navigation.navigate("QuizStudentResultScreen", {
           item,
         });
       } else {
-        // redirectToQuiz();
-        // return;
         if (item.grade === undefined) {
           redirectToQuiz();
-          // dispatch(
-          //   ToDoActions.canCompleteQuiz(
-          //     item?._id,
-          //     item?.group?._id,
-          //     redirectToQuiz
-          //   )
-          // );
+          return;
+          dispatch(
+            ToDoActions.canCompleteQuiz(
+              item?._id,
+              item?.group?._id,
+              redirectToQuiz
+            )
+          );
         } else if (parseInt(item.grade) >= 5) {
-          dispatch(ToDoActions.getQuizResult(item?._id, redirectToAnswer));
+          dispatch(
+            ToDoActions.getQuizResult(item?._id, handleQuizAnswerResponse)
+          );
         }
       }
     }

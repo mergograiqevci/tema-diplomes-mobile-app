@@ -110,13 +110,15 @@ const ProfileScreen = ({ navigation }) => {
         buttonText="Ruaj"
         otherProps={otherAuthProps}
       />
-      <PopUpModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        leftButtonAction={leftButtonAction}
-        rightButtonAction={rightButtonAction}
-        otherProps={modalProps}
-      />
+      {modalVisible && (
+        <PopUpModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          leftButtonAction={leftButtonAction}
+          rightButtonAction={rightButtonAction}
+          otherProps={modalProps}
+        />
+      )}
       {professor && (
         <TouchableOpacity
           style={Styles.accountButton}

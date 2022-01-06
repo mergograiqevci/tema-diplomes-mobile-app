@@ -14,6 +14,7 @@ const Config = {
     unauthorized: "I paautorizuar",
     id_not_valid: "ID nuk është valide",
     default_error: "Një gabim ka ndodhur,ju lutemi provoni më vonë",
+    cant_complete_task: "Nuk mundeni të përfundoni kuizin për shkakë të kohës!",
   },
 };
 

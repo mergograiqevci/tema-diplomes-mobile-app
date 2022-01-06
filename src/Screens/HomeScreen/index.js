@@ -47,7 +47,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (toDoState === State.DONE) {
-      setToDoStatistic(formatToDoStatistic(unFormatedToDoData));
+      setToDoStatistic(formatToDoStatistic(unFormatedToDoData, professor));
     }
   }, [toDoData]);
 

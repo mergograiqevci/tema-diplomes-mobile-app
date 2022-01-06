@@ -26,7 +26,12 @@ class ToDoActions {
         });
     };
   }
-  static completeQuiz(quiz_id, quiz_answers, group_id) {
+  static completeQuiz(
+    quiz_id,
+    quiz_answers,
+    group_id,
+    handleRedirectOnResponse
+  ) {
     let request = { quiz_id, quiz_answers };
     console.log("quiz_id native", quiz_id);
     group_id && Object.assign(request, { group_id });
@@ -37,8 +42,11 @@ class ToDoActions {
         .then((res) => {
           dispatch(ToDoReducers.completeQuizDone(res));
           dispatch(this.getToDo());
+          handleRedirectOnResponse("success", res);
         })
         .catch((err) => {
+          handleRedirectOnResponse("error");
+
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
       const socket = openSocket(Config.Server.API_BASE_URL);
@@ -57,22 +65,17 @@ class ToDoActions {
     };
   }
   static canCompleteQuiz(quiz_id, group_id, redirectToQuiz) {
-    //duhet me kqyr
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       let request = { quiz_id };
-      group_id && Object.assign(request, group_id);
-      console.log("REQUESTI", request);
+      group_id && Object.assign(request, { group_id });
       dispatch(ToDoReducers.canCompleteQuizStart());
       API.ToDo.canCompleteQuiz(token, request)
         .then((res) => {
-          console.log("DONE :", res);
           redirectToQuiz();
           dispatch(ToDoReducers.canCompleteQuizDone(res));
         })
         .catch((err) => {
-          console.log("CANT :", { ...err, quiz_id });
-
           dispatch(ToDoReducers.canCompleteQuizFailed({ ...err, quiz_id }));
         });
     };
@@ -82,7 +85,7 @@ class ToDoActions {
       dispatch(ToDoReducers.clearPrevCanCompleteQuiz());
     };
   }
-  static getQuizResult(id, redirectToAnswer) {
+  static getQuizResult(id, handleQuizAnswerResponse) {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       dispatch(ToDoReducers.getQuizResultStart());
@@ -92,10 +95,11 @@ class ToDoActions {
             res?.data?.completed_result
           );
           dispatch(ToDoReducers.getQuizResultDone(formatedQuizStyle));
-          redirectToAnswer && redirectToAnswer();
+          handleQuizAnswerResponse && handleQuizAnswerResponse("success");
         })
         .catch((err) => {
-          console.log("ERRRORRIII:", err);
+          handleQuizAnswerResponse && handleQuizAnswerResponse("error");
+
           dispatch(ToDoReducers.getQuizResultFailed(err));
         });
     };

@@ -10,9 +10,15 @@ const TasksBox = ({ item }) => {
     "https://www.nicepng.com/png/detail/222-2224770_react-native-icon-png.png";
   return (
     <TouchableOpacity
-      style={[Styles.container, { backgroundColor: Colors.blue }]}
+      style={[
+        Styles.container,
+        {
+          backgroundColor:
+            item.type === "book" ? Colors.blue : Colors.appBaseColor,
+        },
+      ]}
       onPress={() =>
-        navigation.push(
+        navigation.navigate(
           item.type === "book" ? "ReadingBookScreen" : "VideoWebViewScreen",
           { item: item }
         )

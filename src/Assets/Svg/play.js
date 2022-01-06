@@ -4,15 +4,15 @@ import Svg, { Path, Defs, Pattern, Use, Image } from "react-native-svg";
 function Play(props) {
   return (
     <Svg
-      width={38}
-      height={37}
-      viewBox="0 0 38 37"
+      width={35}
+      height={35}
+      viewBox="0 0 36 39"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       {...props}
     >
-      <Path fill="url(#pattern0)" d="M0 0H38V37H0z" />
+      <Path fill="url(#pattern0)" d="M0 0H36V39H0z" />
       <Defs>
         <Pattern
           id="pattern0"
@@ -21,15 +21,15 @@ function Play(props) {
           height={1}
         >
           <Use
-            xlinkHref="#image0_28_1225"
-            transform="matrix(.03125 0 0 .0321 0 -.014)"
+            xlinkHref="#image0_230_1312"
+            transform="matrix(.01693 0 0 .01563 -.042 0)"
           />
         </Pattern>
         <Image
-          id="image0_28_1225"
-          width={32}
-          height={32}
-          xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAQ+SURBVFiFtZZbbFRVFIa/tc8507n1gilECDEgVKm3ioLGByP2QQkYExIl8GLiA6+YmHBLhTRqYvUBE33TGNEgIDQkGhNiFINcAiYkIoQiXhChULAFCp1pp3PO3suH6TSUwsxQhv9pnX32Xt+ffdZZewsVavZmrfPj+cWq0ipKC8IMoEGUAKvOi8j4w/zh5ezWeDb76YE1kwcqySvlJszZlntAPLNGYRmQrCRpbMjZ5CW3Mxaatr2r439OyMD07ZpIS/gO8AbgVwIek1gh2e9svN99GAwm1u9pl1zFBpo7c03qzE6ER24XfKNqMkq61/5iQl2yry3VU9bAQ535uU75Hph8p/CiYoOO2h57zni6aN+q9NFbGmjuzDWpmgPVhBcV77ekLrnzLpKnDr6VPFccN8VgxucaV2d23A04QK7BI0yYacbXb57ZqIlxBuLp8F2EllJJagOYN8XgmVKzbq3sFA+FJ01+cG1xTKDwq+GZ45So9ll1wlcLfOpj0J2DjmOW3f+62zaRvmipybissTTta0v1GADxzJpScICX7zPUxwrx9DhsnOfx0XM+02vLtpIxGppkAFLqsR5AZm/WOr8m7KFMk9kw12P5rPF73xfB9tOOL7os1/KVmWg4E+GFmkUGpxo/nl9cDl5KjT6smGX4pDVg4UyDX0F95JMCkMKlFhlVaZ0ovKhAoCUNbS0e7z3r8+jk0p8lKhhAjbb6IwdLVdTow4uNwuynffZfVLacsPRkdNw8GxSAojzmI8ysDr6gQGBOHOqnCU2TfDpPWn684W9x3mh4vwHqqmmgqKkB1PuwrNnjnvjYLVYjaGGofoItpXIpUKpbGODa3QD3hHA1gq9PWPpzY+tAnCKFoas+yj8IjdUChwp/D1OyCE00Gp7yEY4A86sB74vg0BXlyy7Lsd7x4KK8aPTdb76gPymy4k7AoUJXFjaNVHxU5ogIBgsGRGW3bzT2nZUwC6QmAi+24k1dloEKW3EwpABZfzixyxxfKhkVtpVbNBCOfc4r/NCrLN8d8fGRyuFeXvHyisCWPe2SMQAG9z4Qllr47RlH/wjkbA7ePGxZ+XNE98Ctv/XNlLjiAPKo1wHXXcmaO4c/UJVVpRbXBvDgJMOvfQ57+1cBTAgNZ0IE6TiwNrkOrrsRDQ3ENqAcKpVgIITD/00MDpDus4hwsC6ZaB81VQxOvy45j2CJCmcnlr60Ev2WYNCdd6G8umulDI8zAHB8qVwAfQmku5rwYNCRuOy6Hbrw+hvxOAMAJ1+pORqp/wTK3mrAYxml7oI9FBOdf3Bt+tiN7296GP21VHqjdPACom8D2YmARSF52dnaHttRl0gu2LM6feGm88oleni73utMuEGV16iwWcWyamv67Y6aIdO2f138VEmjlSQcMZJ25BeryPPA48BMoEFUY2LFeZEOmJDfY1m7NXUp8dmedslUkvd/nuayinCgqWIAAAAASUVORK5CYII="
+          id="image0_230_1312"
+          width={64}
+          height={64}
+          xlinkHref="data:image/png;base64,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"
         />
       </Defs>
     </Svg>

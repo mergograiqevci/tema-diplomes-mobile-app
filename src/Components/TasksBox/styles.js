@@ -39,13 +39,13 @@ export default StyleSheet.create({
   },
   icon: {
     position: "absolute",
-    bottom: 10,
-    right: 20,
+    bottom: 7,
+    right: 10,
   },
   readBookView: {
     position: "absolute",
-    bottom: 15,
-    right: 20,
+    bottom: 9,
+    right: 10,
   },
   readBookText: {
     color: Colors.blue,

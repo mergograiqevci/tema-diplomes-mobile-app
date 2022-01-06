@@ -9,9 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Logout from "~/Assets/Svg/logout";
 import PopUpModal from "~/Components/PopUpModal";
 import ToDoActions from "~/Store/ToDo/Actions";
-import State from "~/Store/State";
 import { useIsFocused } from "@react-navigation/native";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
+import Config from "~/Config";
 const TakingQuizScreen = ({ navigation, route }) => {
   const focused = useIsFocused();
   const dispatch = useDispatch();
@@ -39,13 +39,17 @@ const TakingQuizScreen = ({ navigation, route }) => {
     rightButtonColor: Colors.appBaseColor,
   };
 
-  useEffect(() => {
-    if (completeQuizState === State.DONE) {
-      navigation.push("QuizResultScreen", { quizData: completeQuizData });
-    } else if (completeQuizState === State.FAILED) {
-      toasterMessage(completeQuizError?.message, "error");
+  const handleRedirectOnResponse = (type, data) => {
+    if (type === "error") {
+      toasterMessage(
+        Config.ErrorMessages[completeQuizError?.message?.toString()] ||
+          completeQuizError?.message,
+        "error"
+      );
+    } else {
+      navigation.push("QuizResultScreen", { quizData: data });
     }
-  }, [completeQuizState]);
+  };
 
   useEffect(() => {
     if (!focused) {
@@ -169,7 +173,12 @@ const TakingQuizScreen = ({ navigation, route }) => {
 
   const completeQuiz = () => {
     dispatch(
-      ToDoActions.completeQuiz(item?._id, currentAnswers, item?.group?._id)
+      ToDoActions.completeQuiz(
+        item?._id,
+        currentAnswers,
+        item?.group?._id,
+        handleRedirectOnResponse
+      )
     );
   };
 

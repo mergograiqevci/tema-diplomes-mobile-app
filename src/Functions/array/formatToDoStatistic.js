@@ -1,4 +1,4 @@
-const formatToDoStatistic = (unFormatedToDoData) => {
+const formatToDoStatistic = (unFormatedToDoData, professor) => {
   const findVideoGroupTask = unFormatedToDoData?.groupTasks.filter(
     (i) => i.type === "video"
   );
@@ -8,24 +8,49 @@ const formatToDoStatistic = (unFormatedToDoData) => {
   const findQuizGroupTask = unFormatedToDoData?.groupTasks.filter(
     (i) => i.type === "quiz"
   );
-  return [
-    {
-      title: "Grupe",
-      length: unFormatedToDoData?.groups?.length,
-    },
-    {
-      title: "Kuize",
-      length: findQuizGroupTask.length,
-    },
-    {
-      title: "Libra",
-      length: findBookGroupTask?.length,
-    },
-    {
-      title: "Video",
-      length: findVideoGroupTask?.length,
-    },
-  ];
+
+  if (professor) {
+    let totalStudents = 0;
+    unFormatedToDoData?.groups.map(
+      (i) => (totalStudents += parseInt(i?.number_of_students))
+    );
+    return [
+      {
+        title: "Grupe",
+        length: unFormatedToDoData?.groups?.length,
+      },
+      {
+        title: "Student",
+        length: totalStudents,
+      },
+      {
+        title: "Detyrat",
+        length:
+          findQuizGroupTask?.length +
+          findBookGroupTask?.length +
+          findVideoGroupTask?.length,
+      },
+    ];
+  } else {
+    return [
+      {
+        title: "Grupe",
+        length: unFormatedToDoData?.groups?.length,
+      },
+      {
+        title: "Kuize",
+        length: findQuizGroupTask?.length,
+      },
+      {
+        title: "Libra",
+        length: findBookGroupTask?.length,
+      },
+      {
+        title: "Video",
+        length: findVideoGroupTask?.length,
+      },
+    ];
+  }
 };
 
 export default formatToDoStatistic;

@@ -32,7 +32,7 @@ class GroupActions {
             res?.data === "group_created_successfully_failed_to_insert_students"
           ) {
             toasterMessage(
-              "Grupi eshte krijuar me suksese por studentet kan deshtuar te regjistrohen",
+              "Grupi është krijuar me suksesë por studentët kanë dështuar të regjistrohen",
               "error"
             );
           }
@@ -41,7 +41,7 @@ class GroupActions {
         })
         .catch((err) => {
           toasterMessage(
-            "Ka ndodhur nje gabim gjate regjistrimit te grupit",
+            "Ka ndodhur një gabim gjatë regjistrimit të grupit",
             "error"
           );
           dispatch(GroupReducers.createNewGroupFailed(err));
@@ -60,8 +60,6 @@ class GroupActions {
           );
         })
         .catch((err) => {
-          console.log("inside hereeee errerr", err);
-
           dispatch(GroupReducers.findAllStudentsByProfessorFailed(err));
         });
     };
@@ -72,20 +70,18 @@ class GroupActions {
       dispatch(GroupReducers.insertStudentInGroupStart());
       API.Group.insertStudentInGroup(token, request)
         .then((res) => {
-          toasterMessage("Studenti eshte regjistruar me suksese", "success");
+          toasterMessage("Studenti është regjistruar me suksesë", "success");
           dispatch(ToDoActions.getToDo());
           dispatch(GroupReducers.insertStudentInGroupDone(res?.data));
         })
         .catch((err) => {
-          // console.log("duhet me kqyr prap");
-          const error =
-            Config.ErrorMessages[
-              err?.error
-                ? err?.error
-                : err?.error?.path === "_id"
-                ? "id_not_valid"
-                : "default_error"
-            ];
+          console.log("ERRORI:", err);
+          let error;
+          if (err?.error?.path?.toString() === "_id") {
+            error = Config.ErrorMessages["id_not_valid"];
+          } else {
+            error = Config.ErrorMessages["default_error"];
+          }
 
           toasterMessage(error, "error");
           dispatch(GroupReducers.insertStudentInGroupFailed(err));
