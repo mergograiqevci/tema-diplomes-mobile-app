@@ -13,7 +13,7 @@ const formatQuizStyle = (quizData) => {
         if (correct_answer.find((c) => c === inYourAnswer)) {
           style = { backgroundColor: Colors.green };
         } else {
-          style = { backgroundColor: Colors.red };
+          style = { backgroundColor: Colors.negative };
         }
       } else if (correct_answer.find((o) => o === options[j])) {
         style = { borderRadius: Colors.green };

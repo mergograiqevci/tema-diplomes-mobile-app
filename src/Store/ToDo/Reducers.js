@@ -16,6 +16,7 @@ const initialState = {
   getQuizResultState: State.NOT_PROCESSED,
   getQuizResultData: {},
   completedQuizStudentData: [],
+  youtubeModalVisible: false,
 };
 
 const slice = createSlice({
@@ -88,6 +89,9 @@ const slice = createSlice({
     clearPrevCompletedQuizStudentResult(state) {
       state.completedQuizStudentData = [];
     },
+    toggleYoutubeModalVisible(state) {
+      state.youtubeModalVisible = !state.youtubeModalVisible;
+    },
   },
 });
 
@@ -110,4 +114,5 @@ export const {
   getQuizResultFailed,
   completedQuizStudentResult,
   clearPrevCompletedQuizStudentResult,
+  toggleYoutubeModalVisible,
 } = slice.actions;

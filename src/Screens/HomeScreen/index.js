@@ -14,6 +14,8 @@ import isProfessor from "~/Functions/isProfessor";
 import Loading from "~/Components/Loading";
 import Reload from "~/Assets/Svg/reload";
 import Styles from "./styles";
+import VideoComponent from "~/Components/VideoComponent";
+import YoutubeVideoModal from "~/Components/YoutubeVideoModal";
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;

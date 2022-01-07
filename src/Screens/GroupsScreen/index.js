@@ -100,7 +100,7 @@ const GroupsScreen = ({ navigation }) => {
         height={50}
       />
       <FlatList
-        style={{ paddingTop: 20 }}
+        style={{ paddingVertical: 3 }}
         data={groups}
         keyExtractor={(item, index) => item + index}
         renderItem={renderItem}

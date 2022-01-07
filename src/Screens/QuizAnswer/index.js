@@ -7,7 +7,7 @@ import QuizController from "~/Components/QuizController";
 import ArrowLeft from "~/Assets/Svg/arrowLeft";
 import Styles from "./styles";
 const QuizAnswer = ({ navigation, route }) => {
-  const { quizName } = route.params;
+  const { item } = route.params;
   const toDoReducer = useSelector((state) => state?.ToDo);
   const safeAreaSize = useSelector((state) => state?.User.safeAreaSize);
   const quizResultData = toDoReducer?.getQuizResultData;
@@ -52,7 +52,7 @@ const QuizAnswer = ({ navigation, route }) => {
     <View style={{ flex: 1, paddingBottom: safeAreaSize?.bottom }}>
       <StatusBar barStyle="light-content" />
       <Header
-        title={quizName}
+        title={item?.quiz?.title}
         leftIcon={<ArrowLeft />}
         handleLeftIcon={() => navigation.pop()}
         safeAreaBackgroundColor={Colors.appBaseColor}

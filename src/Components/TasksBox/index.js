@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import Play from "~/Assets/Svg/play";
 import Styles from "./styles";
 import Colors from "~/Assets/Colors";
 import { useNavigation } from "@react-navigation/native";
+import YoutubeVideoModal from "../YoutubeVideoModal";
 const TasksBox = ({ item }) => {
+  const [youtubeModalVisible, setYoutubeModalVisible] = useState(false);
   const navigation = useNavigation();
   const imgStat =
     "https://www.nicepng.com/png/detail/222-2224770_react-native-icon-png.png";
+
   return (
     <TouchableOpacity
       style={[
@@ -17,12 +20,13 @@ const TasksBox = ({ item }) => {
             item.type === "book" ? Colors.blue : Colors.appBaseColor,
         },
       ]}
-      onPress={() =>
-        navigation.navigate(
-          item.type === "book" ? "ReadingBookScreen" : "VideoWebViewScreen",
-          { item: item }
-        )
-      }
+      onPress={() => {
+        if (item.type === "book") {
+          navigation.navigate("ReadingBookScreen", { item });
+        } else {
+          setYoutubeModalVisible(true);
+        }
+      }}
     >
       <Image
         source={{
@@ -47,6 +51,13 @@ const TasksBox = ({ item }) => {
             <Text style={Styles.readBookText}>Lexoje</Text>
           </View>
         </View>
+      )}
+      {youtubeModalVisible && (
+        <YoutubeVideoModal
+          item={item}
+          modalVisible={youtubeModalVisible}
+          setModalVisible={setYoutubeModalVisible}
+        />
       )}
     </TouchableOpacity>
   );
