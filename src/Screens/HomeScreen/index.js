@@ -14,12 +14,9 @@ import isProfessor from "~/Functions/isProfessor";
 import Loading from "~/Components/Loading";
 import Reload from "~/Assets/Svg/reload";
 import Styles from "./styles";
-import VideoComponent from "~/Components/VideoComponent";
-import YoutubeVideoModal from "~/Components/YoutubeVideoModal";
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;
-  const [flatListPosition, setFlatListPosition] = useState(0);
   const [topHeaderHeight, setTopHeaderHeight] = useState(threshold);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -53,16 +50,15 @@ const HomeScreen = () => {
     }
   }, [toDoData]);
 
-  useEffect(() => {
-    let position = threshold - flatListPosition;
-    position > 84 && setTopHeaderHeight(position);
-  }, [flatListPosition]);
-
   const handleOptionsInFlat = (e) => {
-    // if (e.nativeEvent.contentOffset.y > height / 10) {
-    setFlatListPosition(e.nativeEvent.contentOffset.y);
-    // }
+    let position = threshold - e.nativeEvent.contentOffset.y;
+    if (position < 0) {
+      topHeaderHeight !== 80 && setTopHeaderHeight(80);
+    } else {
+      position > 84 && setTopHeaderHeight(position);
+    }
   };
+
   const renderItem = ({ item }) => {
     if (item?.isTask === true && item?.type !== "quiz") {
       return <TasksBox item={item} />;
