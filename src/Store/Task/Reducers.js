@@ -14,6 +14,7 @@ const initialState = {
   deleteTaskError: null,
   deleteTaskState: State.NOT_PROCESSED,
   deleteTaskData: {},
+  studentsByQuiz: {},
 };
 
 const slice = createSlice({
@@ -64,6 +65,9 @@ const slice = createSlice({
       state.deleteTaskError = action.payload;
       state.deleteTaskState = State.FAILED;
     },
+    setStudentsByQuiz(state, action) {
+      state.studentsByQuiz = action.payload;
+    },
   },
 });
 
@@ -81,4 +85,5 @@ export const {
   deleteTaskStart,
   deleteTaskDone,
   deleteTaskFailed,
+  setStudentsByQuiz,
 } = slice.actions;

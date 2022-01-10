@@ -15,6 +15,7 @@ const Config = {
     id_not_valid: "ID nuk është valide",
     default_error: "Një gabim ka ndodhur,ju lutemi provoni më vonë",
     cant_complete_task: "Nuk mundeni të përfundoni kuizin për shkakë të kohës!",
+    student_exists: "Studenti gjendet në këtë grup!",
   },
 };
 

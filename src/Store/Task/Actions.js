@@ -29,7 +29,6 @@ class TaskActions {
       API.Task.gradeTask(token, request)
         .then((res) => {
           toasterMessage("Studenti është notuar me sukses", "success");
-          dispatch(TaskActions.findStudentsByTask(request?.task_id));
           dispatch(TaskReducers.setGradeTaskDone(res));
         })
         .catch((err) => {

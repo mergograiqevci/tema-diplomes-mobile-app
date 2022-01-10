@@ -20,8 +20,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 const StudentRatingScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { styledQuestion, fullItem } = route.params;
-  const [grade, setGrade] = useState(fullItem?.grade ? fullItem?.grade : "");
+  const studentsByQuiz = useSelector((state) => state?.Task?.studentsByQuiz);
+  const styledQuestion = studentsByQuiz?.styledQuestion;
+  const fullItem = studentsByQuiz?.fullItem;
+  const [grade, setGrade] = useState(
+    fullItem?.quiz?.grade ? fullItem?.quiz?.grade : ""
+  );
 
   const flatListHeader = () => {
     return (
@@ -80,10 +84,10 @@ const StudentRatingScreen = ({ navigation, route }) => {
   const flatListFooter = () => {
     return (
       <View style={{ flex: 1, marginBottom: 20 }}>
-        <Text style={Styles.footerText}>Piket: {fullItem?.points}</Text>
+        <Text style={Styles.footerText}>Piket: {fullItem?.quiz?.points}</Text>
         <View style={Styles.gradeView}>
           <TextInput
-            placeholder="Nota"
+            placeholder="Nota / 10"
             onChangeText={setGrade}
             keyboardType="numeric"
             style={Styles.inputStyle}

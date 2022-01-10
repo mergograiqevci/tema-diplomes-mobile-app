@@ -172,14 +172,13 @@ const TakingQuizScreen = ({ navigation, route }) => {
   };
 
   const completeQuiz = () => {
-    dispatch(
-      ToDoActions.completeQuiz(
-        item?._id,
-        currentAnswers,
-        item?.group?._id,
-        handleRedirectOnResponse
-      )
-    );
+    let request = {
+      task_id: item?._id,
+      type: "quiz",
+      quiz_answers: currentAnswers,
+    };
+    item?.group?._id && Object.assign(request, { group_id: item?.group?._id });
+    dispatch(ToDoActions.completeTask(request, handleRedirectOnResponse));
   };
 
   const handleContinueToNextQuestion = () => {

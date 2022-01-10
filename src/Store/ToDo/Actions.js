@@ -26,33 +26,24 @@ class ToDoActions {
         });
     };
   }
-  static completeQuiz(
-    quiz_id,
-    quiz_answers,
-    group_id,
-    handleRedirectOnResponse
-  ) {
-    let request = { quiz_id, quiz_answers };
-    console.log("quiz_id native", quiz_id);
-    group_id && Object.assign(request, { group_id });
+  static completeTask(request, handleRedirectOnResponse) {
     return (dispatch, getState) => {
       const token = getState()?.User?.token;
       dispatch(ToDoReducers.completeQuizStart());
-      API.ToDo.completeQuiz(token, request)
+      API.ToDo.completeTask(token, request)
         .then((res) => {
           dispatch(ToDoReducers.completeQuizDone(res));
           dispatch(this.getToDo());
-          handleRedirectOnResponse("success", res);
+          handleRedirectOnResponse && handleRedirectOnResponse("success", res);
         })
         .catch((err) => {
-          handleRedirectOnResponse("error");
-
+          console.log("ERRORI", err);
+          handleRedirectOnResponse && handleRedirectOnResponse("error");
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
       const socket = openSocket(Config.Server.API_BASE_URL);
       socket.on("quiz", (data) => {
-        if (data.action === `completed-${quiz_id}`) {
-          console.log("KAN ARDH DO DATA:", data);
+        if (data.action === `completed-${request?.task_id}`) {
           dispatch(ToDoReducers.completedQuizStudentResult(data));
         }
       });
@@ -98,6 +89,7 @@ class ToDoActions {
           handleQuizAnswerResponse && handleQuizAnswerResponse("success");
         })
         .catch((err) => {
+          console.log("ERRORI", err);
           handleQuizAnswerResponse && handleQuizAnswerResponse("error");
 
           dispatch(ToDoReducers.getQuizResultFailed(err));

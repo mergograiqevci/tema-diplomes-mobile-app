@@ -11,16 +11,21 @@ import toasterMessage from "~/Functions/toaster/toasterMessage";
 import TaskActions from "~/Store/Task/Actions";
 import { useDispatch } from "react-redux";
 import isProfessor from "~/Functions/isProfessor";
+import ToDoActions from "~/Store/ToDo/Actions";
 const ReadingBookScreen = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { item } = route.params;
+  const convertedItem = item?.task ? item?.task : item;
   const [err, setErr] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const source = {
-    uri: item?.book?.pdf,
+    uri: convertedItem?.book?.pdf,
     cache: true,
   };
   const professor = isProfessor();
+
   const onResponse = (type) => {
     if (type === "error") {
       toasterMessage("Ka ndodhur nje gabim gjate largimit te detyres", "error");
@@ -29,16 +34,47 @@ const ReadingBookScreen = ({ route }) => {
     }
   };
 
+  const responseForTask = () => {
+    const id = convertedItem?.book?.total_page
+      ? convertedItem?.pivot_id
+      : convertedItem?._id;
+    const request = {
+      task_id: id,
+      type: "book",
+      group_id: convertedItem?.group?._id,
+      page: currentPage,
+      completed: currentPage === totalPage,
+      total_page: totalPage,
+    };
+
+    dispatch(ToDoActions.completeTask(request));
+  };
+
+  const handleBackIcon = () => {
+    if (!professor) {
+      if (!item?.task) {
+        if (!convertedItem?.book?.total_page) {
+          responseForTask();
+        } else {
+          if (parseInt(convertedItem?.book?.page) < currentPage) {
+            responseForTask();
+          }
+        }
+      }
+    }
+    navigation.goBack();
+  };
+
   const handleRemoveTask = () => {
-    dispatch(TaskActions.deleteTask(item?._id, onResponse));
+    dispatch(TaskActions.deleteTask(convertedItem?._id, onResponse));
   };
 
   return (
     <View style={{ flex: 1 }}>
       <Header
         leftIcon={<ArrowLeft />}
-        title={item?.title}
-        handleLeftIcon={() => navigation.goBack()}
+        title={convertedItem?.title}
+        handleLeftIcon={handleBackIcon}
         rightIcon={professor && <DeleteIcon />}
         handleRightIcon={professor && handleRemoveTask}
         safeAreaBackgroundColor={Colors.appBaseColor}
@@ -53,15 +89,21 @@ const ReadingBookScreen = ({ route }) => {
       )}
       <Pdf
         source={source}
-        onLoadComplete={(numberOfPages, filePath) => {}}
-        onPageChanged={(page, numberOfPages) => {}}
+        onLoadComplete={(numberOfPages, filePath) => {
+          setTotalPage(numberOfPages);
+        }}
+        onPageChanged={(page, numberOfPages) => {
+          setCurrentPage(page);
+        }}
         onError={(error) => {
           setErr(true);
         }}
         onPressLink={(uri) => {}}
         style={Styles.pdfView}
         enablePaging={true}
-        page={1}
+        page={
+          convertedItem?.book?.page ? parseInt(convertedItem?.book?.page) : 1
+        }
       />
     </View>
   );

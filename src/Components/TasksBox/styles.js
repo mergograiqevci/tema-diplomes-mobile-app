@@ -44,14 +44,21 @@ export default StyleSheet.create({
   },
   readBookView: {
     position: "absolute",
-    bottom: 9,
-    right: 10,
+    bottom: 25,
+    right: 20,
   },
   readBookText: {
     color: Colors.blue,
     textAlign: "center",
     fontWeight: "700",
     fontSize: 16,
+  },
+  progressText: {
+    color: Colors.white,
+    textAlign: "left",
+    fontWeight: "600",
+    marginBottom: 5,
+    fontSize: 13,
   },
   bgText: {
     backgroundColor: Colors.white,

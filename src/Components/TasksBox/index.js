@@ -1,15 +1,25 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 import Play from "~/Assets/Svg/play";
 import Styles from "./styles";
 import Colors from "~/Assets/Colors";
 import { useNavigation } from "@react-navigation/native";
 import YoutubeVideoModal from "../YoutubeVideoModal";
+import * as Progress from "react-native-progress";
+const { width } = Dimensions.get("window");
+import isProfessor from "~/Functions/isProfessor";
 const TasksBox = ({ item }) => {
   const [youtubeModalVisible, setYoutubeModalVisible] = useState(false);
   const navigation = useNavigation();
   const imgStat =
     "https://www.nicepng.com/png/detail/222-2224770_react-native-icon-png.png";
+
+  const startedReading = item?.book?.page;
+
+  const professor = isProfessor();
+
+  const percentage =
+    parseInt(item?.book?.page) / parseInt(item?.book?.total_page);
 
   return (
     <TouchableOpacity
@@ -45,13 +55,31 @@ const TasksBox = ({ item }) => {
           <Play />
         </View>
       )}
-      {item.type === "book" && (
-        <View style={Styles.readBookView}>
-          <View style={Styles.bgText}>
-            <Text style={Styles.readBookText}>Lexoje</Text>
+      {item.type === "book" ? (
+        !professor ? (
+          <View style={Styles.readBookView}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={Styles.progressText}>Progresi</Text>
+              <Text style={Styles.progressText}>
+                {startedReading ? parseInt(percentage * 100) + "%" : "0%"}{" "}
+              </Text>
+            </View>
+            <Progress.Bar
+              progress={startedReading ? percentage : 0}
+              width={width / 2.1}
+              color="white"
+            />
           </View>
-        </View>
-      )}
+        ) : (
+          <View style={Styles.readBookView}>
+            <View style={Styles.bgText}>
+              <Text style={Styles.readBookText}>Lexoje</Text>
+            </View>
+          </View>
+        )
+      ) : null}
       {youtubeModalVisible && (
         <YoutubeVideoModal
           item={item}

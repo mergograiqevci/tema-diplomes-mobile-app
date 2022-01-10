@@ -13,7 +13,10 @@ import moment from "moment";
 import DeleteIcon from "~/Assets/Svg/delete";
 import State from "~/Store/State";
 import PopUpModal from "~/Components/PopUpModal";
+import * as TaskReducers from "~/Store/Task/Reducers";
+import { useIsFocused } from "@react-navigation/native";
 const QuizStudentResultScreen = ({ navigation, route }) => {
+  const foucsed = useIsFocused();
   const { item } = route.params;
   const dispatch = useDispatch();
   const taskReducer = useSelector((state) => state?.Task);
@@ -50,31 +53,38 @@ const QuizStudentResultScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    if (!canDelete) {
-      dispatch(TaskActions.findStudentsByTask(item?._id));
+    if (foucsed) {
+      if (!canDelete) {
+        dispatch(TaskActions.findStudentsByTask(item?._id));
+      }
     }
-  }, []);
+  }, [foucsed]);
 
   const renderItem = ({ item }) => {
     const convertedItem = {
       left: item?.student?.username,
-      right: item?.grade ? "Nota:" + item?.grade : item?.points,
-      center: item?.grade && "Piket:" + item?.points,
+      right: item?.quiz?.grade
+        ? "Nota:" + item?.quiz?.grade
+        : item?.quiz?.points,
+      center: item?.quiz?.grade && "Piket:" + item?.quiz?.points,
     };
     return (
       <QuizController
         item={convertedItem}
         textColor={Colors.white}
         backgroundColor={Colors.green}
-        onPress={() =>
-          navigation.navigate("StudentRatingScreen", {
-            styledQuestion: formatQuizStyle(
-              JSON.parse(JSON.stringify(item?.completed_result)),
-              true
-            ),
-            fullItem: item,
-          })
-        }
+        onPress={() => {
+          dispatch(
+            TaskReducers.setStudentsByQuiz({
+              styledQuestion: formatQuizStyle(
+                JSON.parse(JSON.stringify(item?.quiz?.completed_result)),
+                true
+              ),
+              fullItem: item,
+            })
+          );
+          navigation.navigate("StudentRatingScreen");
+        }}
       />
     );
   };

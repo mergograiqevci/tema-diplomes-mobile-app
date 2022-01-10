@@ -30,11 +30,10 @@ export default StyleSheet.create({
   inputStyle: {
     borderWidth: 1,
     borderColor: Colors.gray,
-    width: "20%",
     textAlign: "center",
     paddingVertical: 8,
     paddingHorizontal: 10,
-    fontSize: 17,
+    fontSize: 13,
     borderRadius: 6,
     fontWeight: "600",
     alignItems: "center",

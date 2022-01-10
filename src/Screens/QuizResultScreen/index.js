@@ -34,6 +34,7 @@ const QuizResultScreen = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => {
+    console.log("ITEM:", item);
     const convertedItem = {
       left: "ID:" + item?.quiz?.student,
       right: "Piket:" + item?.quiz?.points,

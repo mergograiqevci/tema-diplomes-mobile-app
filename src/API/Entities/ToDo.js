@@ -13,8 +13,8 @@ class ToDo {
 
     return toDoData;
   }
-  static async completeQuiz(token, request) {
-    let toDoData = await Request.post(`/tasks/complete_quiz`, request, {
+  static async completeTask(token, request) {
+    let toDoData = await Request.post(`/tasks/complete_task`, request, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

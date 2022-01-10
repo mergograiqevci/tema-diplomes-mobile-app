@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
@@ -11,7 +11,11 @@ import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isTodayDay from "~/Functions/isTodayDay";
 import isProfessor from "~/Functions/isProfessor";
 import findGroupTasks from "~/Functions/array/findGroupTasks";
+import YoutubeVideoModal from "../YoutubeVideoModal";
+import CompletedIcon from "~/Assets/Svg/completed";
 const OtherTasks = ({ item }) => {
+  const [youtubeModalVisible, setYoutubeModalVisible] = useState(false);
+
   const dispatch = useDispatch();
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
@@ -23,6 +27,7 @@ const OtherTasks = ({ item }) => {
 
   const navigation = useNavigation();
   const professor = isProfessor();
+
   const title =
     item?.isGroup === true
       ? item?.group?.title
@@ -30,7 +35,7 @@ const OtherTasks = ({ item }) => {
         : item?.title
       : item?.isTask === true
       ? item?.title
-      : item?.quiz?.title;
+      : item?.task?.title;
 
   const subTitle =
     item?.isGroup === true
@@ -39,17 +44,21 @@ const OtherTasks = ({ item }) => {
       ? moment(item?.quiz?.date)
           .utc()
           .format(isTodayDay(item?.quiz?.date) ? "HH:mm" : "DD/MM-HH:mm")
-      : item?.grade === null
-      ? item?.points
-      : "Nota: " + item?.grade;
+      : item?.type === "quiz"
+      ? item?.quiz?.grade === null
+        ? item?.quiz?.points
+        : "Nota: " + item?.quiz.grade
+      : "show_completed_icon";
 
   const bottomSubTitle =
     item?.isGroup === true
       ? "Students"
       : item?.isTask === true
       ? undefined
-      : item?.grade === null
-      ? "Pike"
+      : item?.quiz?.grade === null
+      ? item?.type === "quiz"
+        ? "Pike"
+        : undefined
       : undefined;
 
   const backgroundColor = item?.backgroundColor
@@ -91,24 +100,33 @@ const OtherTasks = ({ item }) => {
       });
     } else {
       if (professor) {
-        navigation.navigate("QuizStudentResultScreen", {
-          item,
-        });
+        if (item?.type === "quiz") {
+          navigation.navigate("QuizStudentResultScreen", {
+            item,
+          });
+        }
       } else {
-        if (item.grade === undefined) {
-          redirectToQuiz();
-          return;
-          dispatch(
-            ToDoActions.canCompleteQuiz(
-              item?._id,
-              item?.group?._id,
-              redirectToQuiz
-            )
-          );
-        } else if (parseInt(item.grade) >= 5) {
-          dispatch(
-            ToDoActions.getQuizResult(item?._id, handleQuizAnswerResponse)
-          );
+        if (item?.type === "quiz") {
+          console.log("item?.grade", item?.quiz?.grade);
+          if (item?.quiz?.grade === undefined) {
+            // redirectToQuiz();
+            // return;
+            dispatch(
+              ToDoActions.canCompleteQuiz(
+                item?._id,
+                item?.group?._id,
+                redirectToQuiz
+              )
+            );
+          } else if (parseInt(item?.quiz?.grade) >= 5) {
+            dispatch(
+              ToDoActions.getQuizResult(item?._id, handleQuizAnswerResponse)
+            );
+          }
+        } else if (item?.type === "book") {
+          navigation.navigate("ReadingBookScreen", { item });
+        } else if (item?.type === "video") {
+          setYoutubeModalVisible(true);
         }
       }
     }
@@ -126,13 +144,17 @@ const OtherTasks = ({ item }) => {
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>
-        <Text style={Styles.rightTitle}>
-          {canCompleteQuizError?.message === "cant_complete_task" &&
-          item.isTask === true &&
-          item?._id === canCompleteQuizError?.quiz_id
-            ? `Data e Provimit`
-            : subTitle}
-        </Text>
+        {subTitle !== "show_completed_icon" ? (
+          <Text style={Styles.rightTitle}>
+            {canCompleteQuizError?.message === "cant_complete_task" &&
+            item.isTask === true &&
+            item?._id === canCompleteQuizError?.quiz_id
+              ? `Data e Provimit`
+              : subTitle}
+          </Text>
+        ) : (
+          <CompletedIcon />
+        )}
         {bottomSubTitle !== undefined && (
           <View
             style={[
@@ -146,6 +168,13 @@ const OtherTasks = ({ item }) => {
           </View>
         )}
       </View>
+      {youtubeModalVisible && (
+        <YoutubeVideoModal
+          item={item}
+          modalVisible={youtubeModalVisible}
+          setModalVisible={setYoutubeModalVisible}
+        />
+      )}
     </TouchableOpacity>
   );
 };

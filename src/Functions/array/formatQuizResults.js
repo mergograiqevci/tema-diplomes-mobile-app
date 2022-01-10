@@ -1,9 +1,9 @@
 const formatQuizResults = (result) => {
   let fullData = [];
   let gradedStudent = result.filter(
-    (s) => parseInt(s?.grade) >= 5 && parseInt(s?.grade) <= 10
+    (s) => parseInt(s?.quiz?.grade) >= 5 && parseInt(s?.quiz?.grade) <= 10
   );
-  let unGradedStudent = result.filter((s) => s?.grade === null);
+  let unGradedStudent = result.filter((s) => s?.quiz?.grade === null);
   unGradedStudent &&
     unGradedStudent.length > 0 &&
     fullData.push({

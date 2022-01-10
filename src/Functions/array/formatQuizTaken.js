@@ -6,36 +6,72 @@ const formatQuizTaken = (quizTaken, role) => {
   let completed = [];
   let failed = [];
   let pending = [];
-  for (let i = 0; i < quizTaken.length; i++) {
-    const dateInMilliSeconds = moment(quizTaken[i]?.quiz?.date).utc().valueOf();
-    if (role === "professor") {
-      if (dateInMilliSeconds >= currentTimeInMilliSeconds) {
-        pending.push({ ...quizTaken[i], backgroundColor: Colors.pendingQuiz });
+
+  const formatQuiz = (object) => {
+    if (!object?.quiz?.grade) {
+      if (object?.quiz?.points) {
+        pending.push({
+          ...object,
+          backgroundColor: Colors.pendingQuiz,
+        });
+      } else {
+        failed.push({ ...object, backgroundColor: Colors.negative });
+      }
+    } else {
+      if (object?.quiz?.grade.toString() === "5") {
+        failed.push({ ...object, backgroundColor: Colors.negative });
       } else {
         completed.push({
-          ...quizTaken[i],
+          ...object,
           backgroundColor: Colors.appBaseColor,
         });
       }
-    } else {
-      if (!quizTaken[i]?.grade) {
-        if (quizTaken[i]?.points) {
+    }
+  };
+
+  const formatBook = (object) => {
+    if (object?.book?.page === object?.book?.total_page) {
+      completed.push({
+        ...object,
+        backgroundColor: Colors.appBaseColor,
+      });
+    }
+  };
+
+  const formatVideo = (object) => {
+    if (object?.video?.completed === true) {
+      completed.push({
+        ...object,
+        backgroundColor: Colors.appBaseColor,
+      });
+    }
+  };
+
+  for (let i = 0; i < quizTaken.length; i++) {
+    if (role === "professor") {
+      if (quizTaken[i]?.type === "quiz") {
+        const dateInMilliSeconds = moment(quizTaken[i]?.quiz?.date)
+          .utc()
+          .valueOf();
+        if (dateInMilliSeconds >= currentTimeInMilliSeconds) {
           pending.push({
             ...quizTaken[i],
             backgroundColor: Colors.pendingQuiz,
           });
-        } else {
-          failed.push({ ...quizTaken[i], backgroundColor: Colors.negative });
-        }
-      } else {
-        if (quizTaken[i]?.grade.toString() === "5") {
-          failed.push({ ...quizTaken[i], backgroundColor: Colors.negative });
         } else {
           completed.push({
             ...quizTaken[i],
             backgroundColor: Colors.appBaseColor,
           });
         }
+      }
+    } else {
+      if (quizTaken[i]?.type === "quiz") {
+        formatQuiz(quizTaken[i]);
+      } else if (quizTaken[i]?.type === "book") {
+        formatBook(quizTaken[i]);
+      } else if (quizTaken[i]?.type === "video") {
+        formatVideo(quizTaken[i]);
       }
     }
   }

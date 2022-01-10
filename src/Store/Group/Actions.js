@@ -80,7 +80,11 @@ class GroupActions {
           if (err?.error?.path?.toString() === "_id") {
             error = Config.ErrorMessages["id_not_valid"];
           } else {
-            error = Config.ErrorMessages["default_error"];
+            if (err?.message === "student_exists") {
+              error = Config.ErrorMessages["student_exists"];
+            } else {
+              error = Config.ErrorMessages["default_error"];
+            }
           }
 
           toasterMessage(error, "error");
