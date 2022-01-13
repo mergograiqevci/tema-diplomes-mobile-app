@@ -16,9 +16,7 @@ import State from "~/Store/State";
 import Config from "~/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Loader from "~/Components/Loader";
-import { useIsFocused } from "@react-navigation/native";
 const LoginScreen = () => {
-  const focused = useIsFocused();
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
   const loginState = userReducer?.loginState;
@@ -35,12 +33,10 @@ const LoginScreen = () => {
     passError: "password",
   };
   useEffect(() => {
-    if (focused) {
-      if (errorMessageColor !== Colors.white) {
-        dispatch(UserActions.setErrorMessageColor(Colors.white));
-      }
+    if (errorMessageColor !== Colors.white) {
+      dispatch(UserActions.setErrorMessageColor(Colors.white));
     }
-  }, [focused]);
+  }, []);
 
   useEffect(() => {
     if (loginState === State.FAILED) {
