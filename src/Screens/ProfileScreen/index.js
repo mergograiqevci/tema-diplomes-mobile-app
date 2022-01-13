@@ -13,7 +13,9 @@ import Config from "~/Config";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isProfessor from "~/Functions/isProfessor";
 import { useIsFocused } from "@react-navigation/native";
-const ProfileScreen = ({ navigation }) => {
+import { useNavigation } from "@react-navigation/native";
+const ProfileScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const focused = useIsFocused();
   const userReducer = useSelector((state) => state?.User);
