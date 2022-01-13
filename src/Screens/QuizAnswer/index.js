@@ -52,7 +52,7 @@ const QuizAnswer = ({ navigation, route }) => {
     <View style={{ flex: 1, paddingBottom: safeAreaSize?.bottom }}>
       <StatusBar barStyle="light-content" />
       <Header
-        title={item?.quiz?.title}
+        title={item?.task?.title}
         leftIcon={<ArrowLeft />}
         handleLeftIcon={() => navigation.pop()}
         safeAreaBackgroundColor={Colors.appBaseColor}

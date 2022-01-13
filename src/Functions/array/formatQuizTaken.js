@@ -15,7 +15,11 @@ const formatQuizTaken = (quizTaken, role) => {
           backgroundColor: Colors.pendingQuiz,
         });
       } else {
-        failed.push({ ...object, backgroundColor: Colors.negative });
+        failed.push({
+          ...object,
+          backgroundColor: Colors.negative,
+          grade: "-0",
+        });
       }
     } else {
       if (object?.quiz?.grade.toString() === "5") {

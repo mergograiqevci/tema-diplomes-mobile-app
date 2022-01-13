@@ -107,17 +107,16 @@ const OtherTasks = ({ item }) => {
         }
       } else {
         if (item?.type === "quiz") {
-          console.log("item?.grade", item?.quiz?.grade);
           if (item?.quiz?.grade === undefined) {
-            // redirectToQuiz();
-            // return;
-            dispatch(
-              ToDoActions.canCompleteQuiz(
-                item?._id,
-                item?.group?._id,
-                redirectToQuiz
-              )
-            );
+            if (item?.grade !== "-0") {
+              dispatch(
+                ToDoActions.canCompleteQuiz(
+                  item?._id,
+                  item?.group?._id,
+                  redirectToQuiz
+                )
+              );
+            }
           } else if (parseInt(item?.quiz?.grade) >= 5) {
             dispatch(
               ToDoActions.getQuizResult(item?._id, handleQuizAnswerResponse)
@@ -141,6 +140,7 @@ const OtherTasks = ({ item }) => {
       ]}
       onPress={handleTaskOnClick}
       activeOpacity={0.7}
+      disabled={item?.grade === "-0"}
     >
       <Text style={Styles.title}>{title}</Text>
       <View style={Styles.subTextView}>
