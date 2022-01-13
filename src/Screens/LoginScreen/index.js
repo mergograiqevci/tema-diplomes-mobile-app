@@ -9,7 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import UserActions from "~/Store/User/Actions";
 import Styles from "./styles";
-import LoginLogo from "~/Assets/Svg/loginLogo";
 import AuthForm from "~/Components/AuthForm";
 import Colors from "~/Assets/Colors";
 import Student from "~/Assets/Svg/student";
@@ -17,11 +16,14 @@ import State from "~/Store/State";
 import Config from "~/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Loader from "~/Components/Loader";
+import { useIsFocused } from "@react-navigation/native";
 const LoginScreen = () => {
+  const focused = useIsFocused();
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
   const loginState = userReducer?.loginState;
   const loginError = userReducer?.loginError;
+  const errorMessageColor = userReducer?.errorMessageColor;
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
@@ -32,6 +34,13 @@ const LoginScreen = () => {
     passPlaceHolder: "Password",
     passError: "password",
   };
+  useEffect(() => {
+    if (focused) {
+      if (errorMessageColor !== Colors.white) {
+        dispatch(UserActions.setErrorMessageColor(Colors.white));
+      }
+    }
+  }, [focused]);
 
   useEffect(() => {
     if (loginState === State.FAILED) {
@@ -61,7 +70,6 @@ const LoginScreen = () => {
           <SafeAreaView style={{ flex: 0 }} />
           <View style={Styles.loginLogo}>
             <Student width={130} height={90} />
-            {/* <LoginLogo /> */}
           </View>
 
           <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>

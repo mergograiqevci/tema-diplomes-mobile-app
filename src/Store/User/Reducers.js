@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import State from "~/Store/State";
-
+import Colors from "~/Assets/Colors";
 const initialState = {
   loginData: null,
   loginError: null,
@@ -17,6 +17,7 @@ const initialState = {
   myProfileState: State.NOT_PROCESSED,
   token: undefined,
   userIsValid: undefined,
+  errorMessageColor: Colors.negative,
 };
 
 const slice = createSlice({
@@ -102,6 +103,9 @@ const slice = createSlice({
     setUserIsValid(state, action) {
       state.userIsValid = action.payload;
     },
+    setErrorMessageColor(state, action) {
+      state.errorMessageColor = action.payload;
+    },
   },
 });
 
@@ -111,6 +115,7 @@ export const {
   loginDone,
   loginFailed,
   setSafeAreaSize,
+  setErrorMessageColor,
   registerStart,
   registerDone,
   registerFailed,

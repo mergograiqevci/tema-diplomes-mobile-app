@@ -102,6 +102,11 @@ class UserActions {
     };
   }
 
+  static setErrorMessageColor(color) {
+    return (dispatch) => {
+      dispatch(UserReducers.setErrorMessageColor(color));
+    };
+  }
   static setSafeAreaSize() {
     return (dispatch) => {
       SafeArea.getSafeAreaInsetsForRootView().then((result) => {

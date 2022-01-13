@@ -12,13 +12,16 @@ import State from "~/Store/State";
 import Config from "~/Config";
 import toasterMessage from "~/Functions/toaster/toasterMessage";
 import isProfessor from "~/Functions/isProfessor";
+import { useIsFocused } from "@react-navigation/native";
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const focused = useIsFocused();
   const userReducer = useSelector((state) => state?.User);
   const myProfile = userReducer?.myProfile;
   const resetPassword = userReducer?.resetPassword;
   const resetPasswordError = userReducer?.resetPasswordError;
   const resetPasswordState = userReducer?.resetPasswordState;
+  const errorMessageColor = userReducer?.errorMessageColor;
   const [username, setUsername] = useState(myProfile?.data?.username);
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
@@ -39,6 +42,14 @@ const ProfileScreen = ({ navigation }) => {
       }
     }
   }, [myProfile]);
+
+  useEffect(() => {
+    if (focused) {
+      if (errorMessageColor !== Colors.negative) {
+        dispatch(UserActions.setErrorMessageColor(Colors.negative));
+      }
+    }
+  }, [focused]);
 
   const modalProps = {
     title: "A jeni te sigurt qe deshironi te dilni?",
@@ -69,6 +80,7 @@ const ProfileScreen = ({ navigation }) => {
     if (resetPasswordState === State.DONE) {
       toasterMessage(`Keni ndryshuar me sukses fjalëkalimin`, "success");
       dispatch(UserActions.clearPrevResetPasswordData());
+      setErrorMessages({});
     } else if (resetPasswordState === State.FAILED) {
       setErrorMessages({
         ["password"]:

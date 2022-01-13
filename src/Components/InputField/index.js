@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import Styles from "./styles";
 import Colors from "~/Assets/Colors";
+import { useSelector } from "react-redux";
 const Input = ({
   leftIcon,
   placeholder,
@@ -15,7 +16,9 @@ const Input = ({
   enabled,
 }) => {
   const [focused, setFocused] = useState(false);
-
+  const errorMessageColor = useSelector(
+    (state) => state?.User?.errorMessageColor
+  );
   return (
     <View>
       <View style={Styles.inputView}>
@@ -55,7 +58,9 @@ const Input = ({
         <View style={[Styles.iconView, { left: 15 }]}>{leftIcon}</View>
       </View>
       {errorMessage ? (
-        <Text style={Styles.errorMessage}>{errorMessage}</Text>
+        <Text style={[Styles.errorMessage, { color: errorMessageColor }]}>
+          {errorMessage}
+        </Text>
       ) : null}
     </View>
   );
