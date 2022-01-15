@@ -103,7 +103,7 @@ const HomeScreen = () => {
           <SectionHeader title={title} />
         )}
         stickySectionHeadersEnabled={false}
-        style={{ marginTop: topHeaderHeight + 80 }}
+        style={{ marginTop: topHeaderHeight + 70 }}
         onScroll={handleOptionsInFlat}
         ListHeaderComponent={sectionListHeader}
       />

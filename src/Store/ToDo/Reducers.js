@@ -46,10 +46,12 @@ const slice = createSlice({
       state.completeQuizState = State.FAILED;
     },
     completedQuizStudentResult(state, action) {
-      state.completedQuizStudentData = [
-        ...state.completedQuizStudentData,
-        action.payload,
-      ];
+      let array = [...state.completedQuizStudentData];
+      let cArr = [...action.payload];
+      cArr.map((i) => {
+        array.push(i);
+      });
+      state.completedQuizStudentData = array;
     },
     unFormatedToDo(state, action) {
       state.unFormatedToDoData = action.payload;

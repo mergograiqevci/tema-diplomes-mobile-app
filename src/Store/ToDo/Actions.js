@@ -5,7 +5,7 @@ import formatSections from "~/Functions/array/formatSections";
 import formatQuizStyle from "~/Functions/array/formatQuizStyle";
 import openSocket from "socket.io-client";
 import Config from "~/Config";
-
+import toasterMessage from "~/Functions/toaster/toasterMessage";
 class ToDoActions {
   static getToDo() {
     return (dispatch, getState) => {
@@ -21,7 +21,6 @@ class ToDoActions {
           dispatch(ToDoReducers.getToDoDone(formatedSections));
         })
         .catch((err) => {
-          console.log("err", err);
           dispatch(ToDoReducers.getToDoFailed(err));
         });
     };
@@ -37,16 +36,36 @@ class ToDoActions {
           handleRedirectOnResponse && handleRedirectOnResponse("success", res);
         })
         .catch((err) => {
-          console.log("ERRORI", err);
           handleRedirectOnResponse && handleRedirectOnResponse("error");
           dispatch(ToDoReducers.completeQuizFailed(err));
         });
       const socket = openSocket(Config.Server.API_BASE_URL);
       socket.on("quiz", (data) => {
-        if (data.action === `completed-${request?.task_id}`) {
-          dispatch(ToDoReducers.completedQuizStudentResult(data));
+        const jsonData = JSON.parse(JSON.stringify(data));
+        if (jsonData.action === `completed-${request?.task_id}`) {
+          dispatch(ToDoReducers.completedQuizStudentResult([jsonData]));
         }
       });
+    };
+  }
+  static getOtherStudentQuizResult(task_id) {
+    return (dispatch, getState) => {
+      const token = getState()?.User?.token;
+      let otherStudentData = [];
+      API.ToDo.getOtherStudentQuizResult(token, task_id)
+        .then((res) => {
+          const d = [...res?.data];
+          d.map((i) => {
+            otherStudentData.push(i);
+          });
+          dispatch(ToDoReducers.completedQuizStudentResult(otherStudentData));
+        })
+        .catch((err) => {
+          toasterMessage(
+            err ? err : "Ndodhi një gabim gjatë leximit të rezultateve",
+            "error"
+          );
+        });
     };
   }
 

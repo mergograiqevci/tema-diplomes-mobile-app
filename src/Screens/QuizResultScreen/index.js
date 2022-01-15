@@ -15,28 +15,31 @@ const QuizResultScreen = ({ navigation, route }) => {
   const safeAreaSize = useSelector((state) => state.User?.safeAreaSize);
   const { quizData } = route.params;
   const toDoReducer = useSelector((state) => state?.ToDo);
+  const myProfile = useSelector((state) => state?.User?.myProfile);
   const completedQuizStudentData = toDoReducer?.completedQuizStudentData;
-
-  // useEffect(() => {
-  //   if (focused) {
-  //     dispatch(ToDoActions.getQuizResult(quizData?.data?.quiz));
-  //   } else {
-  //     dispatch(ToDoReducers.clearPrevCompletedQuizStudentResult());
-  //   }
-  // }, [focused]);
+  const filterCompletedQuizWithoutMe = completedQuizStudentData.filter(
+    (i) => i?.quiz?.student?.toString() !== myProfile?.data?._id.toString()
+  );
+  useEffect(() => {
+    if (focused) {
+      dispatch(ToDoActions.getOtherStudentQuizResult(quizData?.data?.task));
+    } else {
+      dispatch(ToDoReducers.clearPrevCompletedQuizStudentResult());
+    }
+  }, [focused]);
 
   const handleCloseButton = () => {
     navigation.push("HomeScreen");
   };
 
-  const handleSeeStudentResults = () => {
-    navigation.push("QuizStudentResultScreen");
-  };
-
   const renderItem = ({ item }) => {
+    const id = item?.quiz?.student ? item?.quiz?.student : item?.student;
+    const points = item?.quiz?.quiz?.points
+      ? item?.quiz?.quiz?.points
+      : item?.quiz?.points;
     const convertedItem = {
-      left: "ID:" + item?.quiz?.student,
-      right: "Piket:" + item?.quiz?.quiz?.points,
+      left: "ID:" + id,
+      right: "Piket:" + points,
     };
     return (
       <QuizController
@@ -53,14 +56,18 @@ const QuizResultScreen = ({ navigation, route }) => {
       <Trophy />
       <View style={Styles.pointContainer}>
         <Text style={Styles.yourPointsText}>Piket:</Text>
-        <Text style={Styles.yourPointsValueText}>{quizData?.data?.points}</Text>
+        <Text style={Styles.yourPointsValueText}>
+          {quizData?.data?.quiz?.points}
+        </Text>
         <Text style={Styles.seeStudentResultsText}>
           Rezultatet e studenteve te tjere
         </Text>
       </View>
 
       <FlatList
-        data={completedQuizStudentData}
+        style={{ marginBottom: safeAreaSize.bottom + 70 }}
+        data={filterCompletedQuizWithoutMe}
+        showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -69,7 +76,7 @@ const QuizResultScreen = ({ navigation, route }) => {
         style={[
           Styles.bottomContainer,
           {
-            paddingBottom: safeAreaSize.bottom + 40,
+            bottom: safeAreaSize.bottom + 10,
           },
         ]}
       >

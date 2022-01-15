@@ -124,7 +124,7 @@ const TakingQuizScreen = ({ navigation, route }) => {
     return (
       <View style={{ flex: 1 }}>
         <View style={Styles.headerView}>
-          <Text style={Styles.text}>{item?.quiz?.title}</Text>
+          <Text style={Styles.text}>{item?.title}</Text>
           <Text style={Styles.text}>
             {questionIndex + 1}
             <Text style={[Styles.text, { opacity: 0.6 }]}>
@@ -142,6 +142,9 @@ const TakingQuizScreen = ({ navigation, route }) => {
         </View>
         <Text style={Styles.questionText}>
           {item?.quiz?.details[questionIndex]?.question}
+        </Text>
+        <Text style={Styles.questionOneOrMoreText}>
+          Përgjigjet mund të jenë 0 ose me shumë të sakta
         </Text>
       </View>
     );

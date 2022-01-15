@@ -109,6 +109,8 @@ const OtherTasks = ({ item }) => {
         if (item?.type === "quiz") {
           if (item?.quiz?.grade === undefined) {
             if (item?.grade !== "-0") {
+              redirectToQuiz();
+              return;
               dispatch(
                 ToDoActions.canCompleteQuiz(
                   item?._id,

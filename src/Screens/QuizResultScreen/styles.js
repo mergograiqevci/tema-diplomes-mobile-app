@@ -72,6 +72,7 @@ export default StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
     width: "100%",
+    position: "absolute",
   },
   pointContainer: {
     width: "100%",

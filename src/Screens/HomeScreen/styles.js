@@ -4,5 +4,6 @@ export default StyleSheet.create({
   reload: {
     alignSelf: "flex-end",
     marginRight: 18,
+    paddingTop: 5,
   },
 });

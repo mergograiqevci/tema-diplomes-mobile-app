@@ -23,7 +23,7 @@ export default StyleSheet.create({
     color: Colors.white,
     paddingHorizontal: 20,
     marginTop: 40,
-    marginBottom: 25,
+    marginBottom: 5,
   },
   headerView: {
     flexDirection: "row",
@@ -61,5 +61,13 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 9,
     backgroundColor: Colors.blue,
+  },
+  questionOneOrMoreText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.white,
+    paddingHorizontal: 30,
+    marginBottom: 25,
+    opacity: 0.8,
   },
 });
