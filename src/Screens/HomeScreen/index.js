@@ -27,6 +27,7 @@ const HomeScreen = () => {
   const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const [toDoStatistic, setToDoStatistic] = useState([]);
   const professor = isProfessor();
+
   const toDoWithoutGroups = toDoData?.filter((i) => i?.key !== "groups");
 
   const getToDo = () => {
