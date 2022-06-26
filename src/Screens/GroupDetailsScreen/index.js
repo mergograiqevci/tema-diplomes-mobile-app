@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, SectionList } from "react-native";
+import { View, SectionList, TouchableOpacity } from "react-native";
 import Header from "~/Components/Header";
 import Logout from "~/Assets/Svg/logout";
 import AddPerson from "~/Assets/Svg/addPerson";
@@ -18,40 +18,39 @@ import State from "~/Store/State";
 import { useIsFocused } from "@react-navigation/native";
 import * as GroupReducers from "~/Store/Group/Reducers";
 import TaskNotFound from "~/Components/TaskNotFound";
+import ArrowLeft from "~/Assets/Svg/arrowLeft";
+
+const inviteModalProps = {
+  title: "Shto nje student ne grup",
+  leftButtonText: "Ruaj",
+  leftButtonColor: Colors.appBaseColor,
+  rightButtonText: "Kthehu",
+  rightButtonColor: Colors.negative,
+};
+
+const deleteModalProps = {
+  title: "A jeni te sigurt qe deshironi te dilni nga grupi ?",
+  subTitle: "",
+  leftButtonText: "Konfirmo",
+  leftButtonColor: Colors.negative,
+  rightButtonText: "Kthehu",
+  rightButtonColor: Colors.appBaseColor,
+};
+
+const PADDING_HORIZONTAL_BETWEEN_RIGHT_ICONS = 10;
+
 const GroupDetailsScreen = ({ navigation, route }) => {
+  const { item, tasks } = route.params;
   const dispatch = useDispatch();
   const focused = useIsFocused();
-
   const groupReducer = useSelector((state) => state?.Group);
   const leaveGroupData = groupReducer?.leaveGroupData;
   const leaveGroupError = groupReducer?.leaveGroupError;
   const leaveGroupState = groupReducer?.leaveGroupState;
-
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
   const [id, setId] = useState("");
-  const [errorMessages, setErrorMessages] = useState({});
-  const { item, tasks } = route.params;
-
   const professor = isProfessor();
-
-  const inviteModalProps = {
-    title: "Shto nje student ne grup",
-    leftButtonText: "Ruaj",
-    leftButtonColor: Colors.appBaseColor,
-    rightButtonText: "Kthehu",
-    rightButtonColor: Colors.negative,
-  };
-
-  const deleteModalProps = {
-    title: "A jeni te sigurt qe deshironi te dilni nga grupi ?",
-    subTitle: "",
-    leftButtonText: "Konfirmo",
-    leftButtonColor: Colors.negative,
-    rightButtonText: "Kthehu",
-    rightButtonColor: Colors.appBaseColor,
-  };
 
   useEffect(() => {
     if (leaveGroupState === State.FAILED) {
@@ -106,14 +105,30 @@ const GroupDetailsScreen = ({ navigation, route }) => {
     }
   };
 
+  const renderHeaderRightView = () => {
+
+    const iconOnClick = (icon, onPress) => {
+      return (<TouchableOpacity onPress={onPress} style={{ paddingHorizontal: PADDING_HORIZONTAL_BETWEEN_RIGHT_ICONS }}>
+        {icon}
+      </TouchableOpacity>)
+    }
+
+    return (
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        {iconOnClick(<AddPerson />, () => setInviteModalVisible(true))}
+        {iconOnClick(professor ? <Plus /> : <Logout />, handleRightIcon)}
+      </View>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Header
-        title={item?.group?.title ? item?.group?.title : item?.title}
-        leftIcon={<AddPerson />}
-        handleLeftIcon={() => setInviteModalVisible(true)}
-        rightIcon={professor ? <Plus /> : <Logout />}
-        handleRightIcon={handleRightIcon}
+        title={item?.group?.title ?? item?.title}
+        customTitleStyle={{ marginRight: -PADDING_HORIZONTAL_BETWEEN_RIGHT_ICONS * 2 }}
+        leftIcon={<ArrowLeft />}
+        handleLeftIcon={() => navigation.goBack()}
+        customRightView={renderHeaderRightView}
         safeAreaBackgroundColor={Colors.appBaseColor}
         backgroundColor={Colors.appBaseColor}
         height={50}
@@ -135,7 +150,7 @@ const GroupDetailsScreen = ({ navigation, route }) => {
         rightButtonAction={rightButtonAction}
         id={id}
         onChangeId={setId}
-        errorMessage={errorMessages}
+        errorMessage={{}}
         otherProps={inviteModalProps}
       />
       <PopUpModal

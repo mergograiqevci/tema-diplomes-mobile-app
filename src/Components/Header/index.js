@@ -5,10 +5,12 @@ import Styles from "./styles";
 
 const Header = ({
   title,
+  customTitleStyle,
   leftIcon,
   handleLeftIcon,
   rightIcon,
   handleRightIcon,
+  customRightView,
   safeAreaBackgroundColor,
   backgroundColor,
   height,
@@ -23,8 +25,8 @@ const Header = ({
         ]}
       >
         <IconHolder onPress={handleLeftIcon}>{leftIcon}</IconHolder>
-        <Text style={Styles.font}>{title}</Text>
-        <IconHolder onPress={handleRightIcon}>{rightIcon}</IconHolder>
+        <Text style={[Styles.font, customTitleStyle]}>{title}</Text>
+        {customRightView ? customRightView() : <IconHolder onPress={handleRightIcon}>{rightIcon}</IconHolder>}
       </View>
     </View>
   );

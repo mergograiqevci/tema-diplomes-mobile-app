@@ -14,12 +14,12 @@ import isProfessor from "~/Functions/isProfessor";
 import Loading from "~/Components/Loading";
 import Reload from "~/Assets/Svg/reload";
 import Styles from "./styles";
+
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const threshold = 200;
   const [topHeaderHeight, setTopHeaderHeight] = useState(threshold);
   const [refreshing, setRefreshing] = useState(false);
-
   const toDoReducer = useSelector((state) => state?.ToDo);
   const toDoData = toDoReducer?.toDoData;
   const toDoError = toDoReducer?.toDoError;
@@ -27,12 +27,7 @@ const HomeScreen = () => {
   const unFormatedToDoData = toDoReducer?.unFormatedToDoData;
   const [toDoStatistic, setToDoStatistic] = useState([]);
   const professor = isProfessor();
-
   const toDoWithoutGroups = toDoData?.filter((i) => i?.key !== "groups");
-
-  const getToDo = () => {
-    dispatch(ToDoActions.getToDo());
-  };
 
   useEffect(() => {
     getToDo();
@@ -50,6 +45,10 @@ const HomeScreen = () => {
       setToDoStatistic(formatToDoStatistic(unFormatedToDoData, professor));
     }
   }, [toDoData]);
+
+  const getToDo = () => {
+    dispatch(ToDoActions.getToDo());
+  };
 
   const handleOptionsInFlat = (e) => {
     let position = threshold - e.nativeEvent.contentOffset.y;
@@ -107,9 +106,9 @@ const HomeScreen = () => {
         style={{ marginTop: topHeaderHeight + 70 }}
         onScroll={handleOptionsInFlat}
         ListHeaderComponent={sectionListHeader}
+        showsVerticalScrollIndicator={false}
       />
       {header()}
-
       <ProfileBox toDoStatistic={toDoStatistic} height={topHeaderHeight} />
     </View>
   );

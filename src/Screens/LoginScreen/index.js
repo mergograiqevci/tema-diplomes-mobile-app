@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Keyboard,
   TouchableWithoutFeedback,
+  TouchableOpacity
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import UserActions from "~/Store/User/Actions";
@@ -16,6 +17,7 @@ import State from "~/Store/State";
 import Config from "~/Config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Loader from "~/Components/Loader";
+
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state?.User);
@@ -32,6 +34,7 @@ const LoginScreen = () => {
     passPlaceHolder: "Password",
     passError: "password",
   };
+
   useEffect(() => {
     if (errorMessageColor !== Colors.white) {
       dispatch(UserActions.setErrorMessageColor(Colors.white));
@@ -45,7 +48,7 @@ const LoginScreen = () => {
           ? "id"
           : "password"]:
           Config.ErrorMessages[
-            loginError.message ? loginError.message : "default_error"
+          loginError.message ? loginError.message : "default_error"
           ],
       });
     }
@@ -59,6 +62,16 @@ const LoginScreen = () => {
     }
   };
 
+  const renderTestAppButton = (title, testId, testPassword) => {
+    return (
+      <TouchableOpacity
+        onPress={() => dispatch(UserActions.login(testId, testPassword))}
+        style={Styles.testAppButton}>
+        <Text style={Styles.testAppButtonText}>{title}</Text>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <KeyboardAwareScrollView style={{ flex: 1 }} bounces={false}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -67,7 +80,6 @@ const LoginScreen = () => {
           <View style={Styles.loginLogo}>
             <Student width={130} height={90} />
           </View>
-
           <Text style={Styles.title}>Mirë se vini në takeQUIZ</Text>
           <AuthForm
             onChangeId={setId}
@@ -79,6 +91,10 @@ const LoginScreen = () => {
             otherProps={otherAuthProps}
           />
           {loginState === State.PROCESSING && <Loader />}
+          <View style={Styles.testAppButtonContainer}>
+            {renderTestAppButton("Vazhdo si student", "61d2fbea7d9fdf8c83c13192", "123")}
+            {renderTestAppButton("Vazhdo si profesor", "61ba3f700566c37c3ad1c897", "123")}
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>

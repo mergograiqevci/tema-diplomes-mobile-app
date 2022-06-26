@@ -9,7 +9,6 @@ export default StyleSheet.create({
   },
   loginLogo: {
     marginTop: 120,
-    // marginLeft: 25,
     alignItems: "center",
   },
   title: {
@@ -18,6 +17,23 @@ export default StyleSheet.create({
     fontSize: 25,
     // marginLeft: 25,
     textAlign: "center",
-    // fontFamily: "Montserrat-Bold",
   },
+  testAppButton: {
+    borderWidth: 1,
+    borderColor: Colors.white,
+    backgroundColor: "transparent",
+    borderStyle: "solid"
+  },
+  testAppButtonText: {
+    color: Colors.white,
+    fontSize: 18,
+    padding: 5,
+  },
+  testAppButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 20,
+    flex: 0.7,
+    alignItems: "flex-end"
+  }
 });
