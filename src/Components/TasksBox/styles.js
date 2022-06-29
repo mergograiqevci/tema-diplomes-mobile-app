@@ -2,12 +2,11 @@ import { StyleSheet } from "react-native";
 import Colors from "~/Assets/Colors";
 export default StyleSheet.create({
   container: {
-    height: 140,
+    // height: 140,
+    paddingVertical: 10,
     marginHorizontal: 20,
     paddingHorizontal: 10,
     marginVertical: 5,
-    flexDirection: "row",
-    alignItems: "center",
     borderRadius: 9,
   },
   imageView: {
@@ -44,7 +43,7 @@ export default StyleSheet.create({
   },
   readBookView: {
     position: "absolute",
-    bottom: 25,
+    bottom: 0,
     right: 20,
   },
   readBookText: {

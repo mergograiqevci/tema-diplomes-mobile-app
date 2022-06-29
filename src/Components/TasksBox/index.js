@@ -38,28 +38,29 @@ const TasksBox = ({ item }) => {
         }
       }}
     >
-      <Image
-        source={{
-          uri: item[item?.type]?.image ? item[item?.type]?.image : imgStat,
-        }}
-        style={Styles.imageView}
-      />
-      <View style={Styles.textView}>
-        <Text style={Styles.title}>{item.title}</Text>
-        <Text style={Styles.description} numberOfLines={2}>
-          {item[item.type].description}
-        </Text>
+      <View style={{ flexDirection: "row" }}>
+        <Image
+          source={{
+            uri: item[item?.type]?.image ? item[item?.type]?.image : imgStat,
+          }}
+          style={Styles.imageView}
+        />
+        <View style={Styles.textView}>
+          <Text style={Styles.title}>{item.title}</Text>
+          <Text style={Styles.description} numberOfLines={2}>
+            {item[item.type].description}
+          </Text>
+        </View>
       </View>
-      {item.type === "video" && (
+      {item.type === "video" ? (
         <View style={Styles.icon}>
           <Play />
         </View>
-      )}
-      {item.type === "book" ? (
+      ) : (
         !professor ? (
-          <View style={Styles.readBookView}>
+          <View style={{ alignItems: "flex-end", marginTop: "-8%" }}>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{ flexDirection: "row", justifyContent: "space-between", width: width / 2.1 }}
             >
               <Text style={Styles.progressText}>Progresi</Text>
               <Text style={Styles.progressText}>
@@ -73,13 +74,13 @@ const TasksBox = ({ item }) => {
             />
           </View>
         ) : (
-          <View style={Styles.readBookView}>
+          <View style={{ alignItems: "flex-end", marginTop: '-8%' }}>
             <View style={Styles.bgText}>
               <Text style={Styles.readBookText}>Lexoje</Text>
             </View>
           </View>
         )
-      ) : null}
+      )}
       {youtubeModalVisible && (
         <YoutubeVideoModal
           item={item}
